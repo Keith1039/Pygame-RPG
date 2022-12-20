@@ -1427,6 +1427,7 @@ class Hero:
             elif decision == "3":
                 self.main_menu(main_menu_count)
 
+
         elif (x_pos == -1 and y_pos == 3):
             print("1: Move forward")
             print("2: Move to the right")
@@ -3120,8 +3121,8 @@ class Hero:
 
 
 #The hero
-Rion=Hero("Rion",0,10,5,120,120,3,7,9,"unarmed",2,3,4,0,100,500)
-#Rion = Hero("Chad",999,999,999,999,999,999,999,999,"sword",999,999,999,999,999,99999999)
+#Rion=Hero("Rion",0,10,5,120,120,3,7,9,"unarmed",2,3,4,0,100,500)
+Rion = Hero("Chad",999,999,999,999,999,999,999,999,"sword",999,999,999,999,999,99999999)
 
 
 
