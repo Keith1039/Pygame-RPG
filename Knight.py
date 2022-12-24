@@ -8,17 +8,20 @@ items={"Volatile Poison","silver polish","emblem","moonlit map",'Gospel of the d
 combinable_items=["Volitile poison", "silver polish","lance", "rusty dagger", "sword", "old map", "moonstone"]
 consumable_item={"old bread":20,"potion":50}
 inventory=[]
+
+
+#Statuses are, Normal or In-Combat or Dead or opening_chest
 class Knight:
-    def __init__(self, name, level, strength, vitality, Hp, HPcap, agility, magic, defence, weapon, exp, expcap, money):
+    def __init__(self, name, level, strength, sword,  vitality, Hp, HPcap, agility, defence, exp, expcap, money):
         self.Hp = Hp
         self.name = name
         self.str = strength
-        self.weapon = weapon
-        self.attack = strength + weapons[weapon]
+        self.sword = sword
+        self.attack = strength + weapons[sword]
         self.vit = vitality
         self.agl = agility
-        self.stance = "Normal"
-        self.mag = magic
+        self.status = "Normal"
+        self.stance = "1"
         self.defence = defence
         self.exp = exp
         self.expcap = expcap

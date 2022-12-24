@@ -2,6 +2,7 @@ knight_attack = 4, "Knight/Cut_Sprites/Attack_1 "
 knight_run_R = 10, "Knight/Cut_Sprites/Run_R "
 knight_run_L = 10, "Knight/Cut_Sprites/Run_L "
 knight_idle = 10, "Knight/Cut_Sprites/Idle "
+knight_death = 10, "Knight/Cut_Sprites/Death "
 
 class AnimationManager:
 
@@ -21,9 +22,8 @@ class AnimationManager:
         elif name == "Idle":
             self.ani_array = knight_idle
 
+        elif name == "Death":
+            self.ani_array = knight_death
 
 
-test = AnimationManager()
-test.Change_array("Knight Attack")
-print(len(test.ani_array))
-print(len(knight_attack))
+
