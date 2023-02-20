@@ -3129,14 +3129,14 @@ Rion = Hero("Chad",999,999,999,999,999,999,999,999,"sword",999,999,999,999,999,9
 
 
 class Enemy:
-    def __init__(self,name,strength,vitality,defence,agility,exp,Money):
-        self.name=name
-        self.attck=strength
-        self.vit=vitality
-        self.agl=agility
-        self.defence=defence
-        self.exp=exp
-        self.drop=Money
+    def __init__(self, name, strength, vitality, defence, agility, exp, money):
+        self.name = name
+        self.attck = strength
+        self.vit = vitality
+        self.agl = agility
+        self.defence = defence
+        self.exp = exp
+        self.drop = money
 
     def attack(self,enemy):
         damage = self.attck - enemy.defence

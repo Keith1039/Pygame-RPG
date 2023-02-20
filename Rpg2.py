@@ -1,13 +1,13 @@
 import pygame as game
 import pygame.display
-import subprocess
 from sys import exit
 import Animation_Manager
 import Knight
+from Knight import KStatus
 from NPC_Animation_Manager import NPC_Animation_Manager
 from Object_Animation_Manager import Object_Animation_Manager
 from Screen_Manager import ScreenManager
-
+from Map import DungeonMap_Dict
 #I should have an array of sprite managers and it goes through them
 game.init()
 screen = game.display.set_mode((1422, 800))
@@ -42,13 +42,14 @@ Screen_Manager = ScreenManager(temp_screen)
 
 interactables = Screen_Manager.Apply_context()
 
+
+
 while True:
     print(x)
-    #subprocess.call("Testing-1.0-pc/Testing.exe") sick it works... works a little too well tbh
     spot = animation_tracker // 10
     spot2 = animation_tracker2 // 10
     spot3 = animation_tracker3 // 10
-    if knight.status == "Dead":
+    if knight.status == KStatus.DEAD:
         Knight_ani.Change_array("Death")
 
 
@@ -59,11 +60,13 @@ while True:
 
     # Changing animations
 
-    #This should only work for the overworld. This shouldn't be allowed in fights
-    if knight.status != "In Combat":
-        keys = game.key.get_pressed()
+    # Get's the players key input
+    keys = game.key.get_pressed()
+
+    # Determines players overworld movement
+    if knight.status != KStatus.IN_COMBAT:
         prev_Knight_ani = Knight_ani.ani_array
-        if knight.status == "Normal":
+        if knight.status == KStatus.NORMAL:
             if keys[game.K_RIGHT]:
                 Knight_ani.Change_array("Knight Run R")
                 if prev_Knight_ani != Knight_ani.ani_array:
@@ -95,6 +98,7 @@ while True:
                 animation_tracker = 0
         else:
             Knight_ani.Change_array("Death")
+
         print(knight.status)
 
         screen.blit(temp_screen, (0, 0))
@@ -116,8 +120,8 @@ while True:
         animation_tracker2 += 1
         #Animation tracker3 is for objects like chests and arrows
         if len(Screen_Manager.Object_Ani.ani_array) != 0 and animation_tracker3 == (10 * Screen_Manager.Object_Ani.ani_array[0] - 1):
-            knight.status = "Normal"
-        elif knight.status != "Normal": #for now, I'll have to fiddle with this if I want the arrows to work
+            knight.status = KStatus.NORMAL
+        elif knight.status != KStatus.NORMAL: #for now, I'll have to fiddle with this if I want the arrows to work
             animation_tracker3 += 1
 
         if x > 1000 or x < 0:

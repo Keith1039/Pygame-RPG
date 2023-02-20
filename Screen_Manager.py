@@ -28,7 +28,7 @@ class ScreenManager:
         interactables = []
         if self.context == "Background1":
             #Need to find a better way to deal with this
-            interactables = [ chest_1_1 ]
+            interactables = [chest_1_1]
             self.object_manager.Objects = [(800, 500), True]
             self.Object_Ani.Set_Array(self.context)
 

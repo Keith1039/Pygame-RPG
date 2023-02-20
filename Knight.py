@@ -1,3 +1,4 @@
+from enum import Enum
 weapons={"sword":10,"poisoned sword":12,"silver sword":20,"rusty dagger":1,"poisoned rusty dagger":2,"lance":5,"silver lance":10,"???":999999,"unarmed":3}
 items_shop_list=["old map", "old bread","potion"]
 items_shop={"old map":1000,"old bread":50,"potion":150,"moonstone":300,"silver polish":50}
@@ -9,6 +10,11 @@ combinable_items=["Volitile poison", "silver polish","lance", "rusty dagger", "s
 consumable_item={"old bread":20,"potion":50}
 inventory=[]
 
+class KStatus(Enum):
+    NORMAL = 1
+    IN_COMBAT = 2
+    OPENING_CHEST = 3
+    DEAD = 4
 
 #Statuses are, Normal or In-Combat or Dead or opening_chest
 class Knight:
@@ -20,7 +26,7 @@ class Knight:
         self.attack = strength + weapons[sword]
         self.vit = vitality
         self.agl = agility
-        self.status = "Normal"
+        self.status = KStatus.NORMAL
         self.stance = "1"
         self.defence = defence
         self.exp = exp
