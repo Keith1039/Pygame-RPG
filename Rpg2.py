@@ -4,8 +4,8 @@ from sys import exit
 import Animation_Manager
 import Knight
 from Knight import KStatus
-from NPC_Animation_Manager import NPC_Animation_Manager
-from Object_Animation_Manager import Object_Animation_Manager
+from NPC_Animation_Manager import NPCAnimationManager
+from Object_Animation_Manager import ObjectAnimationManager
 from Screen_Manager import ScreenManager
 from Map import DungeonMap_Dict
 #I should have an array of sprite managers and it goes through them
@@ -25,7 +25,7 @@ knight_surface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
 Knight_ani = Animation_Manager.AnimationManager()
 Knight_ani.Change_array("Knight Attack")
-NPC_Manager = NPC_Animation_Manager()
+NPC_Manager = NPCAnimationManager()
 prev_Knight_ani = []
 
 
