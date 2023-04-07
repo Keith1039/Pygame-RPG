@@ -1,6 +1,6 @@
 import pygame as game
 
-from Object_Animation_Manager import ObjectAnimationManager
+from managers.Object_Animation_Manager import ObjectAnimationManager
 
 
 #Screen manager should draw the actual stuff I guess?

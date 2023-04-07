@@ -1,4 +1,4 @@
-from Object_Animation_Manager import ObjectAnimationManager
+from managers.Object_Animation_Manager import ObjectAnimationManager
 
 global objectAnimationManager
 objectAnimationManager = ObjectAnimationManager()

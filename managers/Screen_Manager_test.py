@@ -1,4 +1,4 @@
-from Screen_Manager import ScreenManager
+from managers.Screen_Manager import ScreenManager
 import pygame as game
 
 global screenManager

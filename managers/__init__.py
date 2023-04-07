@@ -1,0 +1,3 @@
+from managers.NPC_Animation_Manager import NPCAnimationManager
+from managers.Object_Animation_Manager import ObjectAnimationManager
+from managers.Screen_Manager import ScreenManager

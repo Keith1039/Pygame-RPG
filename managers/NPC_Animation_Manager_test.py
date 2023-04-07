@@ -1,7 +1,7 @@
-import NPC_Animation_Manager
+from managers.NPC_Animation_Manager import NPCAnimationManager
 
 global npc_Manager
-npc_Manager = NPC_Animation_Manager.NPCAnimationManager()
+npc_Manager = NPCAnimationManager()
 
 def test_ChangeArray_B1A():
     npc_Manager.context = "Background1"
