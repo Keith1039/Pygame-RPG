@@ -20,7 +20,8 @@ See if you can find the true ending of this short tale.
 ## Features
 
 - Interactable NPCs
-- Stanced and turn based system (planned)
+- 3 main story locations  
+- Stance and turn based system (planned)
 - Standard RPG mechanics
 
 ### Developper portion
@@ -52,7 +53,7 @@ helpful for when the player really shouldn't be moving like if their in a fight,
 or just dead.
 
 Also contains the stat line for the knight. I plan to add functions for use in combat and a 
-`levelUp()` function.
+`level_up()` function.
 
 # Animation_Manager
 The knight characters animation manager. This class is responsible for displaying the proper animations
@@ -90,9 +91,9 @@ I will probably remove it at some point.
 # ScreenManager
 The class that is responsible for drawing the screen. Well actually, it holds the information that gets drawn 
 on the screen but that's semantics. Unlike the other managers that require a context of some sort, this is the
-class that actually determines said context. instead of a `change_array()` function it has a `changeScreen()`
+class that actually determines said context. instead of a `change_array()` function it has a `change_screen()`
 function which changes the screen based on the previous screen and the previous context. This class also
-determines the interactable objects on the screen which is determined by it's `applyContext()` class. 
+determines the interactable objects on the screen which is determined by it's `apply_context()` class. 
 
 I should probably make more descriptive function names for the manager classes so no one get's confused. I'll
 address that in another PR.
@@ -106,7 +107,7 @@ Since I'm allergic to anything that anything even remotely resembling front end,
 The class that has all of the dungeon events and information. Things like bos encounters, enemy encounters
 and the such are recorded in this file. The class itself holds information of events in dungeons and whether
 they have been accessed or not. This is all stored in dictionaries inside the map class. Which dict is in
-use will be determined via a .... CONTEXT and be applied 
+use will be determined via a (you guessed it) CONTEXT and be applied 
 
 ## Saving
 

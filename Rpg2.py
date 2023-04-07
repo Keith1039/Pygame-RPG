@@ -15,37 +15,37 @@ font = game.font.Font('font/Pixeltype.ttf', 50)
 knight = Knight.Knight("Rion", 1, 2, "sword", 1, 1, 1, 1, 1, 1, 1, 1)
 
 #Think I'll go for the 1422 x 800 route from now on
-temp_screen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
-text_surface = font.render("Checking", False, "Red")
-knight_surface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
+tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
+textSurface = font.render("Checking", False, "Red")
+knightSurface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
-Knight_ani = Animation_Manager.AnimationManager()
-Knight_ani.Change_array("Knight Attack")
-NPC_Manager = managers.NPCAnimationManager()
-prev_Knight_ani = []
+knightAni = Animation_Manager.AnimationManager()
+knightAni.change_array("Knight Attack")
+NPCManager = managers.NPCAnimationManager()
+prevKnightAni = []
 
 
-animation_tracker = 0
-animation_tracker2 = 0
-animation_tracker3 = 0
+animationTracker = 0
+animationTracker2 = 0
+animationTracker3 = 0
 
 #An array filled with spots where the treasure chests are. Dictated by Screen Manager
 #Interactable also applies to npcs so yeah.
 
 x = 500
-Screen_Manager = managers.ScreenManager(temp_screen)
+screenManager = managers.ScreenManager(tempScreen)
 
-interactables = Screen_Manager.Apply_context()
+interactables = screenManager.apply_context()
 
 
 
 while True:
     print(x)
-    spot = animation_tracker // 10
-    spot2 = animation_tracker2 // 10
-    spot3 = animation_tracker3 // 10
+    spot = animationTracker // 10
+    spot2 = animationTracker2 // 10
+    spot3 = animationTracker3 // 10
     if knight.status == KStatus.DEAD:
-        Knight_ani.Change_array("Death")
+        knightAni.change_array("Death")
 
 
     for event in game.event.get():
@@ -60,72 +60,80 @@ while True:
 
     # Determines players overworld movement
     if knight.status != KStatus.IN_COMBAT:
-        prev_Knight_ani = Knight_ani.ani_array
+        prevKnightAni = knightAni.aniArray
         if knight.status == KStatus.NORMAL:
             if keys[game.K_RIGHT]:
-                Knight_ani.Change_array("Knight Run R")
-                if prev_Knight_ani != Knight_ani.ani_array:
-                    animation_tracker = 0
+                knightAni.change_array("Knight Run R")
+                if prevKnightAni != knightAni.aniArray:
+                    animationTracker = 0
+                    
                 else:
                     x += 4
+
             elif keys[game.K_LEFT]:
-                Knight_ani.Change_array("Knight Run L")
-                if prev_Knight_ani != Knight_ani.ani_array:
-                    animation_tracker = 0
+                knightAni.change_array("Knight Run L")
+                if prevKnightAni!= knightAni.aniArray:
+                    animationTracker = 0
+
                 else:
                     x -= 4
+
             elif keys[game.K_UP]:
                 for u in range(len(interactables)):
                     status = knight.status
                     interactable = interactables[u]
-                    Screen_Manager.Object_Ani.Change_array(knight, x, interactable)
+                    screenManager.objectAni.change_array(knight, x, interactable)
                     if status != knight.status:
-                        #resetting animation_tracker
-                        animation_tracker3 = 0
-            else:
-                Knight_ani.Change_array("Idle")
-                if prev_Knight_ani != Knight_ani.ani_array:
-                    animation_tracker = 0
+                        #resetting animationTracker
+                        animationTracker3 = 0
 
-        elif Knight_ani.ani_array != Animation_Manager.knight_death:
-            Knight_ani.Change_array("Idle")
-            if prev_Knight_ani != Knight_ani.ani_array:
-                animation_tracker = 0
+            else:
+                knightAni.change_array("Idle")
+                if prevKnightAni != knightAni.aniArray:
+                    animationTracker = 0
+
+        elif knightAni.aniArray != Animation_Manager.knightDeath:
+            knightAni.change_array("Idle")
+            if prevKnightAni != knightAni.aniArray:
+                animationTracker = 0
+
         else:
-            Knight_ani.Change_array("Death")
+            knightAni.change_array("Death")
 
         print(knight.status)
 
-        screen.blit(temp_screen, (0, 0))
-        for f in range(0, len(Screen_Manager.object_manager.Objects), 2 ):
+        screen.blit(tempScreen, (0, 0))
+        for f in range(0, len(screenManager.objectManager.objects), 2 ):
             appendable3 = "(" + str(spot3 + 1) + ").png"
-            if Screen_Manager.object_manager.Objects[f+1] == True:
-                tmp_surface = game.image.load(Screen_Manager.Object_Ani.ani_array[1] + appendable3)
+            if screenManager.objectManager.objects[f+1] == True:
+                tmpSurface = game.image.load(screenManager.objectAni.aniArray[1] + appendable3)
+
             else:
-                tmp_surface = game.image.load(Screen_Manager.Object_Ani.ani_array[1])
-            screen.blit(tmp_surface, Screen_Manager.object_manager.Objects[f])
+                tmpSurface = game.image.load(screenManager.objectAni.aniArray[1])
+            screen.blit(tmpSurface, screenManager.objectManager.objects[f])
 
 
-        screen.blit(text_surface, (0, 0))
-        screen.blit(knight_surface, (x, 440))
+        screen.blit(textSurface, (0, 0))
+        screen.blit(knightSurface, (x, 440))
 
         #Animation tracker is for the knight(player character)
-        animation_tracker += 1
+        animationTracker += 1
         #Animation tracker2 is for the NPCs
-        animation_tracker2 += 1
+        animationTracker2 += 1
         #Animation tracker3 is for objects like chests and arrows
-        if len(Screen_Manager.Object_Ani.ani_array) != 0 and animation_tracker3 == (10 * Screen_Manager.Object_Ani.ani_array[0] - 1):
+        if len(screenManager.objectAni.aniArray) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniArray[0] - 1):
             knight.status = KStatus.NORMAL
+
         elif knight.status != KStatus.NORMAL: #for now, I'll have to fiddle with this if I want the arrows to work
-            animation_tracker3 += 1
+            animationTracker3 += 1
 
         if x > 1000 or x < 0:
             #Code for switching screens
-            temp_screen = Screen_Manager.changeScreen(x)
-            interactable = Screen_Manager.Apply_context()
+            tempScreen = screenManager.change_screen(x)
+            interactable = screenManager.apply_context()
 
-            NPC_Manager.context = Screen_Manager.context
-            NPC_Manager.Apply_context()
+            NPCManager.context = screenManager.context
+            NPCManager.apply_context()
             #Probably gonna make this a function
 
             if x > 1000:
@@ -133,32 +141,26 @@ while True:
             else:
                 x = 900
 
-        if animation_tracker >= 99 and Knight_ani.ani_array == Animation_Manager.knight_death:
-            animation_tracker = 99
+        if animationTracker >= 99 and knightAni.aniArray == Animation_Manager.knightDeath:
+            animationTracker = 99
 
-        elif animation_tracker >= (10 * Knight_ani.ani_array[0] - 1):
-            animation_tracker = 0
+        elif animationTracker >= (10 * knightAni.aniArray[0] - 1):
+            animationTracker = 0
 
         #This is gonna be an issue eventually
-        if len(NPC_Manager.ani_array) != 0 and animation_tracker2 >= (10 * NPC_Manager.ani_array[0] - 1):
-            animation_tracker2 = 0
-
-
-
-
-
-
+        if len(NPCManager.aniArray) != 0 and animationTracker2 >= (10 * NPCManager.aniArray[0] - 1):
+            animationTracker2 = 0
 
         appendable = "(" + str(spot + 1) + ").png"
-        if len(NPC_Manager.ani_array) != 0:
-           appendable2 = "(" + str((spot2 + 1) % NPC_Manager.ani_array[0] + 1) + ").png"
+        if len(NPCManager.aniArray) != 0:
+           appendable2 = "(" + str((spot2 + 1) % NPCManager.aniArray[0] + 1) + ").png"
 
 
 
-        knight_surface = game.image.load(Knight_ani.ani_array[1] + appendable)
-        for z in range(len(NPC_Manager.NPCs)):
-            NPC_Manager.Change_array(NPC_Manager.NPCs[z])
-            screen.blit(game.image.load(NPC_Manager.ani_array[1] + appendable2), (NPC_Manager.ani_array[0], 500))
+        knightSurface = game.image.load(knightAni.aniArray[1] + appendable)
+        for z in range(len(NPCManager.NPCs)):
+            NPCManager.change_array(NPCManager.NPCs[z])
+            screen.blit(game.image.load(NPCManager.aniArray[1] + appendable2), (NPCManager.aniArray[0], 500))
 
     game.display.update()
     clock.tick(60)
