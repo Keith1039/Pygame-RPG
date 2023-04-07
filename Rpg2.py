@@ -1,13 +1,9 @@
 import pygame as game
-import pygame.display
 from sys import exit
 import Animation_Manager
 import Knight
 from Knight import KStatus
-from NPC_Animation_Manager import NPCAnimationManager
-from Object_Animation_Manager import ObjectAnimationManager
-from Screen_Manager import ScreenManager
-from Map import DungeonMap_Dict
+import managers
 #I should have an array of sprite managers and it goes through them
 game.init()
 screen = game.display.set_mode((1422, 800))
@@ -25,7 +21,7 @@ knight_surface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
 Knight_ani = Animation_Manager.AnimationManager()
 Knight_ani.Change_array("Knight Attack")
-NPC_Manager = NPCAnimationManager()
+NPC_Manager = managers.NPCAnimationManager()
 prev_Knight_ani = []
 
 
@@ -37,8 +33,7 @@ animation_tracker3 = 0
 #Interactable also applies to npcs so yeah.
 
 x = 500
-
-Screen_Manager = ScreenManager(temp_screen)
+Screen_Manager = managers.ScreenManager(temp_screen)
 
 interactables = Screen_Manager.Apply_context()
 
@@ -165,7 +160,7 @@ while True:
             NPC_Manager.Change_array(NPC_Manager.NPCs[z])
             screen.blit(game.image.load(NPC_Manager.ani_array[1] + appendable2), (NPC_Manager.ani_array[0], 500))
 
-    pygame.display.update()
+    game.display.update()
     clock.tick(60)
 
 
