@@ -1,21 +1,22 @@
-ShopKeep_Ani = 18, "NPC_Sprites/ShopKeep_idle "
+ShopKeepAni = 18, "NPC_Sprites/ShopKeep_idle "
 
 
 class NPCAnimationManager:
     def __init__(self):
         self.context = ""
         self.NPCs = []
-        self.ani_array = []
+        self.aniArray = []
 
-    def Change_array(self, name):
+    def change_array(self, name):
         if name == "ShopKeep":
-            self.ani_array = ShopKeep_Ani
+            self.aniArray = ShopKeepAni
 
-    def Apply_context(self):
+    def apply_context(self):
         if self.context == "Background1":
             self.NPCs = []
+            
         elif self.context == "Background2":
             self.NPCs = ["ShopKeep"]
-            self.Change_array("ShopKeep")
+            self.change_array("ShopKeep")
 
 
