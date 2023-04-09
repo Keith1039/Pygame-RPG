@@ -4,26 +4,13 @@ knightRunL = 10, "Knight/Cut_Sprites/Run_L "
 knightIdle = 10, "Knight/Cut_Sprites/Idle "
 knightDeath = 10, "Knight/Cut_Sprites/Death "
 
+aniArray = {"Knight Attack": knightAttack, "Knight Run R": knightRunR, "Knight Run L": knightRunL, "Idle": knightIdle,
+            "Death": knightDeath}
 class AnimationManager:
 
     def __init__(self):
         self.aniArray = []
 
     def change_array(self, name):
-        if name == "Knight Attack":
-            self.aniArray = knightAttack
-
-        elif name == "Knight Run R":
-            self.aniArray = knightRunR
-
-        elif name == "Knight Run L":
-            self.aniArray = knightRunL
-
-        elif name == "Idle":
-            self.aniArray = knightIdle
-
-        elif name == "Death":
-            self.aniArray = knightDeath
-
-
+        self.aniArray = aniArray.get(name)
 

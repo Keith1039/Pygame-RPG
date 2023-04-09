@@ -1,22 +1,19 @@
-ShopKeepAni = 18, "NPC_Sprites/ShopKeep_idle "
+ShopKeepAni = (18, "NPC_Sprites/ShopKeep_idle ")
 
-
+NPC_tuple_dict = {"Background1": (), "Background2": ("ShopKeep",)}
+NPC_ani_tuple_dict = {"ShopKeep": ShopKeepAni}
 class NPCAnimationManager:
     def __init__(self):
-        self.context = ""
-        self.NPCs = []
-        self.aniArray = []
+        self.NPCs = ()
+        self.aniTuple = ()
 
-    def change_array(self, name):
-        if name == "ShopKeep":
-            self.aniArray = ShopKeepAni
+    def apply_context(self, context):
+        self.NPCs = NPC_tuple_dict.get(context)
 
-    def apply_context(self):
-        if self.context == "Background1":
-            self.NPCs = []
-            
-        elif self.context == "Background2":
-            self.NPCs = ["ShopKeep"]
-            self.change_array("ShopKeep")
+    def change_tuple(self, name):
+        self.aniTuple = NPC_ani_tuple_dict.get(name)
+
+
+
 
 
