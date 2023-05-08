@@ -4,6 +4,30 @@ import Animation_Manager
 import Knight
 from Knight import KStatus
 import managers
+
+
+interact_functions = {}
+# Make this hard coded for now
+mockDialogEvent = managers.Event(None, "Dialogue","event_text/Test_dialogue.txt")
+def draw_dialogue(dialogueTimer, font):
+    text = dialogueManager.prevText
+    if dialogueTimer % 180 == 0:
+        text = dialogueManager.get_text()
+    textSurface = font.render(text, False, "Red")
+    if dialogueManager.portrait != None:
+        nameSurface = font.render(dialogueManager.name, False, "Red")
+        screen.blit(dialogueManager.characterBox, (0, 650))
+        screen.blit(dialogueManager.portrait, (15, 670))
+        screen.blit(nameSurface, (20, 620))
+        screen.blit(dialogueManager.textBox, (120, 650))
+        screen.blit(textSurface, (140, 670))
+    else:
+        #This way there's no awkward space where the portrait used to be.
+        screen.blit(dialogueManager.textBox, (0, 650))
+        screen.blit(textSurface, (20, 670))
+    #There is an easier way to do this but it makes my eyes bleed so no :)
+    return text != ""
+
 #I should have an array of sprite managers and it goes through them
 game.init()
 screen = game.display.set_mode((1422, 800))
@@ -24,19 +48,21 @@ knightAni.change_array("Knight Attack")
 NPCManager = managers.NPCAnimationManager()
 prevKnightAni = []
 
-
+temporary = game.image.load("portraits/Knight.png")
 animationTracker = 0
 animationTracker2 = 0
 animationTracker3 = 0
+dialogueTimer = 0
 
 #An array filled with spots where the treasure chests are. Dictated by Screen Manager
 #Interactable also applies to npcs so yeah.
 
 x = 500
 screenManager = managers.ScreenManager(tempScreen)
+dialogueManager = managers.DialogueManager()
 
 interactables = screenManager.interactables
-
+textEnable = True #For the purposes of this test
 
 while True:
     #print(x)
@@ -81,6 +107,18 @@ while True:
                 for u in range(len(interactables)):
                     status = knight.status
                     interactable = interactables[u]
+                    if interactable.eventType == "Chest":
+                        screenManager.objectAni.change_tuple(knight, x, interactable)
+                        if status != knight.status:
+                            #resetting animationTracker
+                            animationTracker3 = 0
+                    elif interactable.eventType == "Dialogue":
+                        textEnable = True
+                        knight.status = KStatus.IN_CUTSCENE
+                        # Do something
+                        
+                        #print("Triggered")
+                    
                     screenManager.objectAni.change_tuple(knight, x, interactable)
                     if status != knight.status:
                         #resetting animationTracker
@@ -102,7 +140,9 @@ while True:
         ##print(knight.status)
 
         screen.blit(tempScreen, (0, 0))
-        for f in range(0, len(screenManager.objectManager.objects), 2 ):
+        #screen.blit(temporary, (100, 550))
+
+        for f in range(0, len(screenManager.objects), 2):
             appendable3 = "(" + str(spot3 + 1) + ").png"
             if screenManager.objects[f+1] == True:
                 tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1] + appendable3)
@@ -114,6 +154,15 @@ while True:
 
         screen.blit(textSurface, (0, 0))
         screen.blit(knightSurface, (x, 440))
+        #Code for testing the dialogueManager
+        if textEnable == True:
+            if dialogueManager.file == None:
+                dialogueTimer = 180
+                dialogueManager.load_file(mockDialogEvent)
+            textEnable = draw_dialogue(dialogueTimer, font)
+            dialogueTimer += 1
+        else:
+            dialogueTimer = 0
 
         #Animation tracker is for the knight(player character)
         animationTracker += 1
@@ -165,6 +214,4 @@ while True:
 
     game.display.update()
     clock.tick(60)
-
-
 

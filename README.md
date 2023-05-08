@@ -98,6 +98,10 @@ determines the interactable objects on the screen which is determined by it's `a
 I should probably make more descriptive function names for the manager classes so no one get's confused. I'll
 address that in another PR.
 
+# DialogueManager
+The class responsible for managing the text boxes and the accompanying dialogue. This class uses files to read from 
+and a function in Rpg2.py draws out the information provided by this class. 
+
 ## UI
 
 These classes are responsible for the user interface so things like the menus, minimap etc.
