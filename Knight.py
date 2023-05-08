@@ -14,7 +14,8 @@ class KStatus(Enum):
     NORMAL = 1
     IN_COMBAT = 2
     OPENING_CHEST = 3
-    DEAD = 4
+    IN_CUTSCENE = 4
+    DEAD = 5
 
 #Statuses are, Normal or In-Combat or Dead or opening_chest
 class Knight:
