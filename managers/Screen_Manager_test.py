@@ -32,4 +32,3 @@ def test_move_to_undefined_from_screen1():
     prev_context = screenManager.context
     screenManager.change_screen(-300)
     assert screenManager.context == prev_context
-

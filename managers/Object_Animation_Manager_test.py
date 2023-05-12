@@ -1,4 +1,5 @@
 from managers.Object_Animation_Manager import ObjectAnimationManager
+from managers.Screen_Manager import Event
 from managers.Dummy_Knight import Knight
 
 objectAnimationManager = ObjectAnimationManager()
@@ -15,7 +16,7 @@ def test_set_Array():
 
 def test_change_tuple():
         knight = Knight()
-        interactable = [(500, 600), "Chest", False]
+        interactable = Event((500, 600), "Chest")
         pos = 550
         # Clearing the tuple
         objectAnimationManager.aniTuple = ()
