@@ -35,8 +35,7 @@ animationTracker3 = 0
 x = 500
 screenManager = managers.ScreenManager(tempScreen)
 
-interactables = screenManager.apply_context()
-
+interactables = screenManager.interactables
 
 
 while True:
@@ -105,12 +104,12 @@ while True:
         screen.blit(tempScreen, (0, 0))
         for f in range(0, len(screenManager.objectManager.objects), 2 ):
             appendable3 = "(" + str(spot3 + 1) + ").png"
-            if screenManager.objectManager.objects[f+1] == True:
+            if screenManager.objects[f+1] == True:
                 tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1] + appendable3)
 
             else:
                 tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1])
-            screen.blit(tmpSurface, screenManager.objectManager.objects[f])
+            screen.blit(tmpSurface, screenManager.objects[f])
 
 
         screen.blit(textSurface, (0, 0))
@@ -128,10 +127,10 @@ while True:
             animationTracker3 += 1
 
         if x > 1000 or x < -280:
-            #Code for switching screens
+            # Code for switching screens
             prev_screen = screenManager.screen
             tempScreen = screenManager.change_screen(x)
-            interactable = screenManager.apply_context()
+            interactable = screenManager.interactables
 
             NPCManager.apply_context(screenManager.context)
 

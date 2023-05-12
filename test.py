@@ -1,6 +1,5 @@
-def helloworld():
-    print("Hello world")
-
-dictionary = {5:helloworld()}
-
-dictionary[5]
+#import os
+file = open('event_text/event1.txt')
+for i in range(10):
+    print(file.readline())
+    print(i)
