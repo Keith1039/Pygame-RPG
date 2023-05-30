@@ -1,0 +1,12 @@
+In a world full of monsters knowing how to fight is essential!
+When a fight starts there's no stopping until one of you is dead so try your best!
+Luckily for you most enemies are lone wolves, meaning you only have to deal with one at a time!
+In combat, there are three options. Attack, defend and item.
+Attack, well, attacks your enemy dealing damage based on your attack and their defence.
+Defence braces your character to receive an attack, halving the potential damage. Knowing when to defend is a crucial way to stay alive.
+Item let's you use the consumable items in your inventory. This is your go to way to heal. Scarfing down bread and potions in a fight is crucial to survival!
+Who attacks first depends on your agility stats. If your enemy is faster they'll go first. If not, you'll go first.
+The turn order matters for the attack and item options.
+If you're slower than your opponent that means that you'll attack second or heal second so be careful.
+regardless of who goes first you'll always get your defence off so when you think you're in danger don't hesitate to defend!
+Goodluck and try not to die!

@@ -1,0 +1,18 @@
+???: It seems like it's time for you to wake up.
+???: This ... story is to be an intresting one. With these eyes I forsee three possible endings.
+???: I advise you to think carefully before you make your decisions. Your very fate depends on it.
+???: Now then, the stage is set and the actors are waking from their slumber. Without further ado, the play will begin. Do be sure to entertain me.
+You wake up to the feeling of cold metal. You crawl out of the sarcophagus tired and confused.
+???: my name... that's right.. I'm.
+This will only be asked once, if you leave the character name blank a default name will be used instead
+???: That's right. My name is  Rion
+Rion: It looks like there's some stuff with me
+Rion Gained a rusty dagger!
+Rion Gained a sword!
+Rion Gained a sword?
+Rion: This sword... whenever I try unsheathing it my body freezes. Honestly, it seems quite sinister but it might be a clue as to who I am.
+Rion: Other than my name, I can't remember anything.why I'm here, who I am... I can't recall anything.
+Rion: For now though, I should leave this place so that I can find out more about myself.
+you swing the sword around for a bit.
+Hopefully I won't have to use this, as for why I can wield this so well... Was I a mercenary or something?
+Rion equipped the sword.

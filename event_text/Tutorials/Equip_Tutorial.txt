@@ -1,0 +1,2 @@
+Here the player character can change their equipment.
+For the purposes of the setting you may only change your weapon for now.

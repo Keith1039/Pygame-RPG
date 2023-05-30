@@ -74,7 +74,7 @@ basement_key_flag=[]
 upstairs_key_flag=[]
 
 
-#tutorials
+#Combat_Tutorial.txt
 def combat_tutorial():
     input("In a world full of monsters knowing how to fight is essential!")
     input("When a fight starts there's no stopping until one of you is dead so try your best!")
@@ -89,6 +89,7 @@ def combat_tutorial():
     input("regardless of who goes first you'll always get your defence off so when you think you're in danger don't hesitate to defend!")
     input("Goodluck and try not to die!")
 
+#Combine_Tutorial.txt
 def combine_tutorial():
     input("Various items that you find might have other uses.")
     input("In this menu, two items can be combined to create another item.")
@@ -97,6 +98,7 @@ def combine_tutorial():
     input("Even if two items don't end up making anything, you won't lose them by trying so go wild.")
     input("Items are only consumed when a new item is succesfully created.")
 
+#Descritptions_Tutorial.txt
 def descriptions_tutorial():
     input("Item descriptions can help you understand the potential uses for an item.")
     input("Some items need to be examined in this menu in order for certain events to trigger.")
@@ -104,10 +106,12 @@ def descriptions_tutorial():
     input("Books can contain clues as to how to progress and the current setting.")
     input("Be sure to frequently check this menu!")
 
+#Main_Menu_Tutorial.txt
 def main_menu_tutorial():
     input("The main menu is where you go to use items, equip items, combine items and examine items.")
     input("Each function has it's on separate tutorial so feel free to explore each option!")
 
+#Equip_Tutorial.txt
 def equip_tutorial():
     input("Here the player character can change their equipment.")
     input("For the purposes of the setting you may only change your weapon for now.")
@@ -1679,7 +1683,7 @@ class Hero:
                     if confirmation=="yes":
                         input("Fafnir: That emblem! I Thought all of you were dead!")
                         input("The Proud dragon's composure dissapears. Replacing it is a crippling fear.")
-                        input("In your trance you calmly unsheathe the jet black katana.")
+                        input("In your trance you calmly unsheathe the jet black sword.")
                         self.weapon="???"
                         self.attck=(self.str+weapons[self.weapon])
                         self.Hp=1
@@ -1693,7 +1697,7 @@ class Hero:
                                 self.level_up_sequence()
                             input("the dragon is slain.")
                             input(self.name+':'+ " "+"I remember everything... The empire I was sworn to protect is gone.")
-                            input("you look at the cursed katana")
+                            input("you look at the cursed sword")
                             input(self.name+':'+ " "+" And it's all my fault....")
                             input("Flashes of your past appear. You gleefully cutting down monsters and innocents alike in the burning capital.")
                             input("You hold your head")
@@ -1716,7 +1720,7 @@ class Hero:
                             input("Morgan: So you can't die just yet O sword of the empire. You have a duty to save your men.")
                             input("Morgan holds out her hand")
                             input(self.name+':'+' '+"*smiles* I could never beat you in an argument")
-                            input("You sheathe the katana")
+                            input("You sheathe the sword")
                             input(self.name+':'+' '+"So long as I'm still sane I'll help as much as possible")
                             input("You shake her hand")
                             input("Morgan: Good, before we go, let's fix your problem first.")
@@ -1824,7 +1828,7 @@ class Hero:
                 input("Mysterious shopkeep: If you want to know then pay me 9999999999999999999999999 gold.")
                 if self.bal < 9999999999999999999999999:
                     input(self.name+':'+' '+"How can you say that with such an innocent smile on your face. *sigh*")
-                    print("You give up on trying to sell the mysterious katana")
+                    print("You give up on trying to sell the mysterious sword")
                 else:
                     input(self.name+':'+"You're in luck! I just so happen to have that much. count it and weep!")
                     input("Mysterious shopkeep: since when were you filthy rich? I didn't even think this much money existed.")
@@ -1832,8 +1836,8 @@ class Hero:
                     input("Mysterious shopkeep: sorry, trade secret, no matter how much money you offer me I won't say a word.")
                     input(self.name+':'+' '+"All those days of goblin and kobald killing.....")
                     input("Mysterious shopkeep: OK OK, fine. Have this on the house!")
-                    input(self.name+' '+ "gained 100 potions!")
-                    for i in range(100):
+                    input(self.name+' '+ "gained 1000000000 potions!")
+                    for i in range(1000000000):
                         inventory.append("potion")
                     input("Mysterious shopkeep: now please don't ever bring this up again.")
                     input("Mysterious shopkeep: *sobs* My profit marginsssssssssssss")
@@ -1870,74 +1874,89 @@ class Hero:
     
     #Item descriptions
     #####################################################################################################
+
+    #Rusty_dagger.txt
     def rusty_dagger_des(self):
         input("A rusted dagger that seems very feable. It is one of the items you found on yourself when you woke up. Maybe you'll find a use for it")
         input(self.name+':'+' '+"There's a weird engraving on the side... but it's too faint to read.")
         print("attack value is"+' '+ str(weapons["rusty dagger"]))
     
+    #Poisoned_Rusty_Dagger.txt
     def poisoned_rusty_dagger_des(self):
-                input("The same dagger but now drenched in the volitile posion. Looks like it will be good for one last blow. make it count.")
-                input(self.name+':'+' '+"I don't know why but I feel bad using the dagger like this.")
-                print("attack value is"+' '+ str(weapons["poisoned rusty dagger"]))
+        input("The same dagger but now drenched in the volitile posion. Looks like it will be good for one last blow. make it count.")
+        input(self.name+':'+' '+"I don't know why but I feel bad using the dagger like this.")
+        print("attack value is"+' '+ str(weapons["poisoned rusty dagger"]))
     
+    #Lance.txt
     def lance_des(self):
         input("A lance found in the minotaurs lair. Although you feel you aren't proficient with the weapon it might be useful later on.")
         input(self.name+':'+' '+"I'm not a spearman but oh well")
         print("attack value is"+' '+ str(weapons["lance"]))
     
+    #Silver_Lance.txt
     def silver_lance_des(self):
         input("You can feel the power of silver flow through this weapon. Make the effects count!")
         print("attack value is"+' '+ str(weapons["silver lance"]))
     
+    #Sword.txt
     def sword_des(self):
         input("normal sword that was at your side when you woke up. Looks like you still know how to use it")
         input(self.name+':'+' '+"Old reliable. You've been with me for a while haven't you.")
         print("attack value is"+' '+ str(weapons["sword"]))
 
+    #Poisoned_Sword.txt
     def poisoned_sword_des(self):
         input("The sword drenched in deadly poison. Sadly it looks like it'll break soon. maybe using that on your main weapon was a bad idea")
         input(self.name+':'+' '+"Maybe this wasn't the best idea.... *sigh*")
         print("attack value is"+' '+ str(weapons["poisoned sword"]))
     
+    # Silver_Sword.txt
     def silver_sword_des(self):
         input("You can feel the power of silver flow through this weapon. Make the effects count!")
         print("attack value is"+' '+ str(weapons["silver sword"]))
 
-
-    def katana_des(self):
-        input("A katana that you carry on your back. Whenever you reach for it your body freezes and refuses to draw it out. Maybe you should leave it alone.")
+    #Cursed_Sword.txt
+    def cursed_sword_des(self):
+        input("A sword that you carry on your back. Whenever you reach for it your body freezes and refuses to draw it out. Maybe you should leave it alone.")
         input(self.name+':'+' '+"*stare* Everytime I look at this a shiver goes down my spine")
     
+    #Volitile_Poison.txt
     def Volitile_poison_des(self):
         input("Some poison you found. It comprimises the structural integrity of whatever it is applied to but will leave the victim of the attack poisoned. Maybe it'll come in handy later.")
         input(self.name+':'+' '+"Sometimes you gotta play dirty to win.")
         input(self.name+':'+' '+"it's only good for one fight so I should save it for a strong enemy.")
     
+    #Silver_Polish.txt
     def Silver_polish_des(self):
         input("Applies the attribute of silver to whatever it is applied to. The effects last for only one fight, maybe you'll find a use for this latter.")
         input(self.name+':'+' '+"It's shiny")
     
+    #Old_Bread.txt
     def old_bread_des(self):
         input("some old bread you found. Hopefully this doesn't make you sick")
         input(self.name+':'+' '+"I'm suprisingly used to eating food like this")
         print("Heals for 20 hp")
     
+    #Emblem.txt
     def emblem_des(self):
         input("An emblem you found. Although you don't know why, you are certain this relates to you and so you keep it close.")
         input(self.name+':'+' '+"What secrets do you hold?....")
         print("you put away the emblem.")
     
+    #Potion.txt
     def potion_des(self):
         input("A type of medicine with a fruity aftertaste. Good for wounds... just don't ask what it's made of.")
         input(self.name+':'+' '+"Nothing like a nice cold drink to help deal with serious wounds!")
         print("heals 50 hp")
 
+    #Old_Map.txt
     def old_map_des(self):
         input("An old map you purchased from the shopkeeper. Maybe there's a secret to it?")
         input(self.name+':'+' '+"..... Should I try lighting it on fire?")
         input(self.name+':'+" "+"... what am I thinking, that's beyond stupid.")
         print("you put away the map")
     
+    #Moonstone.txt
     def moonstone_des(self):
         input("A white smooth stone that's said to be the shape of the moon. You bought it from the shopkeeper.")
         input(self.name+':'+' '+"It's a pretty rock.")
@@ -1945,6 +1964,7 @@ class Hero:
         input(self.name+':'+' '+"Should I combine it with something?")
         print("you put away the moonstone")
     
+    #Moonlit_Map.txt
     def moonlit_map_des(self,ruined_castle_flag):                  
         print("The old map is illuminated to reveal the path to an ancient ruin.")
         input(self.name+':'+' '+"Looks like I won't have to complain to the shopkeep after all.")
@@ -1952,17 +1972,20 @@ class Hero:
         if len(ruined_castle_flag)==1:
             ruined_castle_flag.pop(0)
 
+    #Werewolf_Tooth.txt
     def Werewolf_tooth_def(self):
         print("A large canines tooth. You obtained it after besting the Werewolf, Father David.")
         input(self.name+':'+' '+"What did he mean by 'your ilk' and 'completed product'?")
         input("You put away the werewolf's tooth.")
         input(self.name+':'+' '+"I should go see the shopkeeper now that I'm done.")
     
+    #Basement_Key.txt
     def basement_key_des(self):
         input("A key for the basement floor of the ruined castle")
         input(self.name+':'+' '+"Wow that was early. SHouldn't I be getting this in season 3?") #AOT joke
         input("You put the basement key away")
     
+    #Upstairs_Key.txt
     def upstairs_key_des(self):
         input("A key for the upstair floor of the ruined castle")
         input(self.name+':'+' '+"Now I can go upstairs and explore there!")
@@ -1985,7 +2008,7 @@ class Hero:
         
         "upstairs key":self.upstairs_key_des, "basement key":self.basement_key_des,
 
-        "poisoned rusty dagger":self.poisoned_rusty_dagger_des,"lance":self.lance_des,"silver lance":self.silver_lance_des,"???":self.katana_des}
+        "poisoned rusty dagger":self.poisoned_rusty_dagger_des,"lance":self.lance_des,"silver lance":self.silver_lance_des,"???":self.sword_des}
         if len(descriptions_menu) == 0:
             descriptions_tutorial()
             descriptions_menu.pop(0)
@@ -2037,7 +2060,7 @@ class Hero:
                     print("understood")
             elif confirmations == "???":
                 input("you try but you can't seem to do it. Your body freezes everytime you try.")
-                input("You give up on equipping the katana")
+                input("You give up on equipping the sword")
             elif confirmations == "unarmed":
                 input("you are already unarmed.")
             elif confirmations == "5":
@@ -2166,7 +2189,7 @@ class Hero:
             elif confirmation == "5":
                 check = False
     
-    #inn(remember to put a price)
+    #Inn_Welcome.txt
     def free_inn(self):
         input("Inn owner: Welcome! Oh? You're a new face.")
         input(self.name+':'+' '+"I just came to town.")
@@ -2181,6 +2204,7 @@ class Hero:
         self.memory_frag1()
         self.rest()
 
+    #Memory_Fragment#1.txt
     def memory_frag1(self):
         input("Your head starts to hurt")
         input("???: Is this the one? He looks like he's barely 12.")
@@ -2206,6 +2230,7 @@ class Hero:
         input("You wake up")
         input(self.name+':'+' '+"Were those... my memories?")
 
+    #Memory_Fragment#2.txt
     def memory_frag2(self):
         input("Amadeus: Ah you're here. How goes the campaign.")
         input("someone replies but you can't seem to hear them.")
@@ -2232,6 +2257,7 @@ class Hero:
         input(self.name+':'+' '+"......")
         input(self.name+':'+' '+"I can only go forward.... I'll learn why as I continue this path")
     
+    #Memory_Fragment#2.5.txt
     def memory_frag2_3(self):
         input("You see the Gargoyle you had just defeated, far less ancient than when you encountered it.")
         input("???: Your duty is over. I'm not gonna last much longer.")
@@ -2253,7 +2279,7 @@ class Hero:
         input("???: Goodbye my friend. May we never meet again.") #says this because if they do, one of them dies
         input("???: 'I'll see my duty through.'")
         
-    
+    #Memory_Fragment#3.txt
     def memory_frag3(self):
         input("In front of you is the same Amadeus as before. He looks terrible.")
         input("The bright king from before is nowhere to be seen. It's as if he is crushed under the stress.")
@@ -2397,7 +2423,8 @@ class Hero:
                             check = False
                     else:
                         print("invalid input")
-            
+        
+        #D True_ending.txt
         elif len(town_phase) == 4: #("Make your exit conditions bro")
                 check = True
                 while check == True:
@@ -2449,9 +2476,8 @@ class Hero:
             
 
             
-#undead are weak to what killed them
-
-    def book1(self): 
+    #Faint_Book.txt
+    def Book1(self): 
         confirmation=input("The book is old and worn and the title is too faint. Would you like to read it? yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2463,13 +2489,14 @@ class Hero:
             input("The following pages are blank")
             input("you flip to the end.")
             input("Even though he fought bravely, a vile poison crept into his body, killing him during the great war")
-            input(self.name+':'+' '+"These seem to be the memoirs of a great warrior named minotaur.")
+            input(self.name+':'+' '+"These seem to be the memoirs of a great warrior named 'Minotaur'.")
             input(self.name+':'+' '+"maybe this will be useful for something down the line")
             print("you put the book away")
         else:
             pass
     
-    def book2(self): 
+    #Demons_A_Pocket_Guide_to_Humanity's_Greatest_Enemies.txt
+    def Book2(self): 
         confirmation=input("The book is called 'Demons: A Pocket Guide to Humanities Greatest Enemies'. Would you like to read it? yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2487,7 +2514,8 @@ class Hero:
         else:
             pass
     
-    def book3(self): #Items
+    #Items_An_Adventurer's_Best_Friend.txt
+    def Book3(self):
             confirmation=input("The title of the book is 'Items: An Adventurer's best friend!' Would you like to read it? yes/no ")
             confirmation=confirmation.strip()
             while confirmation != "yes" and confirmation != "no":
@@ -2504,8 +2532,8 @@ class Hero:
             else:
                 pass
 
-    #Gargoyles dungeon
-    def book4(self):
+    #Gargoyles_Dungeon_Journal_#1.txt
+    def Book4(self):
         confirmation=input("This seems to be a journal of some sorts. Would you like to read it? yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2527,8 +2555,9 @@ class Hero:
             print("you put the book away")
         else:
             pass
-    #Found in Gargoyle dungeon
-    def book5(self):
+
+    #Gargoyles_Dungeon_Journal_#2.txt
+    def Book5(self):
         confirmation=input("This seems to be a journal of some sorts. Would you like to read it? yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2547,8 +2576,9 @@ class Hero:
             print("you put the book away")
         else:
             pass
-    #Gargoyle drop
-    def book6(self): 
+
+    #Gargoyles_Dungeon_Journal_#3.txt
+    def Book6(self): 
         confirmation=input("This seems to be a journal of some sorts. Would you like to read it? yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2571,8 +2601,9 @@ class Hero:
             print("you put the book away")
         else:
             pass
-#book about the dragon faith
-    def book7(self): 
+
+    #Gospel_of_the_Dragons.txt
+    def Book7(self): 
         confirmation=input("This was the book the religious woman gave to you. Would you like to read it? yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2590,8 +2621,9 @@ class Hero:
             print("you put the book away")
         else:
             pass
-#tip about boss fights
-    def book8(self): #placed ("History book")
+
+    #Ancient_History_Book.txt
+    def Book8(self): #placed ("History book")
         confirmation=input("This was the book you found in the minotaurs dungeon. Would you like to read it yes/no ")
         confirmation=confirmation.strip()
         while confirmation != "yes" and confirmation != "no":
@@ -2613,7 +2645,8 @@ class Hero:
         else:
             pass
 
-#Dave
+    #Dave
+    #Dave.txt
     def npc1(self):
         input('Dave:' +' '+"Names Dave, Haven't seen you around here. Did you come from the outside?")
         input(self.name+':'+' '+"I'm not sure...")
@@ -2625,7 +2658,9 @@ class Hero:
         input(self.name+':'+' '+"What the hell...")
         input(self.name+':'+' '+"'looks like getting out will be tricky..'")
         print("You and Dave each go on your way. He kept scouring the outskirts, you go on towards the town in the distance.")
-#kid
+
+    #kid
+    #Kid.txt
     def npc2(self):
         input("young boy: Man I wish I could use magic. Apparently only dragons can do it.")
         input(self.name+':'+" "+"Only dragons can use magic?")
@@ -2635,7 +2670,9 @@ class Hero:
         input("A woman calls the boy over")
         input("young boy: Anyway bye weird mister!")
         print("The little boy runs off")
-#Nun
+
+    #Nun
+    #Nun.txt
     def npc3(self,inventory):
         input("Religious woman: I see you've met my fool of a son Dave. Hmph. Doesn't he know that the dragon protects us from the outside?!")
         input(self.name+':'+' '+"The dragon protects us?")
@@ -2645,7 +2682,8 @@ class Hero:
         print(self.name+' '+"Gained the 'Gospel of the dragons'")
         inventory.append('Gospel of the dragons')
 
-#Insane man(Werewolf hint)
+    #Insane man
+    #Insane_Man.txt
     def npc4(self,werewolf_clue2,werewolf_hints):
         if len(werewolf_clue2) == 1:
             input("Drunk man: HAHHAHAHAHAHHA, It'll kill us all.")
@@ -2659,11 +2697,18 @@ class Hero:
         else:
             input("You try to approach the man but he just keeps muttering nonesence.")
             input(self.name+':'+' '+"It's no good. He's too shaken up.")
+    
+    #Insane_Man_Reocurring.txt
+    def npc4a(self):
+        input("You try to approach the man but he just keeps muttering nonesence.")
+        input(self.name+':'+' '+"It's no good. He's too shaken up.")
 
         
-#Flower lady(Werewolf clue number 2)
+    #Flower lady
+    #Flower_Lady.txt
     def npc5(self, werewolf_clue3, werewolf_hints):
         if len(werewolf_clue3) == 1:
+            input("CONDITION HERE")
             input("Flower Lady: Hey you want a flower? Normally I charge but I'm in such a good mood today!")
             input(self.name+':'+" "+"What's the occasion?")
             input("She smirks")
@@ -2672,7 +2717,7 @@ class Hero:
             input(self.name+':'+" "+"Who even is this Father David character?")
             input("Flower Lady: HUH?!?! You don't even know that?!")
             input("Flower Lady: Father David is the head priest for this place! He's such a devoted man that he seared the cross of saint Helios on his arm!")
-            input("Flower Lady: To be honest men like you stand no chance.... Shoo, you don't even deserve a flower if you ask stupid questions like that.")
+            input("Flower Lady: To be honest, men like you stand no chance.... Shoo, you don't even deserve a flower if you ask stupid questions like that.")
             input("The Flower Lady walks off")
             input(self.name+':'+" "+"A cross seared onto his arm?")
             print("You walk off.")
@@ -2681,10 +2726,16 @@ class Hero:
         else:
             input("Flower Lady: Don't talk to me! Anyone who doesn't know how great father David is can go die!")
 
-#Final quest giver
+    #Flower_Lady_Reocurring.txt
+    def npc5_2():
+        input("Hmph go away!")
+
+    #Mysterious shopkeep final quest
+    #Mysterious_Shopkeep_Final_Quest.txt
     def npc6(self):
         if len(final_flag) == 0:     
             if ("Werewolf tooth" in inventory) == True and ("emblem" in inventory) == False:
+                input("CONDITION HERE")
                 input("Mysterious shopkeep: well done")
                 input("Mysterious shopkeep: It seems that you are ready for your final endeavor.")    
                 input("A mysterious door appears")
@@ -2695,18 +2746,20 @@ class Hero:
                 final_flag.append(1)
                 town_phase.append(1)
         
-        
+    #Mysterious_shopkeep_emblem.txt
     def npc_check(self):
         if ("emblem" in inventory) == True:
+            input("CONDITION HERE")
             input("The Mystreious shopkeep is looking at you with a warm smile ")
             input(self.name+':' +' '+"You seem to be in good spirits")
             input("Mysterious shopkeep: I am. How embarassing.")
             input(self.name+':'+ ' '+"'wonder why she's smiling'")
 
 
-#(Shopkeep hint, pay 300 gold)
+    #Info_Broker.txt
     def npc7(self,shopkeeper_hint):
         if len(shopkeeper_hint) == 1:
+            input("CONDITION HERE")
             input("Info broker: You wanna know about an exit? Pay up! ")
             confirmation = input("Will you pay? yes/no ")
             while confirmation != "yes" and confirmation != "no":
@@ -2724,12 +2777,15 @@ class Hero:
                     input("Info broker: Tch, then just leave! Useless....")
             else:
                 input("Info broker: Tch, then just leave! Useless....")
-        else:
-            input("Info broker: I told you what I know so screw off!")
+    
+    #Info_Broker_Reocurring.txt
+    def npc7_2():
+        input("Screw off, can't you tell I'm busy counting money?!")
 
-#(Shopkeep werewolf quest)
+    #Mysterious_Shopkeep_Werewolf.txt
     def npc8(self,shopkeeper_hint,werewolf_clue1, werewolf_hints):
         if len(shopkeeper_hint)==0 and len(werewolf_hints) == 0:
+            input("CONDITION HERE")
             input("Mysterious shopkeep: Hello to my favourite customer. You seem to want something other than my great items. ")
             input(self.name+':'+" "+"Word on the street is that you have a way out of this place. Is that true?")
             input("Mysterious shopkeep: My my... Aren't you well informed. But yes... I do have a way out")
@@ -2740,7 +2796,7 @@ class Hero:
             input("Mysterious shopkeep: Haha, now that's what we like to hear. Anyway I want you to deal with the mysterious murders around town. ")
             input(self.name+':'+" "+"Do I look like a detective to you?")
             input("Mysterious shopkeep: No but you do look like the two things I like in my customers. Capable and desperate.")
-            input(self.name+':'+" "+"Uh Fine.")
+            input(self.name+':'+" "+"Ugh Fine.")
             input("Mysterious shopkeep: That's the spirit! Good luck!")
             input(self.name+':'+' '+"'it's no good, I don't think she'll budge until I do as she says.'")
             input(self.name+':'+' '+"'I should ask around the town to find more clues to this mystery killer.'")
@@ -2750,7 +2806,13 @@ class Hero:
             town_phase.append(1)
 
     
-    #shopeeker introduction
+
+
+    #shopkeeper dialogue(npc9-npc14)
+    ######################################
+
+    #Mysterious Shopkeeps introduction diologue
+    #Mysterious_Shopkeep_Intro.txt
     def npc9(self):
         input(self.name+':'+" "+"'what an odd shop... I looked around but coudln't find any shops that sell useful things.'")
         input("You enter the odd shop at the edge of town.")
@@ -2773,10 +2835,8 @@ class Hero:
         input("Mysterious shopkeep: Likewise.")
         input("You shake hands")
 
-    #shopkeeper alt dialogue(npc10-npc13)
-    ######################################
-
-    #about hat
+    #Mysterious Shopkeep talks about her hat
+    #Mysterious_Shopkeep_Hat
     def npc10(self):
         input(self.name+':'+' '+"So.... What's with the hat?")
         input("Her hat was commically large and ressembled the hat worn by a witch.")
@@ -2786,27 +2846,29 @@ class Hero:
         input(self.name+':'+' '+"You just take very good care of it so I was wondering about it's backstory.")
         input("Mysterious shopkeep: Oh, it's a memento of a really important person. So until I see him again I'll take good care of the hat.")
         input("You remark that her smile is genuine for once. Like she was recalling a fond memory.")
-        input(self.name+':'+' '+"'so she can smile like that too...'")
+        input(self.name+':'+' '+"'so you can smile like that too...'")
         input("Mysterious shopkeep: Jealous?")
         input(self.name+':'+' '+"Obviously not.")
     
-    #about Asterious
+    #Mysterious Shopkeep talks about Asterious
+    #Mysterious_Shopkeep_Asterious.txt
     def npc11(self):
         input("Mysterious shopkeep: So I heard you defeated the undead in the ruins.")
         input(self.name+':'+' '+"'so that's what that was.'")
         input(self.name+':'+' '+"Yeah I guess so. It was really strong.")
-        input("Mysterious shopkeep: Asterious was really powerful when he was alive and should be less powerful as an undead.")
+        input("Mysterious shopkeep: Asterious was really powerful when he was alive but should be less powerful as an undead.")
         input("Mysterious shopkeep: Even so, I don't think he's weak enough for you to beat him. So how exactly did you defeat him?")
         input(self.name+':'+' '+"It wasn't the most honourable way but I coated my weapon in poison and well...")
         input("Mysterious shopkeep: 'That make sense, for a moment I thought he...'")
         input("Mysterious shopkeep: Asterious died to poison in his life.")
         input(self.name+':'+' '+"So the poison I used was the same one that killed him originally?")
         input("Mysterious shopkeep: No, there's no way you could get your hands on that.")
-        input("Mysterious shopkeep: 'That poison could even kill lesser dragons after all.'")
+        input("Mysterious shopkeep: 'That' poison could even kill lesser dragons after all.")
         input("Mysterious shopkeep: An undead is naturally weak to what killed them. Even common rat poison would have a similar effect.")
         input(self.name+':'+' '+"Oh, I see. I'll keep that in mind.")
 
-    #about condition
+    #Mysterious Shopkeep mentions your condition
+    #Mysterious_Shopkeep_Condition.txt
     def npc12(self):
         input("Mysterious shopkeep:.......")
         input("The shopkeeper is staring at you with her piercing gaze.")
@@ -2823,7 +2885,8 @@ class Hero:
         input("Mysterious shopkeep: You're my only customer so stay alive and happily purchase my items. Ok?")
         input(self.name+':'+" "+"We almost had a moment and you ruined it...")
     
-    #about dragons
+    #Mysterious Shopkeep Talks About Dragons
+    #Mysterious_Shopkeep_Dragon.txt
     def npc13(self):
         input(self.name+':'+" "+"I have a question.")
         input("Mysterious shopkeeper: Sure, depending on what it is you'll have to pay though.")
@@ -2845,21 +2908,21 @@ class Hero:
         input(self.name+':'+" "+"I see... I guess that makes sense. i guess there are somethings even you don't know huh.")
         input("Mysterious shopkeep:'Sorry, I can't give you the answers you want. You must obtain them yourself.'")
 
-#reocurring dialogue
-
+    #reocurring dialogue
+    #Mysterious_Shopkeep_Reocurring.txt
     def npc14(self):
         input("Mysterious shopkeep: You've been talking to me quite a bit.")
         input("Mysterious shopkeep: Are you perhaps charmed by me?")
 
 #shopkeeper randomized dialogue
-    def shopkeeper_altdialogue(self,alternate_shopkeeper_dialogue,len_original):
+    def shopkeeper_altdialogue(self,shopkeeperAltDialogue,len_original):
         i=0
-        if len(alternate_shopkeeper_dialogue) != 0:
+        if len(shopkeeperAltDialogue) != 0:
             while i!=1:
                 try:
                     choice=random.randint(0,len_original)
-                    alternate_shopkeeper_dialogue[choice]()
-                    alternate_shopkeeper_dialogue.pop(choice)
+                    shopkeeperAltDialogue[choice]()
+                    shopkeeperAltDialogue.pop(choice)
                     i+=1
                     
                 except:
@@ -2875,8 +2938,8 @@ class Hero:
         check = True
         if len(shopkeeper_count) == 1:
             self.npc9()
-            alternate_shopkeeper_dialogue={1:self.npc10,2:self.npc11,3:self.npc12,4:self.npc13}
-            len_original=len(alternate_shopkeeper_dialogue)
+            shopkeeperAltDialogue={1:self.npc10,2:self.npc11,3:self.npc12,4:self.npc13}
+            len_original=len(shopkeeperAltDialogue)
             town_phase.append(1)
             shopkeeper_count.pop(0)
         self.npc8(shopkeeper_hint,werewolf_clue1,werewolf_hints)
@@ -2893,7 +2956,7 @@ class Hero:
                 confirmation = input("What will you do?: input the number corresponding to your choice.")
             if confirmation == "1":
                 input("you decide to speak to the Mysterious shopkeep.")
-                self.shopkeeper_altdialogue(alternate_shopkeeper_dialogue,len_original)
+                self.shopkeeper_altdialogue(shopkeeperAltDialogue,len_original)
             elif confirmation == "2":
                 self.shop(items_shop,items_shop_list,inventory)
             elif confirmation == "3":
@@ -2904,7 +2967,7 @@ class Hero:
         self.town(town_phase)
             
     
-#intro text
+    #Awakening.txt
     def wakeup(self):
         input("???: It seems like it's time for you to wake up.")
         input("???: This ... story is to be an intresting one. With these eyes I forsee three possible endings.")
@@ -2924,9 +2987,9 @@ class Hero:
         inventory.append("rusty dagger")
         input(self.name+' '+"Gained a sword!")
         inventory.append("sword")
-        input(self.name+' '+"Gained a katana?")
+        input(self.name+' '+"Gained a sword?")
         inventory.append("???")
-        input(self.name+':'+ " "+"This katana... whenever I try unsheathing it my body freezes. Honestly, it seems quite sinister but it might be a clue as to who I am.")
+        input(self.name+':'+ " "+"This sword... whenever I try unsheathing it my body freezes. Honestly, it seems quite sinister but it might be a clue as to who I am.")
         input(self.name+':'+ " "+"Other than my name, I can't remember anything.why I'm here, who I am... I can't recall anything.")
         input(self.name+':'+" "+ "For now though, I should leave this place so that I can find out more about myself.")
         input("you swing the sword around for a bit.")
@@ -2937,9 +3000,9 @@ class Hero:
         self.attck=(self.str+weapons[self.weapon])
     
     #Werewolf confrontation part 1
-
     def werewolf_confirmation(self):
         #plays when all 3 clues are uncovered
+        input("CONDITION HERE")
         input(self.name+':'+' '+"'I think I have enough information.'")
         input(self.name+':'+' '+"'It looks like I have to confront this father David fellow.'")
         input("The sky grows dark and the moon rises.")
@@ -2957,7 +3020,9 @@ class Hero:
             input(self.name+':'+' '+"I should prepare first.")
             #bring back the choices
     
+    #Werewolf.txt
     def werewolf_dialogue(self):
+        input("CONDITION HERE")
         input("You enter the church in the dead of night, in the darkness one man bathes in the moonlight. On his knees in prayer.")
         input(self.name+':'+' '+"Father David, we have to discuss something.")
         input("The priest rises to his feet. The room is covered in a sickening aura.")
@@ -2969,8 +3034,8 @@ class Hero:
         input("The priest's face twisted in rage, becomming beastial in nature.")
         input("Father David: Those people kidnapped young children and indoctrinated them into their little cult!")
         input("Father David: Those who rebelled against them ended up like me!")
-        input("Father David tore off the sleeve of his white robes revealing the sign of the cross, sealed into his very flesh.")
-        input("People beleived he had gotten it as a sign of devotion to the faith. but that was False. It was a brand.")
+        input("Father David tore off the sleeve of his white robes revealing the sign of the cross, seered into his very flesh.")
+        input("People believed he had gotten it as a sign of devotion to the faith. but that was False. It was a brand.")
         input("Father David: They branded us like animals! Treated us like filth because we didn't believe!")
         input("Father David: Such people don't deserve to live! That's what I have determined! Anyone who condones them will be granted death as well!")
         input("Father David: A race that condonnes this savagery doesn't deserve to exist!")
@@ -2985,9 +3050,11 @@ class Hero:
         input("Father David: Hmph, so you're like the rest after all! Then die here!")
         input("Father David commences his gruesome transformation growing taller and gaining a wolf-like body.")
         input(self.name+':'+' '+"It's now or never! Let's end this!")
-        input("The two of you fight bathed in moonlight.")
+        input("The two of you fight, bathed in moonlight.")
     
+    #Minotaur Confirmation
     def minotaur_confirmation(self):
+        input("CONDITION HERE")
         input("Before you stands the rotting corpse of a giant man.")
         input("The armor the giant of a man once wore is now dull and useless")
         input("On it's exposed skull sits a helmet with horns that ressemble a bulls")
@@ -3004,8 +3071,10 @@ class Hero:
             #go back a space
             pass
     
+    #Gargoyle Confirmation
     def gargoyle_confirmation(self,action_count,first_encounter):
         if len(action_count) == 0 and len(first_encounter)== 0:
+            input("CONDITION HERE")
             input("You approach the statue that holds a stone halberd. On it's head sat horns and on it's back were bat-like wings")
             input(self.name+':'+' '+"'What a weird statue... Whatever I'll just go...")
             input("You take a step forward")
@@ -3049,7 +3118,7 @@ class Hero:
 
 
 
-    
+    #Ending_Neutral.txt
     def ending_neutral(self):
         input(self.name+':'+' '+"... is remembering really that important?")
         input("You think back against your fight against father David.")
@@ -3077,14 +3146,14 @@ class Hero:
         input("You and the shopkeep continue to chat for a bit before it's time for you to leave")
         input("As you leave you turn to see her once more. The beautiful woman with the odd hat and fun demeanor")
         input("You don't know why but you burn that image into your eyes, framing it in your memory for all eternity")
-        input("Mysterious shopkeep: 'Goodbye, my one and only customer.'")
-        input("Mysterious shopkeep: 'I'll do my best to protect that blissful paradise you reside in. So please be happy.'")
+        input("Mysterious shopkeep: Goodbye, my one and only customer.")
+        input("Mysterious shopkeep: I'll do my best to protect that blissful paradise you reside in. So please be happy.")
         input("Years pass")
         input("After you defeated Father David the town readily accepts you")
         input("Officially, you are the towns investigator however there are very few things you need to do.")
         input("Sometimes you wander around in the village, always ending up in the same place.")
         input(self.name+':'+' '+"'I had the dream again..'")
-        input("In the dream he saw a beautiful woman who wore a comically large witche's hat.")
+        input("In the dream he saw a beautiful woman who wore a comically large witch's hat.")
         input("She would smile at him from beyond her shop counter.")
         input(self.name+':'+' '+"'she... she was crying'")
         input("In his dreams he noticed the underlying sorrow in that smile, highlighted by a single tear that fell from her eyes.")
@@ -3108,6 +3177,7 @@ class Hero:
         input("Mysterious shopkeep: This will be my final battle, grand witch Morgan won't go down easily!")
         input("Netural ending: Paradise of ignorance in the ruined world Complete!")
 
+    #Ending_Bad.txt
     def ending_bad(self):
         input("You stand no chance against the dragon's awesome might")
         input("???: So this is where it ends.")

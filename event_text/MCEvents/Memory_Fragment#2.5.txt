@@ -1,0 +1,19 @@
+You see the Gargoyle you had just defeated, far less ancient than when you encountered it.
+???: Your duty is over. I'm not gonna last much longer.
+The Gargoyle shakes it's stone head
+???: You're as stuborn as your creator. I had a feeling that this may happen.
+???: In that case... I have one last order for you.
+???: Guard this for me. It's something that should never see the light of day ever again. 
+???: Attack anyone that comes to claim it.... Even if... Even if it's me.
+The Gargoyle makes the saddest expression it can make with it's stony visage.
+???: I understand that I've given you a hard task my friend but I can't take back that order.
+???: This is my final order. A selfish order and one that will cause you pain.
+???: Still, you're the only one I can ask. Please, I'm asking as a friend, not as your master.
+The Gargoyle hesitates before giving a sad nod
+???: Thank you. Here is the item.
+A hand is outstretched clutching a small item 
+The Gargoyle moves from it's position and takes it from the man.
+???: I don't have much time.
+The man puts his hand on top of the gargoyles stone head, patting it gently
+???: Goodbye my friend. May we never meet again. #says this because if they do, one of them die
+???: 'I'll see my duty through.'

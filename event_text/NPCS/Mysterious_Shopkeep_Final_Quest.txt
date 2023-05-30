@@ -1,0 +1,8 @@
+CONDITION HERE
+Mysterious shopkeep: well done
+Mysterious shopkeep: It seems that you are ready for your final endeavor.
+A mysterious door appears
+Mysterious shopkeep: This passageway leads to the edge of town past where the dragon sleeps. You may choose to go but you are leaving things unfinished.
+Mysterious shopkeep: It will still not be too late to go after completing everything that needs to be done.
+Mysterious shopkeep: The choice is yours.
+Rion: 'That's right... I have to make a decision soon...'

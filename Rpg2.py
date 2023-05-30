@@ -192,7 +192,7 @@ while True:
                 if x > 1000:
                     x = 1000
                 else:
-                    x = -288
+                    x = -280
 
         if animationTracker >= 99 and knightAni.aniArray == Animation_Manager.knightDeath:
             animationTracker = 99
