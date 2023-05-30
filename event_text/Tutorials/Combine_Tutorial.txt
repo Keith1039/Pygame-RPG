@@ -1,0 +1,6 @@
+Various items that you find might have other uses.
+In this menu, two items can be combined to create another item.
+2 seemingly useless items can combine to create a key item that is required to continue on.
+In order to beat this game be sure to alwaydies try to combine anything and everything.
+Even if two items don't end up making anything, you won't lose them by trying so go wild.
+Items are only consumed when a new item is succesfully created.

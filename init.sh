@@ -21,6 +21,6 @@ url="$(curl --silent --show-error http://127.0.0.1:4040/api/tunnels | sed -nE 's
 url="https://$url"
 # Changes github webhook to reflect current url
 info="$(cat Git_key)"
-curl -L -X PATCH --insecure -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $info" -H "X-Github-Api-Version: 2022-11-28" https://api.github.com/repos/Keith1039/Pygame-RPG/hooks/405886313/config -d '{"content_type":"json","url":''"'$url/github-webhook/'"}'
+curl -L -X PATCH --insecure -H "Accept: application/vnd.github+json" -H "Authorization: Bearer "$info"" -H "X-Github-Api-Version: 2022-11-28" https://api.github.com/repos/Keith1039/Pygame-RPG/hooks/405886313/config -d '{"content_type":"json","url":''"'"$url"/github-webhook/'"}'
 #Starts url in chrome
 start chrome "$url" 

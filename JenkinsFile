@@ -1,8 +1,0 @@
-
-stage('Running Pytests') {
-    sh '''
-        ls
-        pwd
-        echo build triggered?
-    '''
-}

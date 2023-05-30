@@ -1,0 +1,5 @@
+Item descriptions can help you understand the potential uses for an item.
+Some items need to be examined in this menu in order for certain events to trigger.
+This menu is also how you read the various books you collect throughout your journey.
+Books can contain clues as to how to progress and the current setting.
+Be sure to frequently check this menu!

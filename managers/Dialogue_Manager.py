@@ -4,7 +4,7 @@ import pygame as game
 # Dict that will point to the files where the dialogue still is
 text_dict = {}
 # Portrait dict takes in a name and then gets the portrait
-portrait_dict = {"Knight": game.image.load("portraits/Knight.png")  }
+portrait_dict = {"Knight": game.image.load("portraits/Knight.png"), "Rion": game.image.load("portraits/Knight.png")}
 class DialogueManager: 
     def __init__(self ):
         self.file = None

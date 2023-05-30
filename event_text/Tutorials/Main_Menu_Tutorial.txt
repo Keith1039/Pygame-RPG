@@ -1,0 +1,2 @@
+The main menu is where you go to use items, equip items, combine items and examine items.
+Each function has it's on separate tutorial so feel free to explore each option!

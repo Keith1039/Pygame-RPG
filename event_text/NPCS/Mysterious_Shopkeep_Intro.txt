@@ -1,0 +1,20 @@
+Rion:'what an odd shop... I looked around but coudln't find any shops that sell useful things.'
+You enter the odd shop at the edge of town.
+Mysterious shopkeep: Welcome!
+the shopkeeper looks like an elegant noble woman except for the commically large hat she wore.
+you find her black hair and red eyes oddly entrancing
+Rion: 'why's someone like her in a rundown town like this?'
+Rion:Hello, I was wondering if this shop sold useful supplies for adventurers.
+She gave a kind smile
+Mysterious shopeeker: Of course! You're in luck, we sell exactly that. We have a variety of potions at your disposal.
+Rion: Do you sell weapons or armor as well?
+Mysterious shopkeeper: Sorry, ever since the dragon has been here all armor and weapons were offered as a tribute.
+Mysterious shopkeeper: To make it worse, this place doesn't have a blacksmith.
+Mysterious shopkeeper: I wouldn't hold out hope of getting new equipment here.
+Rion:I see, seeing as I'll be here for a while, what should I call you?
+Mysterious shopkeep: 'As I thought, you don't remember.'
+Mysterious shopkeep: for now 'Mysterious shopkeep' is good enough.
+Rion: 'I guess she has her reasons for hiding her name.'
+Rion: Anyway I'm Rion',' nice to meet you.
+Mysterious shopkeep: Likewise.
+You shake hands

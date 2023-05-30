@@ -1,1 +1,5 @@
 Git_key
+managers/__pycache__/
+event_text/strip.py
+event_text/script
+event_text/Parse.py
