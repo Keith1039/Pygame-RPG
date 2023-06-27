@@ -1,4 +1,3 @@
-from enum import Enum
 weapons={"sword":10,"poisoned sword":12,"silver sword":20,"rusty dagger":1,"poisoned rusty dagger":2,"lance":5,"silver lance":10,"???":999999,"unarmed":3}
 items_shop_list=["old map", "old bread","potion"]
 items_shop={"old map":1000,"old bread":50,"potion":150,"moonstone":300,"silver polish":50}
@@ -10,29 +9,36 @@ combinable_items=["Volitile poison", "silver polish","lance", "rusty dagger", "s
 consumable_item={"old bread":20,"potion":50}
 inventory=[]
 
-class KStatus(Enum):
-    NORMAL = 1
-    IN_COMBAT = 2
-    OPENING_CHEST = 3
-    IN_CUTSCENE = 4
-    DEAD = 5
-
 #Statuses are, Normal or In-Combat or Dead or opening_chest
 class Knight:
-    def __init__(self, name, level, strength, sword,  vitality, Hp, HPcap, agility, defence, exp, expcap, money):
-        self.Hp = Hp
-        self.name = name
-        self.str = strength
-        self.sword = sword
-        self.attack = strength + weapons[sword]
-        self.vit = vitality
-        self.agl = agility
-        self.status = KStatus.NORMAL
-        self.stance = "1"
-        self.defence = defence
-        self.exp = exp
-        self.expcap = expcap
+    #Change these to default stats later
+    def __init__(self, name="Rion", level=1, strength=1, vitality=1, Hp=1, HPcap=1, agility=1, defence=1, exp=1, expcap=1, money=1):
         self.Hp = Hp
         self.Hpcap = HPcap
-        self.bal = money
-        self.lvl = level
+        self.Name = name
+        self.Lvl = level
+        self.Str = strength
+        self.Vit = vitality
+        self.Agl = agility
+        self.Status = "Normal" 
+        self.Stance = "1"
+        self.Defence = defence
+        self.Exp = exp
+        self.Expcap = expcap
+        self.Bal = money
+
+
+    def load_dict(self, knightDict):
+        self.Hp = knightDict["Hp"]
+        self.Hpcap = knightDict["Hpcap"]
+        self.Name = knightDict["Name"]
+        self.Lvl = knightDict["Lvl"]
+        self.Str = knightDict["Str"]
+        self.Vit = knightDict["Vit"]
+        self.Agl = knightDict["Agl"]
+        self.Status = knightDict["Status"]
+        self.Stance = knightDict["Stance"]
+        self.Defence = knightDict["Defence"]
+        self.Exp = knightDict["Exp"]
+        self.Expcap = knightDict["Expcap"]
+        self.Bal = knightDict["Bal"]

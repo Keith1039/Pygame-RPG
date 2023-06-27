@@ -15,19 +15,19 @@ chestB1 = Event((500, 600), "Chest")
 # Moving to right screen = 1
 # Moving to left screen = -1
 screen_dict = {("Background1", 1): "Background2", ("Background2", -1): "Background1"}
-background_dict ={"Background1": "2D_Battle_Art/PNG/Battleground1/Bright/Battleground1.png",
+background_dict ={"Background1": "Background_Art/gothic_chapel_portfolio_1422x800.png",
                   "Background2": "Background_Art/PNG/game_background_1/game_background_1.png"}
 interactables_dict = {"Background1": (chestB1, ), "Background2": ()}
-objects_dict = {"Background1": ((800, 500), True), "Background2": ()}
+objects_dict = {"Background1": ((800, 500), True), "Background2": ()} # NEEDS TO BE SAVED
 class ScreenManager:
     def __init__(self, screen):
         self.interactables = ()
-        self.context = "Background1"
+        self.context = "Background1" # Only thing that I need to keep track of when I do save
         self.screen = screen
         self.objects = ()
         self.objectAni = ObjectAnimationManager()
+        self.objectDict = objects_dict
         self.apply_context()
-
 
     def change_screen(self, pos):
         mover = 0
@@ -41,15 +41,20 @@ class ScreenManager:
         # Basically if there's not a map to the right don't let the players go right
         if background is None:
             self.context = prevContext
-            return self.screen
+            background = background_dict.get(self.context)
         self.screen = game.image.load(background)
         self.apply_context()
-        return self.screen
 
     def apply_context(self):
         self.interactables = interactables_dict.get(self.context)
-        self.objects = objects_dict.get(self.context)
+        self.objects = self.objectDict.get(self.context)
         self.objectAni.set_tuple(self.context)
+
+    def change_context(self, context, pos):
+        self.context = context
+        self.change_screen(pos)
+    
+
 
 
 # Unnecessary class. I don't know what I was up to when I made this but for now it's useless

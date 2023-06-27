@@ -14,7 +14,7 @@ class DialogueManager:
         self.textBox = game.image.load("portraits/text_box.png")
         self.event = None
         self.prevText = ""
-
+    
     def load_file(self, event):
         # Loads the file that we read from
         self.event = event

@@ -47,7 +47,7 @@ mine and you should be fine
 ## classes relating to the Knight
 
 # Knight
-Has the Kstatus class which indicates the status of the knight object for use in the game
+Has the status variable which indicates the status of the knight object for use in the game
 for example if status is not normal, movement cannot be performed by the knight. This is 
 helpful for when the player really shouldn't be moving like if their in a fight, reading dialogue
 or just dead.
