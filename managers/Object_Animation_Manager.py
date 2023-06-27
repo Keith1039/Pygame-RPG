@@ -16,5 +16,5 @@ class ObjectAnimationManager:
         within_range = pos > interactable.range[0] and pos < interactable.range[1]
         if within_range and not interactable.activated:
             self.aniTuple = object_ani_dict.get(interactable.eventType)
-            knight.status = "Opening Chest"
+            knight.Status = "Opening Chest"
             interactable.activated = True

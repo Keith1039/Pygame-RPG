@@ -21,7 +21,7 @@ def test_change_tuple():
         # Clearing the tuple
         objectAnimationManager.aniTuple = ()
         objectAnimationManager.change_tuple(knight, pos, interactable)
-        assert objectAnimationManager.aniTuple == chestAniL and knight.status == "Opening Chest"
+        assert objectAnimationManager.aniTuple == chestAniL and knight.Status == "Opening Chest"
 
 
 

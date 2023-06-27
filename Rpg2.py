@@ -2,7 +2,6 @@ import pygame as game
 from sys import exit
 import Animation_Manager
 import Knight
-from Knight import KStatus
 import managers
 
 
@@ -36,7 +35,7 @@ game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
 font = game.font.Font('font/Pixeltype.ttf', 50)
 
 #Hero Object
-knight = Knight.Knight("Rion", 1, 2, "sword", 1, 1, 1, 1, 1, 1, 1, 1)
+knight = Knight.Knight()
 
 #Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
@@ -44,7 +43,6 @@ textSurface = font.render("Checking", False, "Red")
 knightSurface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
 knightAni = Animation_Manager.AnimationManager()
-knightAni.change_array("Knight Attack")
 NPCManager = managers.NPCAnimationManager()
 prevKnightAni = []
 
@@ -53,6 +51,7 @@ animationTracker = 0
 animationTracker2 = 0
 animationTracker3 = 0
 dialogueTimer = 0
+gameState = 0 # Determines the game state
 
 #An array filled with spots where the treasure chests are. Dictated by Screen Manager
 #Interactable also applies to npcs so yeah.
@@ -60,6 +59,7 @@ dialogueTimer = 0
 x = 500
 screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager()
+saveManager = managers.SaveManager(knight, vars())
 
 interactables = screenManager.interactables
 textEnable = True #For the purposes of this test
@@ -69,7 +69,7 @@ while True:
     spot = animationTracker // 10
     spot2 = animationTracker2 // 10
     spot3 = animationTracker3 // 10
-    if knight.status == KStatus.DEAD:
+    if knight.Status == "Dead":
         knightAni.change_array("Death")
 
 
@@ -84,9 +84,9 @@ while True:
     keys = game.key.get_pressed()
 
     # Determines players overworld movement
-    if knight.status != KStatus.IN_COMBAT:
+    if knight.Status != "In Combat":
         prevKnightAni = knightAni.aniArray
-        if knight.status == KStatus.NORMAL:
+        if knight.Status == "Normal":
             if keys[game.K_RIGHT]:
                 knightAni.change_array("Knight Run R")
                 if prevKnightAni != knightAni.aniArray:
@@ -105,25 +105,32 @@ while True:
 
             elif keys[game.K_UP]:
                 for u in range(len(interactables)):
-                    status = knight.status
+                    Status = knight.Status
                     interactable = interactables[u]
                     if interactable.eventType == "Chest":
                         screenManager.objectAni.change_tuple(knight, x, interactable)
-                        if status != knight.status:
+                        if Status != knight.Status:
                             #resetting animationTracker
                             animationTracker3 = 0
                     elif interactable.eventType == "Dialogue":
                         textEnable = True
-                        knight.status = KStatus.IN_CUTSCENE
+                        knight.Status = "In Cutscene"
                         # Do something
                         
                         #print("Triggered")
                     
                     screenManager.objectAni.change_tuple(knight, x, interactable)
-                    if status != knight.status:
+                    if Status != knight.Status:
                         #resetting animationTracker
                         animationTracker3 = 0
-
+            
+            elif keys[game.K_s]:
+                saveManager.quick_save(screenManager)
+            
+            elif keys[game.K_l]:
+                saveManager.quick_load(screenManager)
+                NPCManager.apply_context(screenManager.context) # Updates NPC Animation Manager when loading save
+                # In the future, this will be done automatically with Omni manager
             else:
                 knightAni.change_array("Idle")
                 if prevKnightAni != knightAni.aniArray:
@@ -137,9 +144,9 @@ while True:
         else:
             knightAni.change_array("Death")
 
-        ##print(knight.status)
+        ##print(knight.Status)
 
-        screen.blit(tempScreen, (0, 0))
+        screen.blit(screenManager.screen, (0, 0))
         #screen.blit(temporary, (100, 550))
 
         for f in range(0, len(screenManager.objects), 2):
@@ -170,15 +177,15 @@ while True:
         animationTracker2 += 1
         #Animation tracker3 is for objects like chests and arrows
         if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
-            knight.status = KStatus.NORMAL
+            knight.Status = "Normal"
 
-        elif knight.status != KStatus.NORMAL: #for now, I'll have to fiddle with this if I want the arrows to work
+        elif knight.Status != "Normal": #for now, I'll have to fiddle with this if I want the arrows to work
             animationTracker3 += 1
 
         if x > 1000 or x < -280:
             # Code for switching screens
             prev_screen = screenManager.screen
-            tempScreen = screenManager.change_screen(x)
+            screenManager.change_screen(x)
             interactable = screenManager.interactables
 
             NPCManager.apply_context(screenManager.context)

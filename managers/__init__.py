@@ -3,3 +3,4 @@ from managers.Object_Animation_Manager import ObjectAnimationManager
 from managers.Screen_Manager import ScreenManager, Event
 from managers.Dummy_Knight import Knight
 from managers.Dialogue_Manager import DialogueManager
+from managers.Save_Manager import SaveManager
