@@ -41,10 +41,8 @@ class ScreenManager:
         # Basically if there's not a map to the right don't let the players go right
         if background is None:
             self.context = prevContext
-            return self.screen
         self.screen = game.image.load(background)
         self.apply_context()
-        return self.screen
 
     def apply_context(self):
         self.interactables = interactables_dict.get(self.context)

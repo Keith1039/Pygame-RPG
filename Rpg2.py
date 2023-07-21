@@ -139,7 +139,7 @@ while True:
 
         ##print(knight.status)
 
-        screen.blit(tempScreen, (0, 0))
+        screen.blit(screenManager.screen, (0, 0))
         #screen.blit(temporary, (100, 550))
 
         for f in range(0, len(screenManager.objects), 2):
@@ -178,7 +178,6 @@ while True:
         if x > 1000 or x < -280:
             # Code for switching screens
             prev_screen = screenManager.screen
-            tempScreen = screenManager.change_screen(x)
             interactable = screenManager.interactables
 
             NPCManager.apply_context(screenManager.context)
