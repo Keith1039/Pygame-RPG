@@ -2,3 +2,5 @@ Git_key
 managers/__pycache__/
 event_text/strip.py
 event_text/Parse.py
+save/
+test.py

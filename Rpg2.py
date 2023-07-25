@@ -13,7 +13,7 @@ def draw_dialogue(dialogueTimer, font):
     if dialogueTimer % 180 == 0:
         text = dialogueManager.get_text()
     textSurface = font.render(text, False, "Red")
-    if dialogueManager.portrait != None:
+    if dialogueManager.portrait is not None:
         nameSurface = font.render(dialogueManager.name, False, "Red")
         screen.blit(dialogueManager.characterBox, (0, 650))
         screen.blit(dialogueManager.portrait, (15, 670))
@@ -21,40 +21,42 @@ def draw_dialogue(dialogueTimer, font):
         screen.blit(dialogueManager.textBox, (120, 650))
         screen.blit(textSurface, (140, 670))
     else:
-        #This way there's no awkward space where the portrait used to be.
+        # This way there's no awkward space where the portrait used to be.
         screen.blit(dialogueManager.textBox, (0, 650))
         screen.blit(textSurface, (20, 670))
-    #There is an easier way to do this but it makes my eyes bleed so no :)
+    # There is an easier way to do this but it makes my eyes bleed so no :)
     return text != ""
 
-#I should have an array of sprite managers and it goes through them
+def display_frame_rate(font, screen):
+    fps = font.render("FPS: " + str(int(clock.get_fps())), False, "Red")
+    screen.blit(fps, (0, 0))
+
+# I should have an array of sprite managers and it goes through them
 game.init()
 screen = game.display.set_mode((1422, 800))
 clock = game.time.Clock()
 game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
 font = game.font.Font('font/Pixeltype.ttf', 50)
 
-#Hero Object
+# Hero Object
 knight = Knight.Knight()
 
-#Think I'll go for the 1422 x 800 route from now on
+# Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
-textSurface = font.render("Checking", False, "Red")
 knightSurface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
 knightAni = Animation_Manager.AnimationManager()
+knightAni.change_array("Knight Attack")
 NPCManager = managers.NPCAnimationManager()
 prevKnightAni = []
 
-temporary = game.image.load("portraits/Knight.png")
 animationTracker = 0
 animationTracker2 = 0
 animationTracker3 = 0
 dialogueTimer = 0
-gameState = 0 # Determines the game state
 
-#An array filled with spots where the treasure chests are. Dictated by Screen Manager
-#Interactable also applies to npcs so yeah.
+# An array filled with spots where the treasure chests are. Dictated by Screen Manager
+# Interactable also applies to npcs so yeah.
 
 x = 500
 screenManager = managers.ScreenManager(tempScreen)
@@ -62,10 +64,9 @@ dialogueManager = managers.DialogueManager()
 saveManager = managers.SaveManager(knight, vars())
 
 interactables = screenManager.interactables
-textEnable = True #For the purposes of this test
+textEnable = True # For the purposes of this test
 
 while True:
-    #print(x)
     spot = animationTracker // 10
     spot2 = animationTracker2 // 10
     spot3 = animationTracker3 // 10
@@ -80,7 +81,7 @@ while True:
 
     # Changing animations
 
-    # Get's the players key input
+    # Gets the players key input
     keys = game.key.get_pressed()
 
     # Determines players overworld movement
@@ -105,32 +106,31 @@ while True:
 
             elif keys[game.K_UP]:
                 for u in range(len(interactables)):
-                    Status = knight.Status
+                    status = knight.Status
                     interactable = interactables[u]
                     if interactable.eventType == "Chest":
                         screenManager.objectAni.change_tuple(knight, x, interactable)
-                        if Status != knight.Status:
-                            #resetting animationTracker
+                        if status != knight.Status:
+                            # resetting animationTracker
                             animationTracker3 = 0
                     elif interactable.eventType == "Dialogue":
                         textEnable = True
-                        knight.Status = "In Cutscene"
+                        knight.Status = "In cutscene"
                         # Do something
-                        
-                        #print("Triggered")
-                    
+
                     screenManager.objectAni.change_tuple(knight, x, interactable)
-                    if Status != knight.Status:
-                        #resetting animationTracker
+                    if status != knight.Status:
+                        # resetting animationTracker
                         animationTracker3 = 0
-            
+
             elif keys[game.K_s]:
                 saveManager.quick_save(screenManager)
-            
+
             elif keys[game.K_l]:
                 saveManager.quick_load(screenManager)
-                NPCManager.apply_context(screenManager.context) # Updates NPC Animation Manager when loading save
+                NPCManager.apply_context(screenManager.context)  # Updates NPC Animation Manager when loading save
                 # In the future, this will be done automatically with Omni manager
+
             else:
                 knightAni.change_array("Idle")
                 if prevKnightAni != knightAni.aniArray:
@@ -144,14 +144,13 @@ while True:
         else:
             knightAni.change_array("Death")
 
-        ##print(knight.Status)
 
         screen.blit(screenManager.screen, (0, 0))
-        #screen.blit(temporary, (100, 550))
+        display_frame_rate(font, screen)
 
         for f in range(0, len(screenManager.objects), 2):
             appendable3 = "(" + str(spot3 + 1) + ").png"
-            if screenManager.objects[f+1] == True:
+            if screenManager.objects[f+1]:
                 tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1] + appendable3)
 
             else:
@@ -159,11 +158,10 @@ while True:
             screen.blit(tmpSurface, screenManager.objects[f])
 
 
-        screen.blit(textSurface, (0, 0))
         screen.blit(knightSurface, (x, 440))
-        #Code for testing the dialogueManager
-        if textEnable == True:
-            if dialogueManager.file == None:
+        # Code for testing the dialogueManager
+        if textEnable:
+            if dialogueManager.file is None:
                 dialogueTimer = 180
                 dialogueManager.load_file(mockDialogEvent)
             textEnable = draw_dialogue(dialogueTimer, font)
@@ -171,15 +169,15 @@ while True:
         else:
             dialogueTimer = 0
 
-        #Animation tracker is for the knight(player character)
+        # Animation tracker is for the knight(player character)
         animationTracker += 1
-        #Animation tracker2 is for the NPCs
+        # Animation tracker2 is for the NPCs
         animationTracker2 += 1
-        #Animation tracker3 is for objects like chests and arrows
+        # Animation tracker3 is for objects like chests and arrows
         if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
             knight.Status = "Normal"
 
-        elif knight.Status != "Normal": #for now, I'll have to fiddle with this if I want the arrows to work
+        elif knight.Status != "Normal":  # Fine for now but won't work for the arrows later
             animationTracker3 += 1
 
         if x > 1000 or x < -280:
@@ -187,14 +185,13 @@ while True:
             prev_screen = screenManager.screen
             screenManager.change_screen(x)
             interactable = screenManager.interactables
-
             NPCManager.apply_context(screenManager.context)
 
             # You only change screens when the conditions are met, else you run in place
             if x > 1000 and prev_screen != screenManager.screen:
-                x = 0
+                x = -260
             elif x < -280 and prev_screen != screenManager.screen:
-                x = 900
+                x = 980
             else:
                 if x > 1000:
                     x = 1000
@@ -207,7 +204,7 @@ while True:
         elif animationTracker >= (10 * knightAni.aniArray[0] - 1):
             animationTracker = 0
 
-        #This is gonna be an issue eventually
+        # This might cause a significant loss to performance if I have too many NPCs
         if len(NPCManager.aniTuple) != 0 and animationTracker2 >= (10 * NPCManager.aniTuple[0] - 1):
             animationTracker2 = 0
 

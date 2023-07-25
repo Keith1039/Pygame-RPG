@@ -9,7 +9,7 @@ chestAniL = (4, "Item_Art&Object_Art/Usable/Chest_Opening_L ")
 def test_init_array():
         assert len(objectAnimationManager.aniTuple) == 0
 
-#Test to see if the array required is of an appropriate length
+# Test to see if the array required is of an appropriate length
 def test_set_Array():
         objectAnimationManager.set_tuple("Background1")
         assert objectAnimationManager.aniTuple == chestAniL

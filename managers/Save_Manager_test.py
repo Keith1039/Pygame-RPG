@@ -1,7 +1,10 @@
+import os
+import pygame as game
+import random
+
 from managers.Dummy_Knight import Knight
 from managers.Save_Manager import SaveManager
 from managers.Screen_Manager import ScreenManager
-import pygame as game, random, os
 
 # Replicating an actual game
 game.init()
@@ -53,7 +56,7 @@ animationTracker3 = random.randint(1, 100)
 dialogueTimer = random.randint(1, 180)
 gameState = random.randint(1, 5)
 x = random.randint(-280, 1000)
-screenManager.change_screen(1000) # Move to right screen
+screenManager.change_screen(1000)  # Move to right screen
 for i in range(random.randint(1, 10)):
     knight.levelup()
 def test_quick_save():
@@ -61,7 +64,7 @@ def test_quick_save():
     fill_test_dict()
     fill_screenManager_dict()
     saveManager.quick_save(screenManager)
-    assert saveManager.saveNumber == 0 #Shouldn't change
+    assert saveManager.saveNumber == 0  # Shouldn't change
 
 def test_quick_load():
     Knight2.load_dict(knight_dict)
@@ -71,9 +74,9 @@ def test_quick_load():
         if localVars[key] != test_dict[key]:
             flag = False
             break
-    if flag == True:
+    if flag:
         flag = (Knight2 == knight)
-    if flag == True:
+    if flag:
         flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
     assert flag
 
@@ -84,15 +87,15 @@ dialogueTimer = random.randint(1, 180)
 gameState = random.randint(1, 5)
 for i in range(random.randint(1, 10)):
     knight.levelup()
-screenManager.change_screen(-280) #Moves back to initial screen
+screenManager.change_screen(-280)  # Moves back to initial screen
 def test_save(): #slot #4
     fill_knight_dict()
     fill_test_dict()
     fill_screenManager_dict()
     saveManager.save(4, screenManager)
-    assert saveManager.saveNumber == 4 #Should now be 4
+    assert saveManager.saveNumber == 4  # Should now be 4
 
-def test_load(): #slot #4
+def test_load():  # slot #4
     Knight2.load_dict(knight_dict)
     saveManager.load(4, screenManager)
     flag = True
@@ -106,10 +109,10 @@ def test_load(): #slot #4
         flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
     assert flag
 
-def test_latest_file(): #check if last save is 4
+def test_latest_file():  # check if last save is 4
     newManager = SaveManager(Knight, vars())
     cleanup() # Gets rid of the save files created in the test
-    assert newManager.saveNumber == 4 #Should still be 4
+    assert newManager.saveNumber == 4  # Should still be 4
 
 def cleanup():
     os.system("bash script save-test")

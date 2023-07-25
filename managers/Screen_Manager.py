@@ -9,11 +9,11 @@ class Event:
         self.activated = False
         self.path = path
 
-#Screen manager should draw the actual stuff I guess?
-chestB1 = Event((500, 600), "Chest")
+# Screen manager should draw the actual stuff I guess?
 # For now there's only going to be two options moving to the left screen and moving to the right screen
 # Moving to right screen = 1
 # Moving to left screen = -1
+chestB1 = Event((500, 600), "Chest")
 screen_dict = {("Background1", 1): "Background2", ("Background2", -1): "Background1"}
 background_dict ={"Background1": "Background_Art/gothic_chapel_portfolio_1422x800.png",
                   "Background2": "Background_Art/PNG/game_background_1/game_background_1.png"}
@@ -22,7 +22,7 @@ objects_dict = {"Background1": ((800, 500), True), "Background2": ()} # NEEDS TO
 class ScreenManager:
     def __init__(self, screen):
         self.interactables = ()
-        self.context = "Background1" # Only thing that I need to keep track of when I do save
+        self.context = "Background1"  # Only thing that I need to keep track of when I do save
         self.screen = screen
         self.objects = ()
         self.objectAni = ObjectAnimationManager()
@@ -38,26 +38,22 @@ class ScreenManager:
         prevContext = self.context
         self.context = screen_dict.get((self.context, mover))
         background = background_dict.get(self.context)
-        # Basically if there's not a map to the right don't let the players go right
+        # Basically if there's not a map value to the right don't let the players go right
         if background is None:
             self.context = prevContext
-            background = background_dict.get(self.context)
-        self.screen = game.image.load(background)
-        self.apply_context()
+        else:
+            self.screen = game.image.load(background)
+            self.apply_context()
+
 
     def apply_context(self):
         self.interactables = interactables_dict.get(self.context)
         self.objects = self.objectDict.get(self.context)
         self.objectAni.set_tuple(self.context)
 
-    def change_context(self, context, pos):
+    # Technically speaking this should be null checked
+    # However, you shouldn't be able to save in an invalid place to begin with
+    def change_context(self, context):
         self.context = context
-        self.change_screen(pos)
-    
-
-
-
-# Unnecessary class. I don't know what I was up to when I made this but for now it's useless
-# class ObjectManager:
-#     def __init__(self):
-#         self.objects = ()
+        self.screen = game.image.load(background_dict.get(self.context))  # Draws the screen based on the new context
+        self.apply_context()  # Applies the current context to reload the other things on screen

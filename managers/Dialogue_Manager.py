@@ -24,7 +24,7 @@ class DialogueManager:
     def get_text(self):
         text = self.file.readline()
         self.prevText = text
-        #Clears file's value if EOF has been reached.
+        # Clears file's value if EOF has been reached.
         if text == "":
             self.clear_file()
             self.prevText = "1"
@@ -50,6 +50,6 @@ class DialogueManager:
                 name += text[i]
         self.name = name
         self.prevText = text
-        self.portrait = portrait_dict.get(name) # This can be None btw so there has to be logic checking this
+        self.portrait = portrait_dict.get(name)  # This can be None btw so there has to be logic checking this
         # Returns text that has name stripped from it
         return text
