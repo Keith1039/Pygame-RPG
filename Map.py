@@ -1,6 +1,6 @@
 from enum import Enum
 
-
+# Depending on if this info is saved, Enum might be removed (not parsable by JSON)
 class Status(Enum):
     UNACCESSED = 1
     ACCESSED = 2
@@ -13,7 +13,7 @@ class MapInfo:
         self.event = event
 
     # Called every time the player moves to said space.
-    def changeStatus(self):
+    def change_status(self):
         self.status = Status.ACCESSED
 
 # Screen Manager has the background name and these get

@@ -2,7 +2,6 @@ chestAniR = (4, "Item_Art&Object_Art/Usable/Chest_Opening_R ")
 chestAniL = (4, "Item_Art&Object_Art/Usable/Chest_Opening_L ")
 
 object_ani_dict = {"Chest": chestAniL}
-#Could be useful
 
 class ObjectAnimationManager:
     def __init__(self):
