@@ -5,6 +5,7 @@ import random
 from managers.Dummy_Knight import Knight
 from managers.Save_Manager import SaveManager
 from managers.Screen_Manager import ScreenManager
+from managers.Screen_Manager import Event
 
 # Replicating an actual game
 game.init()
@@ -21,6 +22,7 @@ x = 500
 test_dict = {}
 knight_dict = {}
 screenManager_dict = {}
+eventDict = {}
 localVars = vars()
 saveManager = SaveManager(knight, localVars)
 Knight2 = Knight()
@@ -50,6 +52,29 @@ def fill_knight_dict():
 def fill_screenManager_dict():
     screenManager_dict.update({"context": screenManager.context})
     screenManager_dict.update({"objectDict": screenManager.objectDict})
+
+def fill_event_dict():
+    interactablesVars = {}
+    for key in screenManager.interactablesDict:
+        eventsVar = []
+        eventsTuple = screenManager.interactablesDict[key]
+        for i in range(len(eventsTuple)):
+            eventsVar.append(vars(eventsTuple[i]))
+        interactablesVars.update({key: tuple(eventsVar)})
+    eventDict.update(interactablesVars)
+
+def verify_interactables():
+    flag = True
+    event = Event((300, 400), "")  # Just for init. These values mean nothing
+    for key in screenManager.interactablesDict:
+        i = 0
+        dictVals = eventDict[key]
+        while i < len(dictVals) and flag:
+            event.load(dictVals[i])
+            flag = event == screenManager.interactablesDict[key][i]
+            i += 1
+    return flag
+
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)
 animationTracker3 = random.randint(1, 100)
@@ -59,10 +84,12 @@ x = random.randint(-280, 1000)
 screenManager.change_screen(1000)  # Move to right screen
 for i in range(random.randint(1, 10)):
     knight.levelup()
+
 def test_quick_save():
     fill_knight_dict()
     fill_test_dict()
     fill_screenManager_dict()
+    fill_event_dict()
     saveManager.quick_save(screenManager)
     assert saveManager.saveNumber == 0  # Shouldn't change
 
@@ -78,6 +105,8 @@ def test_quick_load():
         flag = (Knight2 == knight)
     if flag:
         flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
+    if flag:
+        flag = verify_interactables()
     assert flag
 
 animationTracker = random.randint(1, 100)
@@ -92,6 +121,7 @@ def test_save(): #slot #4
     fill_knight_dict()
     fill_test_dict()
     fill_screenManager_dict()
+    fill_event_dict()
     saveManager.save(4, screenManager)
     assert saveManager.saveNumber == 4  # Should now be 4
 
@@ -107,6 +137,8 @@ def test_load():  # slot #4
         flag = (Knight2 == knight)
     if flag:
         flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
+    if flag:
+        flag = verify_interactables()
     assert flag
 
 def test_latest_file():  # check if last save is 4

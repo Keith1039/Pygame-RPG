@@ -55,49 +55,58 @@ class SaveManager:
         # Creates a dict with the local variables that are json serializeable. Also formats object data
         # Animation trackers are saved because I have a feeling removing them is gonna give a scuffed edge case
         allowed = ["animationTracker", "animationTracker2", "animationTracker3", "gameState", "x"]
-        rawVarsDict = {} # The raw values I need for the game (stuff in allowed)
-        inventoryDict = {} # Players inventory
+        rawVarsDict = {}  # The raw values I need for the game (stuff in allowed)
+        inventoryDict = {}  # Players inventory
         for key in self.localVars:
             if key in allowed:
                 rawVarsDict[key] = self.localVars[key]
-        screenManagerDict= {"context": screenManager.context, "objectDict":screenManager.objectDict}
+
+        # Here to turn the events from the dict to their dictionary form for JSON serialization
+        interactablesVars = {}
+        for key in screenManager.interactablesDict:
+            eventsVar = []
+            eventsTuple = screenManager.interactablesDict[key]
+            for i in range(len(eventsTuple)):
+                eventsVar.append(vars(eventsTuple[i]))
+            interactablesVars.update({key: tuple(eventsVar)})
+        screenManagerDict= {"context": screenManager.context, "objectDict": screenManager.objectDict,
+                            "interactablesDict": interactablesVars}
         newerdict = {"Knight": dict(vars(self.hero)), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,  "Inventory": inventoryDict}
         return(newerdict)
-    
-    
+
+    def load_data(self, file, screenManager=ScreenManager):
+        fileInfo = json.load(file)
+        self.hero.load_dict(fileInfo["Knight"])  # Loading knight
+        screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
+        screenManager.change_context(fileInfo["screenManager"]["context"])
+        interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
+        # Loads the event objects with the correct values
+        for key in interactablesInfo:
+            dictArray = interactablesInfo[key]
+            for i in range(len(dictArray)):
+                eventDict = dictArray[i]
+                screenManager.interactablesDict[key][i].load(eventDict)
+        for key in screenManager.objectDict:
+            tuplefy(screenManager.objectDict[key])
+            screenManager.objectDict[key] = tuple(screenManager.objectDict[key])
+        for key in self.localVars:  # Fill the local variables
+            if fileInfo["rawVariables"].get(key) is not None:
+                self.localVars[key] = fileInfo["rawVariables"][key]
+        file.close()
+
     def quick_load(self, screenManager=ScreenManager):
         if self.saveNumber <= self.limit and self.saveNumber >= 0:
             # Loads the most recent save, a 'Continue' option
             # Users will be able to pick the save file graphically (hopefully) so no error checking should be required
             file = open("save/save_data" + str(self.saveNumber) + ".json", "r")
-            fileInfo = json.load(file)
-            self.hero.load_dict(fileInfo["Knight"])  # Loading knight
-            screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
-            screenManager.change_context(fileInfo["screenManager"]["context"])
-            for key in screenManager.objectDict:
-                tuplefy(screenManager.objectDict[key])
-                screenManager.objectDict[key] = tuple(screenManager.objectDict[key])
-            for key in self.localVars:  # Fill the local variables
-                if fileInfo["rawVariables"].get(key) is not None:
-                    self.localVars[key] = fileInfo["rawVariables"][key] 
-            file.close()
+            self.load_data(file, screenManager)
         else:
             print("Invalid file")
 
     def load(self, slot=int, screenManager=ScreenManager ):
         if slot <= self.limit and slot >= 0:
             file = open("save/save_data" + str(slot) + ".json", "r")
-            fileInfo = json.load(file)
-            self.hero.load_dict(fileInfo["Knight"])  # Loading knight
-            screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
-            screenManager.change_context(fileInfo["screenManager"]["context"])
-            for key in screenManager.objectDict:
-                tuplefy(screenManager.objectDict[key])
-                screenManager.objectDict[key] = tuple(screenManager.objectDict[key])
-            for key in self.localVars:   # Fill the local variables
-                if fileInfo["rawVariables"].get(key) is not None:
-                    self.localVars[key] = fileInfo["rawVariables"][key] 
-            file.close()
+            self.load_data(file, screenManager)
         else:
             print("Invalid file")
 
