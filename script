@@ -3,7 +3,20 @@
 args=$1
 
 case $args in
-  save-test)
+  clear-save)
     rm save/*
     ;;
+
+  fill-save)
+      python scripts.py
+    ;;
+
+  run-tests)
+    mkdir -p testDetails  # Make a directory to hold the test information
+    python scripts.py run-tests  # Run the python script to get the test data
+    pytest managers              # Run Pytests
+    rm -rf ./testDetails  # remove the directory and it's contents
+    ;;
 esac
+
+
