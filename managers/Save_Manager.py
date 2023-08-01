@@ -1,11 +1,13 @@
-import os, json
+#!/usr/bin/python
 from managers.Screen_Manager import ScreenManager
+from managers.Dummy_Knight import Knight
+import os, json, pickle
 class SaveManager:
-    def __init__(self, hero,  localVars, saveNumber=0):
+    def __init__(self, hero,  localVars, saveNumber=1):
         self.hero = hero
         self.localVars = localVars
         self.saveNumber = saveNumber
-        self.limit = 5
+        self.limit = 4
         # Makes the initial save file
         
         if "prev_save_info.json" not in os.listdir("save/"):
@@ -28,7 +30,7 @@ class SaveManager:
     # REMEMBER TO ERROR PROOF THIS. MAYBE OVERWRITE SLOT 0 OR READ FROM SLOT 0 IF AN INVALID SLOT IS GIVEN
     # The above is if someone edits file data
     def quick_save(self, screenManager=ScreenManager):
-        if self.saveNumber <= self.limit and self.saveNumber >= 0:
+        if self.saveNumber <= self.limit and self.saveNumber > 0:
             # Saves in the most recent slot
             self.file = open(self.file.name, "w")
             gameValues = self.strip_non_json_and_save(screenManager)
@@ -95,7 +97,7 @@ class SaveManager:
         file.close()
 
     def quick_load(self, screenManager=ScreenManager):
-        if self.saveNumber <= self.limit and self.saveNumber >= 0:
+        if self.saveNumber <= self.limit and self.saveNumber > 0:
             # Loads the most recent save, a 'Continue' option
             # Users will be able to pick the save file graphically (hopefully) so no error checking should be required
             file = open("save/save_data" + str(self.saveNumber) + ".json", "r")
@@ -104,7 +106,7 @@ class SaveManager:
             print("Invalid file")
 
     def load(self, slot=int, screenManager=ScreenManager ):
-        if slot <= self.limit and slot >= 0:
+        if slot <= self.limit and slot > 0:
             file = open("save/save_data" + str(slot) + ".json", "r")
             self.load_data(file, screenManager)
         else:

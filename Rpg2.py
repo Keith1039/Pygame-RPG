@@ -73,8 +73,8 @@ while True:
     if knight.Status == "Dead":
         knightAni.change_array("Death")
 
-
-    for event in game.event.get():
+    eventlist = game.event.get()
+    for event in eventlist:
         if event.type == game.QUIT:
             game.quit()
             exit()

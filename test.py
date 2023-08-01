@@ -1,22 +1,19 @@
-#
-# s=2014241
-#
-# #What the actual hell
-# d=eval("s == 2014241")
-# print(d)
-import json, os
-from Knight import Knight
+import pygame as game
+from sys import exit
+from managers import UIManager
 
-# Knight = Knight("Rion", 1, 2, "sword", 1, 1, 1, 1, 1, 1, 1, 1)
-# file = open("text.json", "w")
-# nuwestDict = vars()
-# print(nuwestDict)
-# nuDict = {"Knight":vars(Knight), "Knight2":vars(Knight)}
-# json.dump(nuDict, file, indent=3)
-# with open("text.json", "r") as f:
-#     jsonInfo = json.load(f)
-#     print(type(jsonInfo["Knight2"]["name"]) )
-#     f.close()
-array = []
-tuple(array)
-print(type(array) == list)
+game.init()
+screen = game.display.set_mode((1422, 800))
+clock = game.time.Clock()
+game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
+font = game.font.Font('font/Pixeltype.ttf', 50)
+UIManager = UIManager(font, screen)
+while True:
+    for event in game.event.get():
+        if event.type == game.QUIT:
+            game.quit()
+            exit()
+    keys = game.key.get_pressed()
+    UIManager.draw_UI(keys) #Handles which keys were pressed
+    game.display.update()
+    clock.tick(60)

@@ -2,5 +2,5 @@ Git_key
 __pycache__/
 event_text/strip.py
 event_text/Parse.py
-save/
 test.py
+ui_test.py

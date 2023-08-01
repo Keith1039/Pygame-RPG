@@ -7,25 +7,8 @@ from managers.Save_Manager import SaveManager
 from managers.Screen_Manager import ScreenManager
 from managers.Screen_Manager import Event
 
-# Replicating an actual game
-game.init()
-screen = game.display.set_mode((1422, 800))
-screenManager = ScreenManager(screen)
-knight = Knight()
-animationTracker = 0
-animationTracker2 = 0
-animationTracker3 = 0
-dialogueTimer = 0
-gameState = 0 
-x = 500
-
-test_dict = {}
-knight_dict = {}
-screenManager_dict = {}
-eventDict = {}
-localVars = vars()
-saveManager = SaveManager(knight, localVars)
-Knight2 = Knight()
+def cleanup():
+    os.system("bash script clear-save")
 def fill_test_dict():
     test_dict.update({"animationTracker": animationTracker})
     test_dict.update({"animationTracker2": animationTracker2})
@@ -74,6 +57,29 @@ def verify_interactables():
             flag = event == screenManager.interactablesDict[key][i]
             i += 1
     return flag
+# Replicating an actual game
+game.init()
+screen = game.display.set_mode((1422, 800))
+screenManager = ScreenManager(screen)
+knight = Knight()
+animationTracker = 0
+animationTracker2 = 0
+animationTracker3 = 0
+dialogueTimer = 0
+gameState = 0 
+x = 500
+
+test_dict = {}
+knight_dict = {}
+screenManager_dict = {}
+eventDict = {}
+localVars = vars()
+list = os.listdir("save/")
+if len(list) != 0:
+    cleanup()
+saveManager = SaveManager(knight, localVars)
+Knight2 = Knight()
+
 
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)
@@ -91,7 +97,7 @@ def test_quick_save():
     fill_screenManager_dict()
     fill_event_dict()
     saveManager.quick_save(screenManager)
-    assert saveManager.saveNumber == 0  # Shouldn't change
+    assert saveManager.saveNumber == 1  # Shouldn't change
 
 def test_quick_load():
     Knight2.load_dict(knight_dict)
@@ -143,8 +149,6 @@ def test_load():  # slot #4
 
 def test_latest_file():  # check if last save is 4
     newManager = SaveManager(Knight, vars())
-    cleanup() # Gets rid of the save files created in the test
+    #cleanup()  # Gets rid of the save files created in the test
     assert newManager.saveNumber == 4  # Should still be 4
 
-def cleanup():
-    os.system("bash script save-test")
