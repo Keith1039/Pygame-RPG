@@ -1,25 +1,25 @@
 {
    "Knight": {
-      "Hp": 251,
+      "Hp": 451,
       "Hpcap": 1,
       "Name": "Rion",
-      "Lvl": 6,
-      "Str": 151,
-      "Vit": 51,
-      "Agl": 101,
+      "Lvl": 10,
+      "Str": 271,
+      "Vit": 91,
+      "Agl": 181,
       "Status": "Normal",
       "Stance": "1",
-      "Defence": 151,
+      "Defence": 271,
       "Exp": 0,
-      "Expcap": 501,
+      "Expcap": 901,
       "Bal": 1
    },
    "rawVariables": {
-      "animationTracker": 80,
-      "animationTracker2": 78,
-      "animationTracker3": 84,
+      "animationTracker": 44,
+      "animationTracker2": 60,
+      "animationTracker3": 13,
       "gameState": 4,
-      "x": -59
+      "x": 839
    },
    "screenManager": {
       "context": "Background1",

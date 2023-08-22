@@ -25,7 +25,8 @@ class Event:
 chestB1 = Event((500, 600), "Chest")
 screen_dict = {("Background1", 1): "Background2", ("Background2", -1): "Background1"}
 background_dict ={"Background1": "Background_Art/gothic_chapel_portfolio_1422x800.png",
-                  "Background2": "Background_Art/PNG/game_background_1/game_background_1.png"}
+                  "Background2": "Background_Art/PNG/game_background_1/game_background_1.png",
+                  "Start": "UI/Start.png"}
 interactables_dict = {"Background1": (chestB1, ), "Background2": ()}   # NEEDS TO BE SAVED
 objects_dict = {"Background1": ((800, 500), True), "Background2": ()}  # NEEDS TO BE SAVED
 

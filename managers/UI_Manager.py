@@ -12,8 +12,8 @@ from managers.UI_Manager_draw import *
 # Options (Not sure if I'll add this part)
 
 # Dictionaries for the titles of games
-title_dict = {"Start": "Legend of Zeroes, Trails of Cold Meals", "Load Game": "Choose Your Save File"}
-title_location_dict = {"Start": (200, 200), "Load Game": (350, 50)}
+title_dict = {"Start": "Legend of Zeroes, Trails of Cold Meals", "Load Game": "Load Game"}
+title_location_dict = {"Start": (200, 200), "Load Game": (550, 50)}
 # Displayables is only for displayable text. Not UI assets
 displayables = {"Start": ("Start Game", "Continue", "Load Game"), "Startv2": ("Start Gamev2", "Continuev2", "Load Gamev2", "Optionsv2"),
                 "Load Game": ("Save Slot #1", "Save Slot #2", "Save Slot #3", "Save Slot #4")}
@@ -116,6 +116,8 @@ class UIManager:
             # Only exception is when we pass null to get rid of UI
             if self.UI is not None and flag:  # flag determines if a page is added to stack
                 self.prevUIs.append(self.UI)
+            if UI is None:
+                self.prevUIs.clear()  # Clear the prev UIs
             self.UI = UI
             self.displayable = displayables.get(self.UI)
             self.constraint_x = constraints_x.get(self.UI)
@@ -162,11 +164,13 @@ class UIManager:
     # Funtion that handles the position of the cursor
     def handle_cursor(self, keys):
         flag = self.cursor.handle_cursor(keys)
+        result = None, None
         # If a selection is made, find out which option was selected
         if flag is None:
             # Return to the previous UI if the array contains an item
             if len(self.prevUIs) != 0:  # Technically speaking this can be simplified to if self.prevUIs
                 self.change_UI(self.prevUIs.pop(), False)  # Setting flag to false means don't add to stack
+
         elif flag:
             pos = self.cursor.pos
             if self.spacing_x != 0:
@@ -188,11 +192,11 @@ class UIManager:
                 # If there's no x spacing then only y spacing matters
                 listPos = ((pos[1] - self.cursor.yConstraints[0]) / self.spacing_y)
             item = self.displayable[int(listPos)]
-            return [self.UI, item]
+            result = self.UI, item
         else:
             self.screen.blit(self.cursor.cursor, self.cursor.pos)
-            return None
 
+        return result
     def draw_menu_and_assets(self, assets):
         # Draw the remaining information
         function = draw_function_dict.get(self.UI)
