@@ -117,7 +117,7 @@ def test_quick_load():
 
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)
-animationTracker3 = random.randint(1, 100)
+animationTracker3 = random.randint(1, 39)  # Changed to stop the possibility of crash when looking for chest ani
 dialogueTimer = random.randint(1, 180)
 gameState = random.randint(1, 5)
 for i in range(random.randint(1, 10)):

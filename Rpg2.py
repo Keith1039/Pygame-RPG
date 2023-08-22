@@ -62,10 +62,10 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
                 animationTracker3 = 0
 
     elif keys[game.K_s]:
-        saveManager.quick_save()
+        saveManager.quick_save()  # Needs to be error checked
 
     elif keys[game.K_l]:
-        saveManager.quick_load()
+        saveManager.quick_load()  # Needs to be error checked
         NPCManager.apply_context(screenManager.context)  # Updates NPC Animation Manager when loading save
     return textEnable, animationTracker3
 
@@ -126,6 +126,8 @@ animationTracker = 0
 animationTracker2 = 0
 animationTracker3 = 0
 
+start = True
+
 # An array filled with spots where the treasure chests are. Dictated by Screen Manager
 # Interactable also applies to npcs so yeah.
 
@@ -133,10 +135,13 @@ x = 500
 screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
 saveManager = managers.SaveManager(knight, vars(), screenManager)
+UIManager = managers.UIManager(font, screen)
+UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars())
 
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test
 
+screenManager.change_context("Start")
 while True:
     spot = animationTracker // 10
     spot2 = animationTracker2 // 10
@@ -154,58 +159,64 @@ while True:
 
     # Gets the players key input
     keys = game.key.get_pressed()
-
-    # Determines players overworld movement
-    if knight.Status != "In Combat":
-        # handles basic movement for the player character
-        x, animationTracker = handle_basic_input(keys, knightAni, knight, x, animationTracker)
-        # handles the player interaction
-        textEnable, animationTracker3, = handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, textEnable, animationTracker3)
-
-        # Draws the objects on the screen
+    if start:
         screen.blit(screenManager.screen, (0, 0))
-        draw_objects(screen, screenManager, spot3)
-        screen.blit(knightSurface, (x, 440))
+        context, choice = UIManager.draw_UI(eventList)
+        UIHandler.handle_interaction(context, choice)
+        if not start and choice == "Start Game":  # If it's not start game then context was already changed
+            screenManager.change_context("Background1")
+    else:
+        # Determines players overworld movement
+        if knight.Status != "In Combat":
+            # handles basic movement for the player character
+            x, animationTracker = handle_basic_input(keys, knightAni, knight, x, animationTracker)
+            # handles the player interaction
+            textEnable, animationTracker3, = handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, textEnable, animationTracker3)
 
-        # Code for testing the dialogueManager
-        if textEnable:
-            if dialogueManager.file is None:
-                dialogueManager.load_file(mockDialogEvent)
-            textEnable = dialogueManager.draw_dialogue(eventList)
+            # Draws the objects on the screen
+            screen.blit(screenManager.screen, (0, 0))
+            draw_objects(screen, screenManager, spot3)
+            screen.blit(knightSurface, (x, 440))
 
-        # Animation tracker is for the knight(player character)
-        animationTracker += 1
-        # Animation tracker2 is for the NPCs
-        animationTracker2 += 1
-        # Animation tracker3 is for objects like chests and arrows
-        if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
-            knight.Status = "Normal"
+            # Code for testing the dialogueManager
+            if textEnable:
+                if dialogueManager.file is None:
+                    dialogueManager.load_file(mockDialogEvent)
+                textEnable = dialogueManager.draw_dialogue(eventList)
 
-        elif knight.Status != "Normal":  # Fine for now but won't work for the arrows later
-            animationTracker3 += 1
+            # Animation tracker is for the knight(player character)
+            animationTracker += 1
+            # Animation tracker2 is for the NPCs
+            animationTracker2 += 1
+            # Animation tracker3 is for objects like chests and arrows
+            if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
+                knight.Status = "Normal"
 
-        x = change_screen(x, screenManager, NPCManager)
+            elif knight.Status != "Normal":  # Fine for now but won't work for the arrows later
+                animationTracker3 += 1
 
-        # Here to stop death animation from looping
-        if animationTracker >= 99 and knightAni.aniArray == Animation_Manager.knightDeath:
-            animationTracker = 99
+            x = change_screen(x, screenManager, NPCManager)
 
-        # if the end is reached, loop over for knight
-        elif animationTracker >= (10 * knightAni.aniArray[0] - 1):
-            animationTracker = 0
+            # Here to stop death animation from looping
+            if animationTracker >= 99 and knightAni.aniArray == Animation_Manager.knightDeath:
+                animationTracker = 99
 
-        # This will need to be changed to support multiple NPCs
-        if len(NPCManager.aniTuple) != 0 and animationTracker2 >= (10 * NPCManager.aniTuple[0] - 1):
-            animationTracker2 = 0
-        # Load Knight image
-        appendable = "(" + str(spot + 1) + ").png"
-        knightSurface = game.image.load(knightAni.aniArray[1] + appendable)
+            # if the end is reached, loop over for knight
+            elif animationTracker >= (10 * knightAni.aniArray[0] - 1):
+                animationTracker = 0
 
-        # this needs to be changed for later
-        for z in range(len(NPCManager.NPCs)):
-            NPCManager.change_tuple(NPCManager.NPCs[z])
-            appendable2 = "(" + str((spot2 + 1) % NPCManager.aniTuple[0] + 1) + ").png"
-            screen.blit(game.image.load(NPCManager.aniTuple[1] + appendable2), (NPCManager.aniTuple[0], 500))
+            # This will need to be changed to support multiple NPCs
+            if len(NPCManager.aniTuple) != 0 and animationTracker2 >= (10 * NPCManager.aniTuple[0] - 1):
+                animationTracker2 = 0
+            # Load Knight image
+            appendable = "(" + str(spot + 1) + ").png"
+            knightSurface = game.image.load(knightAni.aniArray[1] + appendable)
+
+            # this needs to be changed for later
+            for z in range(len(NPCManager.NPCs)):
+                NPCManager.change_tuple(NPCManager.NPCs[z])
+                appendable2 = "(" + str((spot2 + 1) % NPCManager.aniTuple[0] + 1) + ").png"
+                screen.blit(game.image.load(NPCManager.aniTuple[1] + appendable2), (NPCManager.aniTuple[0], 500))
 
     display_frame_rate(font, screen)
     game.display.update()

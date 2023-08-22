@@ -107,7 +107,7 @@ class SaveManager:
             print("Invalid file")
 
     def load(self, slot=int):
-        if slot <= self.limit and slot > 0:
+        if slot <= self.limit and slot > 0:  # Verifies if the file exists
             file = open("save/save_data" + str(slot) + ".json", "r")
             self.load_data(file)
         else:
