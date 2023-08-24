@@ -1,11 +1,12 @@
 #!/usr/bin/python
 from managers.Screen_Manager import ScreenManager
 from managers.Dummy_Knight import Knight
-import os, json, pickle
+import os, json
 class SaveManager:
-    def __init__(self, hero,  localVars, saveNumber=1):
+    def __init__(self, hero,  localVars, screenManager, saveNumber=1):
         self.hero = hero
         self.localVars = localVars
+        self.screenManager = screenManager
         self.saveNumber = saveNumber
         self.limit = 4
         # Makes the initial save file
@@ -29,23 +30,23 @@ class SaveManager:
     
     # REMEMBER TO ERROR PROOF THIS. MAYBE OVERWRITE SLOT 0 OR READ FROM SLOT 0 IF AN INVALID SLOT IS GIVEN
     # The above is if someone edits file data
-    def quick_save(self, screenManager=ScreenManager):
+    def quick_save(self):
         if self.saveNumber <= self.limit and self.saveNumber > 0:
             # Saves in the most recent slot
             self.file = open(self.file.name, "w")
-            gameValues = self.strip_non_json_and_save(screenManager)
+            gameValues = self.strip_non_json_and_save()
             json.dump(gameValues, self.file, indent=3)
             self.file.close()
             self.store_save_info()
         else:
             print("Invalid Slot")
 
-    def save(self, slot=int, screenManager=ScreenManager):
+    def save(self, slot=int):
         # Saves in a specified slot
         if slot > 0 and slot <= self.limit:
             self.saveNumber = slot
             self.file = open("save/save_data" + str(slot) + ".json", "w")
-            gameValues = self.strip_non_json_and_save(screenManager)
+            gameValues = self.strip_non_json_and_save()
             json.dump(gameValues, self.file, indent=3)
             self.file.close()
         else:
@@ -53,7 +54,7 @@ class SaveManager:
         self.store_save_info()
 
     
-    def strip_non_json_and_save(self, screenManager=ScreenManager):
+    def strip_non_json_and_save(self):
         # Creates a dict with the local variables that are json serializeable. Also formats object data
         # Animation trackers are saved because I have a feeling removing them is gonna give a scuffed edge case
         allowed = ["animationTracker", "animationTracker2", "animationTracker3", "gameState", "x"]
@@ -65,50 +66,50 @@ class SaveManager:
 
         # Here to turn the events from the dict to their dictionary form for JSON serialization
         interactablesVars = {}
-        for key in screenManager.interactablesDict:
+        for key in self.screenManager.interactablesDict:
             eventsVar = []
-            eventsTuple = screenManager.interactablesDict[key]
+            eventsTuple = self.screenManager.interactablesDict[key]
             for i in range(len(eventsTuple)):
                 eventsVar.append(vars(eventsTuple[i]))
             interactablesVars.update({key: tuple(eventsVar)})
-        screenManagerDict= {"context": screenManager.context, "objectDict": screenManager.objectDict,
+        screenManagerDict = {"context": self.screenManager.context, "objectDict": self.screenManager.objectDict,
                             "interactablesDict": interactablesVars}
         newerdict = {"Knight": dict(vars(self.hero)), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,  "Inventory": inventoryDict}
         return(newerdict)
 
-    def load_data(self, file, screenManager=ScreenManager):
+    def load_data(self, file):
         fileInfo = json.load(file)
         self.hero.load_dict(fileInfo["Knight"])  # Loading knight
-        screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
-        screenManager.change_context(fileInfo["screenManager"]["context"])
+        self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
+        self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
         # Loads the event objects with the correct values
         for key in interactablesInfo:
             dictArray = interactablesInfo[key]
             for i in range(len(dictArray)):
                 eventDict = dictArray[i]
-                screenManager.interactablesDict[key][i].load(eventDict)
-        for key in screenManager.objectDict:
-            tuplefy(screenManager.objectDict[key])
-            screenManager.objectDict[key] = tuple(screenManager.objectDict[key])
+                self.screenManager.interactablesDict[key][i].load(eventDict)
+        for key in self.screenManager.objectDict:
+            tuplefy(self.screenManager.objectDict[key])
+            self.screenManager.objectDict[key] = tuple(self.screenManager.objectDict[key])
         for key in self.localVars:  # Fill the local variables
             if fileInfo["rawVariables"].get(key) is not None:
                 self.localVars[key] = fileInfo["rawVariables"][key]
         file.close()
 
-    def quick_load(self, screenManager=ScreenManager):
+    def quick_load(self):
         if self.saveNumber <= self.limit and self.saveNumber > 0:
             # Loads the most recent save, a 'Continue' option
             # Users will be able to pick the save file graphically (hopefully) so no error checking should be required
             file = open("save/save_data" + str(self.saveNumber) + ".json", "r")
-            self.load_data(file, screenManager)
+            self.load_data(file)
         else:
             print("Invalid file")
 
-    def load(self, slot=int, screenManager=ScreenManager ):
+    def load(self, slot=int):
         if slot <= self.limit and slot > 0:
             file = open("save/save_data" + str(slot) + ".json", "r")
-            self.load_data(file, screenManager)
+            self.load_data(file)
         else:
             print("Invalid file")
 

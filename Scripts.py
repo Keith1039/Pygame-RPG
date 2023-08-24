@@ -142,9 +142,9 @@ if __name__ == "__main__":
     if arg == "fill-save":
         screenManager = ScreenManager(screen)
         knight = Knight()
-        saveManager = SaveManager(knight, vars())
+        saveManager = SaveManager(knight, vars(), screenManager)
         for i in range(4):
-            saveManager.save(i+1, screenManager)
+            saveManager.save(i+1)
 
     elif arg == "run-tests":
         uiManager = UIManager(font, screen)
