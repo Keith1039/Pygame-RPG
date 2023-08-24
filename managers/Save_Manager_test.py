@@ -77,7 +77,7 @@ localVars = vars()
 list = os.listdir("save/")
 if len(list) != 0:
     cleanup()
-saveManager = SaveManager(knight, localVars)
+saveManager = SaveManager(knight, localVars, screenManager)
 Knight2 = Knight()
 
 
@@ -96,12 +96,12 @@ def test_quick_save():
     fill_test_dict()
     fill_screenManager_dict()
     fill_event_dict()
-    saveManager.quick_save(screenManager)
+    saveManager.quick_save()
     assert saveManager.saveNumber == 1  # Shouldn't change
 
 def test_quick_load():
     Knight2.load_dict(knight_dict)
-    saveManager.quick_load(screenManager)
+    saveManager.quick_load()
     flag = True
     for key in test_dict:
         if localVars[key] != test_dict[key]:
@@ -128,12 +128,12 @@ def test_save(): #slot #4
     fill_test_dict()
     fill_screenManager_dict()
     fill_event_dict()
-    saveManager.save(4, screenManager)
+    saveManager.save(4)
     assert saveManager.saveNumber == 4  # Should now be 4
 
 def test_load():  # slot #4
     Knight2.load_dict(knight_dict)
-    saveManager.load(4, screenManager)
+    saveManager.load(4)
     flag = True
     for key in test_dict:
         if localVars[key] != test_dict[key]:
@@ -148,7 +148,7 @@ def test_load():  # slot #4
     assert flag
 
 def test_latest_file():  # check if last save is 4
-    newManager = SaveManager(Knight, vars())
+    newManager = SaveManager(Knight, vars(), screenManager)
     #cleanup()  # Gets rid of the save files created in the test
     assert newManager.saveNumber == 4  # Should still be 4
 
