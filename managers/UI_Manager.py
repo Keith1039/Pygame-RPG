@@ -1,5 +1,4 @@
 import pygame as game
-import time
 from managers.UI_Manager_draw import *
 # File responsible for drawing UI
 
@@ -52,9 +51,8 @@ class Cursor:
             self.pos = (self.xConstraints[0], self.yConstraints[0])
 
 
-    def handle_cursor(self, keys):
+    def handle_cursor(self, eventList):
         select = False
-        # For readability
         xMin = self.xConstraints[0]  # Starting point for x btw
         xMax = self.xConstraints[1]
 
@@ -63,33 +61,35 @@ class Cursor:
 
         xPos = self.pos[0]
         yPos = self.pos[1]
-        if (keys[game.K_RIGHT] or keys[game.K_d]) and self.spacingX != 0:
-            xPos += self.spacingX
-            if xPos > xMax:
-                xPos = xMin
-        elif (keys[game.K_LEFT] or keys[game.K_a]) and self.spacingX != 0:
-            xPos -= self.spacingX
-            if xPos < xMin:
-                xPos = xMax
-        elif keys[game.K_DOWN] or keys[game.K_s]:
-            # Inverted because Pygame is weird
-            yPos += self.spacingY
-            if yPos > yMax:
-                yPos = yMin
-        elif keys[game.K_UP] or keys[game.K_w]:
-            # Inverted because Pygame is weird
-            yPos -= self.spacingY
-            if yPos < yMin:
-                yPos = yMax
-        elif keys[game.K_RETURN]:
-            select = True
-        elif keys[game.K_ESCAPE]:
-            # Backtrack time
-            select = None
-            pass
+
+        # For readability
+        for event in eventList:
+            if event.type == game.KEYDOWN:
+                if event.key == game.K_RETURN:
+                    select = True
+                    break  # Breaks because this indicates a transition to another screen
+                elif event.key == game.K_ESCAPE:
+                    select = None
+                    break  # Breaks because this indicates a transition to another screen
+                elif event.key == game.K_RIGHT and self.spacingX != 0:
+                    xPos += self.spacingX
+                    if xPos > xMax:
+                        xPos = xMin
+                elif event.key == game.K_LEFT and self.spacingX != 0:
+                    xPos -= self.spacingX
+                    if xPos < xMin:
+                        xPos = xMax
+                elif event.key == game.K_DOWN:
+                    # Inverted because Pygame is weird
+                    yPos += self.spacingY
+                    if yPos > yMax:
+                        yPos = yMin
+                elif event.key == game.K_UP:
+                    # Inverted because Pygame is weird
+                    yPos -= self.spacingY
+                    if yPos < yMin:
+                        yPos = yMax
         self.pos = (xPos, yPos)
-        time.sleep(0.08)  # Adding a delay to make the UI feel smoother otherwise
-        # The UI is too responsive
         return select
 
 class UIManager:
@@ -126,7 +126,7 @@ class UIManager:
 
         
     # Draws the UI based on current state. Assets are game assets that need to be loaded in for certain UIs
-    def draw_UI(self, keys, assets=None):  
+    def draw_UI(self, eventList, assets=None):
         # Function that actually draws what's on screen
         # Assets should be drawn first so we don't cover up the text
         title = title_dict.get(self.UI)
@@ -157,7 +157,7 @@ class UIManager:
             else:
                 pos[1] += self.spacing_y  # Increment y's position
 
-        return self.handle_cursor(keys)
+        return self.handle_cursor(eventList)
     
     # Funtion that handles the position of the cursor
     def handle_cursor(self, keys):
