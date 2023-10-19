@@ -15,6 +15,8 @@ class Knight:
     def __init__(self, name="Rion", level=1, strength=1, vitality=1, Hp=1, HPcap=1, agility=1, defence=1, exp=1, expcap=1, money=1):
         self.Hp = Hp
         self.Hpcap = HPcap
+        self.Mp = 1     # deal with this later when you're doing battle manager
+        self.Mpcap = 1  # deal with this later when you're doing battle manager
         self.Name = name
         self.Lvl = level
         self.Str = strength

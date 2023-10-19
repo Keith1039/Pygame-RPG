@@ -6,7 +6,7 @@ import managers
 
 def display_frame_rate(font, screen):
     fps = font.render("FPS: " + str(int(clock.get_fps())), False, "Red")
-    screen.blit(fps, (0, 0))
+    screen.blit(fps, (1300, 0))
 
 # function that deals with player movement
 def handle_basic_input(keys, knightAni, knight, x, animationTracker): # This is just movement for left and right
@@ -217,8 +217,8 @@ while True:
                 NPCManager.change_tuple(NPCManager.NPCs[z])
                 appendable2 = "(" + str((spot2 + 1) % NPCManager.aniTuple[0] + 1) + ").png"
                 screen.blit(game.image.load(NPCManager.aniTuple[1] + appendable2), (NPCManager.aniTuple[0], 500))
-
-    display_frame_rate(font, screen)
+        UIManager.draw_health_bar(knight)
+        display_frame_rate(font, screen)
     game.display.update()
     clock.tick(60)
 

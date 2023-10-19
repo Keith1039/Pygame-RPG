@@ -31,7 +31,16 @@ spacings_y = {"Start": 50, "Startv2": 50, "Load Game": 160}
 
 draw_function_dict = {"Load Game": draw_save_UI}
 
-
+portraitOrb = game.image.load("UI/Orb.png")
+portrait = game.image.load("portraits/small_knight.png")
+circle = game.image.load("UI/circle.png")
+separator = game.image.load("UI/smaller_separator.png")
+semiCircle = game.image.load("UI/semiCircle.png")
+smallerSemiCircle = game.image.load("UI/smaller_semiCircle.png")
+healthBar = game.image.load("UI/health_bar.png")
+redSemiCircle = game.image.load("UI/red_semicircle.png")
+manaBar = game.image.load("UI/mana_bar.png")
+blueSemiCircle = game.image.load("UI/blue_semicircle.png")
 class Cursor:
     def __init__(self):
         self.xConstraints = ()
@@ -130,7 +139,7 @@ class UIManager:
     # Draws the UI based on current state. Assets are game assets that need to be loaded in for certain UIs
     def draw_UI(self, eventList, assets=None):
         # Function that actually draws what's on screen
-        # Assets should be drawn first so we don't cover up the text
+        # Assets should be drawn first, so we don't cover up the text
         title = title_dict.get(self.UI)
         self.draw_menu_and_assets(assets)
         if title is not None:
@@ -185,9 +194,7 @@ class UIManager:
                 xDistance = ((pos[0] - self.cursor.xConstraints[0]) / self.spacing_x)
                 yDistance = ((pos[1] - self.cursor.yConstraints[0]) / self.spacing_y)
                 listPos = (xDistance + yDistance * maxSpacing)
-                #print(xDistance)
-                #print(yDistance)
-                #print(listPos)
+
             else:
                 # If there's no x spacing then only y spacing matters
                 listPos = ((pos[1] - self.cursor.yConstraints[0]) / self.spacing_y)
@@ -195,8 +202,40 @@ class UIManager:
             result = self.UI, item
         else:
             self.screen.blit(self.cursor.cursor, self.cursor.pos)
-
         return result
+
+    def draw_health_bar(self, knight):
+        # drawing red and blue bars
+        loopVal = (knight.Hp/knight.Hpcap) * 300  # How many times the loop should run
+        for barPos in range(int(loopVal)):
+            self.screen.blit(healthBar, (barPos + 66, 6))
+            if barPos == loopVal - 1:
+                self.screen.blit(redSemiCircle, (barPos + 52, -15))
+
+        loopVal = (knight.Mp / knight.Mpcap) * 234  # 234 because 300-66 = 234
+        for barPos in range(int(loopVal)):
+            self.screen.blit(manaBar, (barPos + 66, 44))
+            if barPos == loopVal - 1:
+                self.screen.blit(blueSemiCircle, (barPos + 54, 30))
+
+        # drawing health and mana bars
+        self.screen.blit(separator, (66, 5))
+        self.screen.blit(semiCircle, (340, 0))
+        self.screen.blit(separator, (66, 43))
+        self.screen.blit(separator, (0, 66))
+        self.screen.blit(smallerSemiCircle, (280, 40))
+
+        # drawing values in the health bars
+        hpText = self.font.render(str(knight.Hp)+"/"+str(knight.Hpcap), False, "Black")
+        mpText = self.font.render(str(knight.Mp)+"/"+str(knight.Mpcap), False, "Black")
+        self.screen.blit(hpText, (200, 15))
+        self.screen.blit(mpText, (180, 43))
+
+        # Drawing portrait circle
+        self.screen.blit(circle, (0, 0))
+        self.screen.blit(portraitOrb, (0, 0))
+        self.screen.blit(portrait, (5, 0))
+
     def draw_menu_and_assets(self, assets):
         # Draw the remaining information
         function = draw_function_dict.get(self.UI)
