@@ -1,8 +1,7 @@
 import pygame as game
 from sys import exit
-import Animation_Manager
-import Knight
 import managers
+import Entity
 
 def display_frame_rate(font, screen):
     fps = font.render("FPS: " + str(int(clock.get_fps())), False, "Red")
@@ -32,7 +31,7 @@ def handle_basic_input(keys, knightAni, knight, x, animationTracker): # This is 
             knightAni.change_array("Idle")
             if prevKnightAni != knightAni.aniArray:
                 animationTracker = 0
-    elif knightAni.aniArray != Animation_Manager.knightDeath:
+    elif knightAni.aniArray != Entity.Animation_Manager.knightDeath:
         knightAni.change_array("Idle")
         if prevKnightAni != knightAni.aniArray:
             animationTracker = 0
@@ -111,13 +110,13 @@ game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
 font = game.font.Font('font/Pixeltype.ttf', 50)
 
 # Hero Object
-knight = Knight.Knight()
+knight = Entity.Knight()
 
 # Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
 knightSurface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
-knightAni = Animation_Manager.AnimationManager()
+knightAni = Entity.AnimationManager()
 knightAni.change_array("Knight Attack")
 NPCManager = managers.NPCAnimationManager()
 prevKnightAni = []
@@ -198,7 +197,7 @@ while True:
             x = change_screen(x, screenManager, NPCManager)
 
             # Here to stop death animation from looping
-            if animationTracker >= 99 and knightAni.aniArray == Animation_Manager.knightDeath:
+            if animationTracker >= 99 and knightAni.aniArray == Entity.Animation_Manager.knightDeath:
                 animationTracker = 99
 
             # if the end is reached, loop over for knight
