@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from managers.Screen_Manager import ScreenManager
 from managers.Dummy_Knight import Knight
 import os, json

@@ -99,8 +99,10 @@ def change_screen(x, screenManager, NPCManager):
                 x = -280
     return x
 interact_functions = {}
+
 # Make this hard coded for now
-mockDialogEvent = managers.Event(None, "Dialogue","event_text/Test_dialogue.txt")
+mockJson = {"eventType": "Dialogue", "path": "event_text/Test_dialogue.txt"}
+mockDialogEvent = managers.Event(mockJson)
 
 # I should have an array of sprite managers and it goes through them
 game.init()

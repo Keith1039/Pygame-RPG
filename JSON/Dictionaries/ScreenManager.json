@@ -1,0 +1,31 @@
+{
+   "background_dict": {
+      "Background1": "Background_Art/gothic_chapel_portfolio_1422x800.png",
+      "Background2": "Background_Art/PNG/game_background_1/game_background_1.png",
+      "Start": "UI/Start.png"
+   },
+   "interactables_dict": {
+      "Background1": [
+         {
+            "range": [
+               500,
+               600
+            ],
+            "eventType": "Chest",
+            "activated": false,
+            "path": ""
+         }
+      ],
+      "Background2": []
+   },
+   "objects_dict": {
+      "Background1": [
+         [
+            800,
+            500
+         ],
+         true
+      ],
+      "Background2": []
+   }
+}

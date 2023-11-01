@@ -1,7 +1,8 @@
-ShopKeepAni = (18, "NPC_Sprites/ShopKeep_idle ")
+import json
 
-NPC_tuple_dict = {"Background1": (), "Background2": ("ShopKeep",)}
-NPC_ani_tuple_dict = {"ShopKeep": ShopKeepAni}
+jsonInfo = json.load(open("JSON/Dictionaries/NPCAnimationManager.json"))
+NPC_tuple_dict = jsonInfo.get("NPC_tuple_dict")
+NPC_ani_tuple_dict = jsonInfo.get("NPC_ani_tuple_dict")
 class NPCAnimationManager:
     def __init__(self):
         self.NPCs = ()

@@ -1,0 +1,73 @@
+{
+   "title_dict": {
+      "Start": "Legend of Zeroes, Trails of Cold Meals",
+      "Load Game": "Load Game"
+   },
+   "title_location_dict": {
+      "Start": [
+         200,
+         200
+      ],
+      "Load Game": [
+         550,
+         50
+      ]
+   },
+   "displayables": {
+      "Start": [
+         "Start Game",
+         "Continue",
+         "Load Game"
+      ],
+      "Startv2": [
+         "Start Gamev2",
+         "Continuev2",
+         "Load Gamev2",
+         "Optionsv2"
+      ],
+      "Load Game": [
+         "Save Slot #1",
+         "Save Slot #2",
+         "Save Slot #3",
+         "Save Slot #4"
+      ]
+   },
+   "constraints_x": {
+      "Start": [
+         660,
+         1000
+      ],
+      "Startv2": [
+         660,
+         960
+      ],
+      "Load Game": [
+         250,
+         1000
+      ]
+   },
+   "constraints_y": {
+      "Start": [
+         500,
+         600
+      ],
+      "Startv2": [
+         500,
+         550
+      ],
+      "Load Game": [
+         150,
+         630
+      ]
+   },
+   "spacings_x": {
+      "Start": 0,
+      "Startv2": 300,
+      "Load Game": 0
+   },
+   "spacings_y": {
+      "Start": 50,
+      "Startv2": 50,
+      "Load Game": 160
+   }
+}

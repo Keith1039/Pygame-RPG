@@ -1,13 +1,14 @@
 import pygame as game
-
+import json
 from managers.Object_Animation_Manager import ObjectAnimationManager
 
 class Event:
-    def __init__(self, pos, eventType, path=""):
-        self.range = pos
-        self.eventType = eventType
-        self.activated = False
-        self.path = path
+
+    def __init__(self, eventInfo):
+        self.range = eventInfo.get("range")
+        self.eventType = eventInfo.get("eventType")  # Can't be None
+        self.activated = eventInfo.get("activated")  # Can't be None
+        self.path = eventInfo.get("path")
 
     def load(self, infoDict):
         self.range = tuple(infoDict["range"])
@@ -18,18 +19,22 @@ class Event:
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-# Screen manager should draw the actual stuff I guess?
-# For now there's only going to be two options moving to the left screen and moving to the right screen
-# Moving to right screen = 1
-# Moving to left screen = -1
-chestB1 = Event((500, 600), "Chest")
-screen_dict = {("Background1", 1): "Background2", ("Background2", -1): "Background1"}
-background_dict ={"Background1": "Background_Art/gothic_chapel_portfolio_1422x800.png",
-                  "Background2": "Background_Art/PNG/game_background_1/game_background_1.png",
-                  "Start": "UI/Start.png"}
-interactables_dict = {"Background1": (chestB1, ), "Background2": ()}   # NEEDS TO BE SAVED
-objects_dict = {"Background1": ((800, 500), True), "Background2": ()}  # NEEDS TO BE SAVED
+def initiate_variables():
+    # Function that pulls JSON information to create dictionaries
+    file = open("JSON/Dictionaries/ScreenManager.json", "r")  # Opens the file
+    screenManagerInfo = json.load(file)  # Load JSON information
+    i_dict = screenManagerInfo["interactables_dict"]  # interactables_dict information
+    temp_dict = {}
+    for key in i_dict:  # Go through the array and turn the event dictionary information into Event objects
+        temp_array = []
+        for eventInfo in i_dict[key]:
+            temp_array.append(Event(eventInfo))
+        temp_dict.update({key: tuple(temp_array)})
+    file.close()
+    return screenManagerInfo["background_dict"], temp_dict, screenManagerInfo["objects_dict"]  # Return the values
 
+screen_dict = {("Background1", 1): "Background2", ("Background2", -1): "Background1"}  # For now this can't be JSONED
+background_dict, interactables_dict, objects_dict = initiate_variables()
 class ScreenManager:
     def __init__(self, screen):
         self.interactables = ()
@@ -41,7 +46,10 @@ class ScreenManager:
         self.interactablesDict = interactables_dict
         self.apply_context()
 
-
+    # Screen manager should draw the actual stuff I guess?
+    # For now there's only going to be two options moving to the left screen and moving to the right screen
+    # Moving to right screen = 1
+    # Moving to left screen = -1
     def change_screen(self, pos):
         mover = 0
         if pos > 1000:

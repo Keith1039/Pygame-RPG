@@ -1,4 +1,5 @@
 import pygame as game
+import json
 from managers.UI_Manager_draw import *
 # File responsible for drawing UI
 
@@ -11,23 +12,24 @@ from managers.UI_Manager_draw import *
 # Load Game (Will just show no save slots if they don't exist)
 # Options (Not sure if I'll add this part)
 
+jsonInfo = json.load(open("JSON/Dictionaries/UIManager.json"))
+
 # Dictionaries for the titles of games
-title_dict = {"Start": "Legend of Zeroes, Trails of Cold Meals", "Load Game": "Load Game"}
-title_location_dict = {"Start": (200, 200), "Load Game": (550, 50)}
+title_dict = jsonInfo.get("title_dict")
+title_location_dict = jsonInfo.get("title_location_dict")
 # Displayables is only for displayable text. Not UI assets
-displayables = {"Start": ("Start Game", "Continue", "Load Game"), "Startv2": ("Start Gamev2", "Continuev2", "Load Gamev2", "Optionsv2"),
-                "Load Game": ("Save Slot #1", "Save Slot #2", "Save Slot #3", "Save Slot #4")}
+displayables = jsonInfo.get("displayables")
 # I need to be VERY precise with these restraints or else everything breaks
 # Dictionary that shows the constraints for the pointer in the x direction
-constraints_x = {"Start": (660, 1000), "Startv2": (660, 960), "Load Game": (250, 1000)}
+constraints_x = jsonInfo.get("constraints_x")
 # Dictionary that shows the constraints for the pointer in the y direction
-constraints_y = {"Start": (500, 600), "Startv2": (500, 550), "Load Game": (150, 630)}
+constraints_y = jsonInfo.get("constraints_y")
 
 # Global spacing
 # Responsible for dictating the spacing between the items in the UI for the x direction
-spacings_x = {"Start": 0, "Startv2": 300, "Load Game": 0}
+spacings_x = jsonInfo.get("spacings_x")
 # Responsible for dictating the spacing between the items in the UI for the y direction
-spacings_y = {"Start": 50, "Startv2": 50, "Load Game": 160}
+spacings_y = jsonInfo.get("spacings_y")
 
 draw_function_dict = {"Load Game": draw_save_UI}
 

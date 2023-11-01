@@ -1,7 +1,10 @@
-chestAniR = (4, "Item_Art&Object_Art/Usable/Chest_Opening_R ")
-chestAniL = (4, "Item_Art&Object_Art/Usable/Chest_Opening_L ")
+import json
 
-object_ani_dict = {"Chest": chestAniL}
+# ObjectAnimationManager's implementation needs to be redone to allow for multiple objects to be
+# present on screen.
+chestAniL = (4, "Item_Art&Object_Art/Usable/Chest_Opening_L ")
+jsonInfo = json.load(open("JSON/Dictionaries/ObjectAnimationManager.json"))
+object_ani_dict = jsonInfo.get("object_ani_dict")
 
 class ObjectAnimationManager:
     def __init__(self):

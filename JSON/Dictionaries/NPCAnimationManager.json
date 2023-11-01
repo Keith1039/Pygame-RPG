@@ -1,0 +1,14 @@
+{
+   "NPC_tuple_dict": {
+      "Background1": [],
+      "Background2": [
+         "ShopKeep"
+      ]
+   },
+   "NPC_ani_tuple_dict": {
+      "ShopKeep": [
+         18,
+         "NPC_Sprites/ShopKeep_idle "
+      ]
+   }
+}

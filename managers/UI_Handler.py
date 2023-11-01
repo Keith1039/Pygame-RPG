@@ -1,25 +1,26 @@
 import os.path
-
+import json
 import managers.Save_Manager
 import managers.UI_Manager
 
 # Class that handles the UI inputs
 
+jsonInfo = json.load(open("JSON/Dictionaries/UIHandler.json"))
 # For UIManager
-ui_related_context = [("Start", "Load Game")]  # Pages who's options go to another UI
-screen_flow_dict = {}
+ui_related_context = jsonInfo.get("ui_related_context")  # Pages who's options go to another UI
+screen_flow_dict = jsonInfo.get("screen_flow_dict")
 
 # For SaveManager
-save_related_context = ["Save Game", "Load Game"]
+save_related_context = jsonInfo.get("save_related_context")
 
 # for Knight
-knight_related_context = []
+knight_related_context = jsonInfo.get("knight_related_context")
 
 # for localVars
-vars_related_context = [("Start", "Start Game"), ("Start", "Continue")]
+vars_related_context = jsonInfo.get("vars_related_context")
 
-# Battle related context
-battle_related_context = []
+# for Battle related context
+battle_related_context = jsonInfo.get("battle_related_context")
 class UIHandler():
     # The things UIHandler will need access to for user input
     def __init__(self, UIManager, SaveManager, knight, localVars, battleManager=None):
@@ -37,7 +38,7 @@ class UIHandler():
             #print(context)
             #print(choice)
             #print("..........................................")
-            if (context, choice) in ui_related_context:
+            if [context, choice] in ui_related_context:
                 self.UIManager.change_UI(choice)  # Just change to the new UI
                 pass
 
@@ -60,7 +61,7 @@ class UIHandler():
             elif context in battle_related_context:
                 #self.battleManager
                 pass
-            elif (context, choice) in vars_related_context:  # For now
+            elif [context, choice] in vars_related_context:  # For now
                 # There's got to be a better way of dealing with this
                 if context == "Start" and choice == "Start Game":
                     self.localVars.update({"start": False})

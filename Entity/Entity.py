@@ -1,11 +1,11 @@
 # Parent class of hero and monster classes. Saves me the trouble of re-writing a
 # bunch of code
 class Entity:
-    def __init__(self, Hp, HPcap, name, level, strength, vitality, agility, defence, exp, money, inventory=None):
+    def __init__(self, Hp, Hpcap, name, level, strength, vitality, agility, defence, exp, money, inventory=None):
         if inventory is None:
             inventory = {}  # Inventory is a dictionary of it with key pairs (string: int)
         self.Hp = Hp
-        self.Hpcap = HPcap
+        self.Hpcap = Hpcap
         self.Name = name
         self.Lvl = level
         self.Str = strength

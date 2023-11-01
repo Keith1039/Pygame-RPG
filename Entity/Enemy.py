@@ -1,11 +1,13 @@
 from Entity.Entity import Entity
 
 class Enemy(Entity):
-    def __init__(self, Hp, Hpcap, name, level, strength, vitality, agility, defence, exp, money, inventory, weakness,
-                 uniquebuff=None):
-        Entity.__init__(Hp, Hpcap, name, level, strength, vitality, agility, defence, exp, money, inventory)
-        self.uniqueBuff = uniquebuff  # For bosses only really
-        self.weakness = weakness  # What stance they're weak to
+    def __init__(self, jsonInfo):
+        Entity.__init__(self, jsonInfo["Hp"], jsonInfo["Hpcap"], jsonInfo["Name"],
+                        jsonInfo["Lvl"], jsonInfo["Str"], jsonInfo["Vit"],
+                        jsonInfo["Agl"], jsonInfo["Defence"], jsonInfo["Exp"], jsonInfo["Money"],
+                        jsonInfo["Inventory"])
+        self.uniqueBuff = jsonInfo["uniqueBuff"]  # For bosses only really
+        self.weakness = jsonInfo["Weakness"]  # What stance they're weak to
 
     def die(self, lootPool):  # Will not work
         # add values to loot pool upon death
