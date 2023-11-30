@@ -10,7 +10,8 @@ clock = game.time.Clock()
 game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
 font = game.font.Font('font/Pixeltype.ttf', 50)
 dialogueManager = DialogueManager(font, screen)
-mockDialogEvent = Event(None, "Dialogue","event_text/Test_dialogue.txt")
+mockJson = {"eventType": "Dialogue", "path": "event_text/Test_dialogue.txt"}
+mockDialogEvent = Event(mockJson)
 
 def get_size_of_file(event):
     i = 0

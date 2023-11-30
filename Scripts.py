@@ -36,7 +36,7 @@ if __name__ == "__main__":
             "Defence": 1,
             "Exp": 1,
             "Money": 1,
-            "Inventory": (),
+            "Inventory": {},
             "uniqueBuff": "",
             "Weakness": ""
         }

@@ -1,7 +1,7 @@
 {
    "Hp": 1,
    "Hpcap": 1,
-   "Name": "Kobold",
+   "Name": "dummy",
    "Lvl": 1,
    "Str": 1,
    "Vit": 1,
@@ -9,7 +9,7 @@
    "Defence": 1,
    "Exp": 1,
    "Money": 1,
-   "Inventory": {},
+   "Inventory": {"Potion":  1},
    "uniqueBuff": "",
    "Weakness": ""
 }

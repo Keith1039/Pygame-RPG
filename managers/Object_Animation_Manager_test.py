@@ -16,12 +16,13 @@ def test_set_Array():
 
 def test_change_tuple():
         knight = Knight()
-        interactable = Event((500, 600), "Chest")
+        mockJson = {"range": (500, 600), "eventType": "Chest"}
+        interactable = Event(mockJson)
         pos = 550
         # Clearing the tuple
         objectAnimationManager.aniTuple = ()
         objectAnimationManager.change_tuple(knight, pos, interactable)
-        assert objectAnimationManager.aniTuple == chestAniL and knight.Status == "Opening Chest"
+        assert tuple(objectAnimationManager.aniTuple) == chestAniL and knight.Status == "Opening Chest"
 
 
 

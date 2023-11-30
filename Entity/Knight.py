@@ -13,18 +13,27 @@ inventory = []
 # Statuses: Normal or In-Combat or Dead or opening_chest
 class Knight(Entity):
     # The current stats still need to be changed to the default stats later
-    def __init__(self, Hp=1, HPcap=1, name="Rion", level=1, strength=1, vitality=1, agility=1, defence=1, exp=1, expcap=1, money=1):
+    def __init__(self, Hp=1, HPcap=1, name="Rion", level=1, strength=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
         Entity.__init__(self, Hp, HPcap, name, level, strength, vitality, agility, defence, exp, money)
         self.Mp = 1     # deal with this later when you're doing battle manager
         self.Mpcap = 1  # deal with this later when you're doing battle manager
         self.Expcap = expcap
         self.Stance = "1"
-        # self.growths = []
+        self.growths = {"Hpcap": self.Vit * 1 + 50, "Str": self.Str * 1 + 50, "Vit": self.Vit * 1 + 50,
+                        "Agl": self.Agl * 1 + 50, "Defence": self.Defence + 50}
 
     def level_up(self):
         # add to stats
-        # Recalculate health via vitality stat
-        self.Exp = self.Exp - self.Expcap  # level_up is only called when self.Exp is greater or equal to self.Expcap
+        knightDict = self.__dict__
+        for stat, growth in self.growths.items():
+            knightDict[stat] = knightDict[stat] + growth
+        # Reset growths to incorperate new stats
+        self.growths = {"Hpcap": self.Vit * 1 + 50, "Str": self.Str * 1 + 50, "Vit": self.Vit * 1 + 50,
+                        "Agl": self.Agl * 1 + 50, "Defence": self.Defence + 50}
+        while self.Exp >= self.Expcap:  # Account for the potential multiple level up
+            self.Lvl += 1  # increase the level for each level up
+            self.Exp -= self.Expcap  # Decrease the Exp of the player to prevent multiple level ups
+            self.Expcap += 50  # increase Expcap for each level up
 
     # Function that's called at the end of a fight for BattleManager
     def get_rewards(self, lootPool):
@@ -32,16 +41,15 @@ class Knight(Entity):
         money = lootPool.get("Money")
         itemDict = lootPool.get("Items")
         # For loop can become a function when directory structure is done
-        for key in self.Inventory:
-            if itemDict.get(key) is not None:  # sees if there is already an entry to update
+        for key in itemDict:
+            if self.Inventory.get(key) is not None:  # sees if there is already an entry to update
                 number = itemDict.get(key)  # How many of the item is in the actual inventory
-                itemDict.update({key: number + self.Inventory[key]})  # add drop amount to the loot pool
+                self.Inventory.update({key: number + self.Inventory[key]})  # add drop amount to the loot pool
             else:
-                itemDict.update({key: self.Inventory[key]})  # Add the key to the loot pool if not already in
-        self.Bal += money
-        self.Exp += experience
-        while self.Exp >= self.Expcap:  # Account for the potential multiple level up
-            self.level_up()
+                self.Inventory.update({key: itemDict[key]})  # Add the key to the loot pool if not already in
+        self.Bal += money       # Add the money gained to the players balance
+        self.Exp += experience  # Add the experience to the players Exp bar
+        self.level_up()  # see if the player leveled up
 
     # Loads the Knight characters stats based on a given dictionary
     def load_dict(self, knightDict):
