@@ -3,7 +3,7 @@ import pygame as game
 import random
 
 from managers.Dummy_Knight import Knight
-from managers.Save_Manager import SaveManager
+from managers.Save_Manager import SaveManager, tuplefy
 from managers.Screen_Manager import ScreenManager
 from managers.Screen_Manager import Event
 
@@ -48,7 +48,8 @@ def fill_event_dict():
 
 def verify_interactables():
     flag = True
-    event = Event((300, 400), "")  # Just for init. These values mean nothing
+    mockJson = {"Range": (300, 400)}
+    event = Event(mockJson)  # Just for init. These values mean nothing
     for key in screenManager.interactablesDict:
         i = 0
         dictVals = eventDict[key]
@@ -107,13 +108,11 @@ def test_quick_load():
         if localVars[key] != test_dict[key]:
             flag = False
             break
-    if flag:
-        flag = (Knight2 == knight)
-    if flag:
-        flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
-    if flag:
-        flag = verify_interactables()
-    assert flag
+
+    flag2 = (Knight2 == knight)
+    flag3 = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == tuplefy(screenManager_dict["objectDict"]))
+    flag4 = verify_interactables()
+    assert flag and flag2 and flag3 and flag4
 
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)

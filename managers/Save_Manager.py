@@ -88,9 +88,7 @@ class SaveManager:
             for i in range(len(dictArray)):
                 eventDict = dictArray[i]
                 self.screenManager.interactablesDict[key][i].load(eventDict)
-        for key in self.screenManager.objectDict:
-            tuplefy(self.screenManager.objectDict[key])
-            self.screenManager.objectDict[key] = tuple(self.screenManager.objectDict[key])
+        tuplefy(self.screenManager.objectDict)
         for key in self.localVars:  # Fill the local variables
             if fileInfo["rawVariables"].get(key) is not None:
                 self.localVars[key] = fileInfo["rawVariables"][key]
@@ -113,7 +111,11 @@ class SaveManager:
             print("Invalid file")
 
 
-def tuplefy(array):
-    for i in range(len(array)):
-        if type(array[i]) == list:
-            array[i] = tuple(array[i])
+def tuplefy(arrayDict):
+    for key in arrayDict:
+        array = arrayDict[key]
+        for i in range(len(array)):
+            if type(array[i]) == list:
+                array[i] = tuple(array[i])
+        arrayDict[key] = tuple(arrayDict[key])
+    return arrayDict
