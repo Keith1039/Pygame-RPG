@@ -53,16 +53,4 @@ class Knight(Entity):
 
     # Loads the Knight characters stats based on a given dictionary
     def load_dict(self, knightDict):
-        self.Hp = knightDict["Hp"]
-        self.Hpcap = knightDict["Hpcap"]
-        self.Name = knightDict["Name"]
-        self.Lvl = knightDict["Lvl"]
-        self.Str = knightDict["Str"]
-        self.Vit = knightDict["Vit"]
-        self.Agl = knightDict["Agl"]
-        self.Status = knightDict["Status"]
-        self.Stance = knightDict["Stance"]
-        self.Defence = knightDict["Defence"]
-        self.Exp = knightDict["Exp"]
-        self.Expcap = knightDict["Expcap"]
-        self.Bal = knightDict["Bal"]
+        self.__dict__ = knightDict
