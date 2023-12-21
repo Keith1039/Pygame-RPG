@@ -41,24 +41,6 @@ This file contains all the scripts that would be a pain to implement with bash s
 my save directory with dummy save files as well as the execution of the UI_manager tests as well as 
 saving them in a json file.
 
-# classes relating to the Knight
-
-### Knight
-
-Knight is the player character's object. It contains all the stats that are associated with an
-RPG protagonist, Hp, Mp, attack etc. This object also has the status variable which indicates the status
-of the knight object for use in the game. For example if status is not normal, movement cannot be performed by the knight. 
-This is helpful for when the player really shouldn't be moving like if they're in a fight, reading dialogue
-or just dead.
-
-Currently incomplete since it is missing crucial elements like a `level_up()` function and any 
-functions relating to combat.
-
-### Animation_Manager
-The knight character's exclusive animation manager. This class is responsible for displaying the proper animations
-for the knight. This is de-coupled from the rest of the managers since it is not for the game at large.
-
-
 # Manager classes
 
 These classes are responsible for managing what happens in the game, whether it be drawing screens, saving the game state etc. 
@@ -132,5 +114,6 @@ user input.
 The class that has all the dungeon events and information. Things like boss encounters, enemy encounters
 and the like are recorded in this file. The class itself holds information of events in dungeons and whether
 they have been accessed or not. This is all stored in dictionaries inside the map class. Which dict is in
-use will be determined via the context and be applied appropriately.
+use will be determined via the context and be applied appropriately. This class is unfinished and has not been 
+fully implemented.
 
