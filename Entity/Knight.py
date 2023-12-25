@@ -13,14 +13,13 @@ inventory = []
 # Statuses: Normal or In-Combat or Dead or opening_chest
 class Knight(Entity):
     # The current stats still need to be changed to the default stats later
-    def __init__(self, Hp=1, HPcap=1, name="Rion", level=1, strength=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
-        Entity.__init__(self, Hp, HPcap, name, level, strength, vitality, agility, defence, exp, money)
-        self.Mp = 1     # deal with this later when you're doing battle manager
-        self.Mpcap = 1  # deal with this later when you're doing battle manager
+    def __init__(self, Hp=1, HPcap=1, Mp=1, Mpcap=1, name="Rion", level=1, strength=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
+        Entity.__init__(self, Hp, HPcap, Mp, Mpcap, name, level, strength, vitality, agility, defence, exp, money)
         self.Expcap = expcap
         self.Stance = "1"
         self.growths = {"Hpcap": self.Vit * 1 + 50, "Str": self.Str * 1 + 50, "Vit": self.Vit * 1 + 50,
                         "Agl": self.Agl * 1 + 50, "Defence": self.Defence + 50}
+        self.moveList = ["Attack"]
 
     def level_up(self):
         # add to stats

@@ -1,0 +1,62 @@
+{
+   "Attack": {
+      "Damage Calculation": "Str * 0.8",
+      "Type": "Attack",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": "Standard attack, inflicts a normal amount of damage to one enemy."
+   },
+   "Pilfering Strike": {
+      "Damage Calculation": "Str * 0.6",
+      "Type": "Attack",
+      "Cost": 20,
+      "Restriction": null,
+      "Effect": "-20 Bal, T",
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": 50,
+      "Weight": 50,
+      "Description": "A weak attack that has a medium chance of stealing gold from the target."
+   },
+   "Angry Shout": {
+      "Damage Calculation": "",
+      "Type": "Buff",
+      "Cost": 60,
+      "Restriction": null,
+      "Effect": "+5 Str, S, 3",
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 50,
+      "Description": "The user howls in anger, raising the strength of the user for 3 turns."
+   },
+   "Drink Potion": {
+      "Damage Calculation": "",
+      "Type": "Heal",
+      "Cost": 40,
+      "Restriction": null,
+      "Effect": "+20 Hp, S",
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 25,
+      "Description": "The user drinks a potion and heals 20 Hp."
+   },
+   "Wrathful Charge": {
+      "Damage Calculation": "Str * 2",
+      "Type": "Attack",
+      "Cost": 100,
+      "Restriction": "Hp < 25%",
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": ""
+   }
+}

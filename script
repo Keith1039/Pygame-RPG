@@ -14,10 +14,22 @@ case $args in
 
   run-tests)
     pytest managers
+    pytest Entity
     ;;
 
   create-enemy)
     python scripts.py create-enemy "$args2"
+    ;;
+
+  refresh-enemy-data)
+    ls JSON/Enemies/ | while read -r FILE
+      do python scripts.py create-enemy "${FILE%.*}"
+    done
+  ;;
+
+  create-move)
+    python scripts.py create-move "$args2"
+
 esac
 
 

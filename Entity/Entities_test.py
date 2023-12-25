@@ -9,13 +9,11 @@ lootpool = {"Exp": 0, "Money": 0, "Items": {}}
 # Entity method tests
 ################################################################
 
-def test_attack():  # Method hasn't been written yet so it cannot be tested
-    pass
 
 def test_take_damage():
     mockEnemy.take_damage(-900)
     flag = mockEnemy.Hp == mockEnemy.Hpcap  # Hp shouldn't change
-    mockEnemy.take_damage(999)
+    mockEnemy.take_damage(9999)
     assert flag and mockEnemy.Hp == 0 and mockEnemy.Status == "Dead"
 
 def test_apply_bonuses():
