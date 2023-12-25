@@ -1,15 +1,20 @@
 {
-   "Hp": 1,
-   "Hpcap": 1,
+   "Hp": 999,
+   "Hpcap": 999,
+   "Mp": 999,
+   "Mpcap": 999,
    "Name": "dummy",
    "Lvl": 1,
-   "Str": 1,
-   "Vit": 1,
-   "Agl": 1,
+   "Str": 999,
+   "Vit": 999,
+   "Agl": 999,
    "Defence": 1,
    "Exp": 1,
    "Money": 1,
    "Inventory": {"Potion":  1},
+   "moveList": [
+      "Attack"
+   ],
    "uniqueBuff": "",
    "Weakness": ""
 }
