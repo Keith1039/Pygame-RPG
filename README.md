@@ -26,4 +26,11 @@ dialogue and books. Can you uncover the truth of this world and the Knight's pas
 If you want to read about the actual code behind this game, there's another README file
 under the managers folder that explain what the managers do.
 
+### How to play
+
+At the moment the best way to play this game is to clone the repository and 
+run the Rpg2.py file using python. This is assuming that pygame has been installed
+on your computer. At the moment, until I have a stable enough version to use to create an
+executable, this is the best way to run the game.
+
 # Credits
