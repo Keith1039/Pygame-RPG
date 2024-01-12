@@ -50,6 +50,13 @@ class Knight(Entity):
         self.Exp += experience  # Add the experience to the players Exp bar
         self.level_up()  # see if the player leveled up
 
+    # turning the inventory dictionary into a list
+    def inventory_to_list(self):
+        itemList = []
+        for item, amount in self.Inventory.items():
+            itemList.append(item + " x" + str(amount))
+        return itemList
+
     # Loads the Knight characters stats based on a given dictionary
     def load_dict(self, knightDict):
         self.__dict__ = knightDict

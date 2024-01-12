@@ -4,7 +4,9 @@ import managers.Save_Manager
 import managers.UI_Manager
 
 # Class that handles the UI inputs
-
+submenu_choice = ["Skills", "Switch Stance", "Items"]
+stances = ["Power", "Defensive", "Nimble"]
+items = [] # fill it when item Manager happens
 jsonInfo = json.load(open("JSON/Dictionaries/UIHandler.json"))
 # For UIManager
 ui_related_context = jsonInfo.get("ui_related_context")  # Pages who's options go to another UI
@@ -23,7 +25,7 @@ vars_related_context = jsonInfo.get("vars_related_context")
 battle_related_context = jsonInfo.get("battle_related_context")
 class UIHandler():
     # The things UIHandler will need access to for user input
-    def __init__(self, UIManager, SaveManager, knight, localVars, battleManager=None):
+    def __init__(self, UIManager, SaveManager, knight, localVars, battleManager):
         # Dialogue Manager might have to be here too
         self.UIManager = UIManager  # For changing the UI
         self.saveManager = SaveManager  # For saving and loading on UI
@@ -34,12 +36,50 @@ class UIHandler():
     # Main function of the class
     # Takes in the context and the choice that was made and process it
     def handle_interaction(self, context, choice):
-        if context is not None and choice is not None:
+        # submenu for battle
+        if context == "Player Select" and choice in submenu_choice:
+            self.UIManager.subMenu = True
+            if choice == "Skills":
+                # Get all the skills except for the first one ("Attack")
+                self.UIManager.subMenuItems = self.knight.moveList[1:]
+            elif choice == "Switch Stance":
+                self.UIManager.subMenuItems = ["Power", "Defensive", "Nimble",
+                                                "Power", "Defensive", "Nimble",
+                                                "Power", "Defensive", "Nimble",
+                                                "Power"]
+
+            elif choice == "Items":
+                inventory = self.knight.inventory_to_list()
+                self.UIManager.subMenuItems = inventory
+
+        elif context is not None and choice is not None:
             #print(context)
             #print(choice)
             #print("..........................................")
             if [context, choice] in ui_related_context:
                 self.UIManager.change_UI(choice)  # Just change to the new UI
+
+            elif context.find("(S)") != -1 or choice == "Attack":
+                if choice in stances:
+                    # switch Knight stance and apply the buff
+                    pass
+                elif choice in items:
+                    # get the info from the items dict
+                    # see if it's usable on enemies or yourself
+                    # if it's usable on enemies go to targeting
+                    # if it's usable on enemies AND yourself go to targeting but add knights pos to the list
+                    # if the item is only usable on yourself, use it and be done with your turn
+                    pass
+                # this is an attack of some sort
+                else:
+                    targetable = []
+                    for i in range(len(self.battleManager.enemies)):
+                        # getting the positions of the enemies
+                        targetable.append(self.battleManager.enemies[i][0])
+                    self.UIManager.targets = targetable
+                    self.UIManager.targetSlider = 0
+                    self.UIManager.change_UI("Select Target")
+
                 pass
 
             elif context in save_related_context:

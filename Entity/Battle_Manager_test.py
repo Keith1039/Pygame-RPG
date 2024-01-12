@@ -7,7 +7,7 @@ factory = EntityFactory()
 knight = Knight()
 dummy = factory.create_entity("dummy")
 battleManager = BattleManager(knight)
-battleManager.enemies.append(dummy)
+battleManager.add_enemy(dummy)
 effectListMatrix = []
 # creating move objects
 attack = Move(dummy, battleManager.moveDict["Attack"])

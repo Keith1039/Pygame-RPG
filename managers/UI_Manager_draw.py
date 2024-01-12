@@ -31,4 +31,7 @@ def draw_save_UI(screen, font):
             screen.blit(dateText, (500, height + 15))
             file.close()
 
+def draw_background(screen, font):
+    background = game.image.load("UI/Battle_UI/Temp_Background.png")
+    screen.blit(background, (100, 550))
 

@@ -6,7 +6,7 @@ class BattleManager:
     def __init__(self, knight):
         self.moveDict = self.get_move_dict()
         self.hero = knight
-        self.enemies = []  # tuple dict with enemy object and the x and y position of the object
+        self.enemies = []  # tuple dict with enemy object and the x and y position of the object (max 6)
         self.turnOrder = []  # turn order list for the entities
         self.lootPool = {
             "Exp": 0,
@@ -15,6 +15,15 @@ class BattleManager:
 
             }
         }
+
+    def add_enemy(self, enemy):
+        # this function adds the enemy into the enemies list
+        # while automatically giving them a set coordinate
+        i = len(self.enemies)
+        x = 900 + int(i / 3) * 300
+        y = 100 + (i % 3) * 250
+        self.enemies.append(((x, y), enemy))
+
 
     def get_move_dict(self):
         # Loads the move dictionary from a file
@@ -150,7 +159,7 @@ class BattleManager:
             self.turnOrder.append((self.hero.Agl, self.hero))
             # add the enemy objects to the turn order with the agility stat as the first index of the tuple
             for i in range(len(self.enemies)):
-                enemy = self.enemies[i]
+                enemy = self.enemies[i][1]
                 self.turnOrder.append((enemy.Agl, enemy))
             # sort the list, since the tuple has a number in the first index in descending order
             self.turnOrder.sort(reverse=True)
@@ -165,13 +174,14 @@ class BattleManager:
         newTurnOrder = []  # empty list of entities that aren't dead
         # Loop through enemies list and append the not dead enemies to the newEnemies list
         for i in range(len(self.enemies)):
-            enemy = self.enemies[i]
+            enemy = self.enemies[i][1]
             if enemy.Status != "Dead":
-                newEnemies.append(enemy)
+                newEnemies.append(self.enemies[i][1])
         self.enemies = newEnemies  # set the enemies list to the newEnemies list
         # Loop through the turnOrder list and append the not dead entities to the newTurnOrder list
+        # turnOrder does not need position of the enemy Object
         for i in range(len(self.turnOrder)):
-            enemy = self.turnOrder[i]
+            enemy = self.turnOrder[i][1]
             if enemy.Status != "Dead":
                 newTurnOrder.append(enemy)
         self.turnOrder = newTurnOrder  # set the turnOrder list to the newTurnOrder list
