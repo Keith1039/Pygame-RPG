@@ -4,3 +4,5 @@ from Entity.Knight import Knight
 from Entity.Entity import Entity
 from Entity.Entity_Factory import EntityFactory
 from Entity.Move import Move
+from Entity.Battle_Manager import BattleManager
+

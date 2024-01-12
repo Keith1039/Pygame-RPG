@@ -30,7 +30,14 @@
          "Save Slot #2",
          "Save Slot #3",
          "Save Slot #4"
-      ]
+      ],
+      "Player Select": [
+         "Attack",
+         "Skills",
+         "Switch Stance",
+         "Items"
+      ],
+      "Select Target": []
    },
    "constraints_x": {
       "Start": [
@@ -44,6 +51,14 @@
       "Load Game": [
          250,
          1000
+      ],
+      "Player Select": [
+         125,
+         125
+      ],
+      "Select Target": [
+         0,
+         0
       ]
    },
    "constraints_y": {
@@ -58,16 +73,26 @@
       "Load Game": [
          150,
          630
+      ],
+      "Player Select": [
+         600,
+         750
+      ],
+      "Select Target": [
+         0,
+         0
       ]
    },
    "spacings_x": {
       "Start": 0,
       "Startv2": 300,
-      "Load Game": 0
+      "Load Game": 0,
+      "Player Select": 0
    },
    "spacings_y": {
       "Start": 50,
       "Startv2": 50,
-      "Load Game": 160
+      "Load Game": 160,
+      "Player Select": 50
    }
 }
