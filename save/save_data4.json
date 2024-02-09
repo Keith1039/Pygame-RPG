@@ -1,25 +1,55 @@
 {
    "Knight": {
-      "Hp": 451,
+      "Hp": 1,
       "Hpcap": 1,
+      "Mp": 1,
+      "Mpcap": 1,
       "Name": "Rion",
-      "Lvl": 10,
-      "Str": 271,
-      "Vit": 91,
-      "Agl": 181,
+      "Lvl": 1,
+      "Str": 1,
+      "Vit": 1,
+      "Agl": 1,
       "Status": "Normal",
-      "Stance": "1",
-      "Defence": 271,
+      "Bonuses": {
+         "Str": [
+            0,
+            -1
+         ],
+         "Vit": [
+            0,
+            -1
+         ],
+         "Agl": [
+            0,
+            -1
+         ],
+         "Defence": [
+            0,
+            -1
+         ]
+      },
+      "Defence": 1,
       "Exp": 0,
-      "Expcap": 901,
-      "Bal": 1
+      "Bal": 0,
+      "Inventory": {},
+      "Expcap": 1,
+      "Stance": "1",
+      "growths": {
+         "Hpcap": 51,
+         "Str": 51,
+         "Vit": 51,
+         "Agl": 51,
+         "Defence": 51
+      },
+      "moveList": [
+         "Attack"
+      ]
    },
    "rawVariables": {
-      "animationTracker": 44,
-      "animationTracker2": 60,
-      "animationTracker3": 13,
-      "gameState": 4,
-      "x": 839
+      "animationTracker": 79,
+      "animationTracker2": 332,
+      "animationTracker3": 39,
+      "x": 460
    },
    "screenManager": {
       "context": "Background1",
@@ -41,7 +71,7 @@
                   600
                ],
                "eventType": "Chest",
-               "activated": false,
+               "activated": true,
                "path": ""
             }
          ],

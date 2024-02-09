@@ -310,8 +310,8 @@ class UIManager:
         self.screen.blit(smallerSemiCircle, (280, 40))
 
         # drawing values in the health bars
-        hpText = self.font.render(str(knight.Hp)+"/"+str(knight.Hpcap), False, "Black")
-        mpText = self.font.render(str(knight.Mp)+"/"+str(knight.Mpcap), False, "Black")
+        hpText = self.font.render(str(knight.Hp)+"/"+str(knight.Hpcap), False, "White")
+        mpText = self.font.render(str(knight.Mp)+"/"+str(knight.Mpcap), False, "White")
         self.screen.blit(hpText, (200, 15))
         self.screen.blit(mpText, (180, 43))
 
