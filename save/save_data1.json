@@ -1,7 +1,9 @@
 {
    "Knight": {
-      "Hp": 451,
-      "Hpcap": 1,
+      "Hp": 500,
+      "Hpcap": 500,
+      "Mp": 39,
+      "Mpcap": 100,
       "Name": "Rion",
       "Lvl": 10,
       "Str": 271,
@@ -17,7 +19,7 @@
    "rawVariables": {
       "animationTracker": 44,
       "animationTracker2": 60,
-      "animationTracker3": 13,
+      "animationTracker3": 0,
       "gameState": 4,
       "x": 839
    },
