@@ -109,7 +109,7 @@ class UIHandler():
                 elif context == "Start" and choice == "Continue":
                     slot = self.saveManager.saveNumber
                     # Implement a check to see if save has been tampered with for all save file loads
-                    flag = os.path.getsize("Save/save_data" + str(slot) + ".json") > 0
+                    flag = os.path.getsize("save/save_data" + str(slot) + ".json") > 0
                     if flag:
                         self.saveManager.quick_load()  # Load the file
                         self.localVars.update({"start": False})  # Leave the Start screen
