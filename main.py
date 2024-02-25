@@ -129,24 +129,30 @@ animationTracker2 = 0
 animationTracker3 = 0
 
 start = True
-
+demoSubMenus = False
 # An array filled with spots where the treasure chests are. Dictated by Screen Manager
 # Interactable also applies to npcs so yeah.
 
 x = 500
+entityFactory = Entity.EntityFactory()
 screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
 saveManager = managers.SaveManager(knight, vars(), screenManager)
-BattleManager = Entity.BattleManager(knight)
+battleManager = Entity.BattleManager(knight)
 UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), knight)
+UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager)
 
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test
 
 screenManager.change_context("Start")
+battleManager.add_enemy(entityFactory.create_entity("dummy"))  # add the entity to battle Manager
+knight.moveList.append("Cure")
+knight.moveList.append("Fireball")
+knight.Inventory.update({"Potion": 1})
 async def main():
-    global knightSurface, animationTracker, animationTracker2, animationTracker3, x, textEnable, start
+    global knightSurface, animationTracker, animationTracker2, animationTracker3, x, textEnable, start, demoSubMenus
+    oldContext = ""
     while True:
         spot = animationTracker // 10
         spot2 = animationTracker2 // 10
@@ -160,11 +166,22 @@ async def main():
                 game.quit()
                 exit()
             elif event.type == game.KEYDOWN:
-                if event.key == game.K_h:
+                if event.key == game.K_h and not demoSubMenus:
                     # go back to home screen
                     screenManager.change_context("Start")
                     UIManager.change_UI("Start")
                     start = True
+                elif event.key == game.K_d and not start:
+                    demoSubMenus = not demoSubMenus
+                    if demoSubMenus:
+                        oldContext = screenManager.context
+                        screenManager.change_context("Start")
+                        UIManager.change_UI("Player Select")
+                    else:
+                        screenManager.change_context(oldContext)
+                        UIManager.change_UI(None)
+
+
 
         # Changing animations
 
@@ -176,6 +193,14 @@ async def main():
             UIHandler.handle_interaction(context, choice)
             if not start and choice == "Start Game":  # If it's not start game then context was already changed
                 screenManager.change_context("Background1")
+        elif demoSubMenus:
+            screen.blit(screenManager.screen, (0, 0))
+            context, choice = UIManager.draw_UI(eventList)
+            UIHandler.handle_interaction(context, choice)
+
+
+
+
         else:
             # Determines players overworld movement
             if knight.Status != "In Combat":
