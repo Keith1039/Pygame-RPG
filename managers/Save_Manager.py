@@ -1,5 +1,5 @@
 from managers.Screen_Manager import ScreenManager
-from managers.Dummy_Knight import Knight
+from Entity.Knight import Knight
 import os, json
 class SaveManager:
     def __init__(self, hero,  localVars, screenManager, saveNumber=1):
@@ -73,12 +73,14 @@ class SaveManager:
             interactablesVars.update({key: tuple(eventsVar)})
         screenManagerDict = {"context": self.screenManager.context, "objectDict": self.screenManager.objectDict,
                             "interactablesDict": interactablesVars}
-        newerdict = {"Knight": dict(vars(self.hero)), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,  "Inventory": inventoryDict}
+        newerdict = {"Knight": vars(self.hero), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,  "Inventory": inventoryDict}
         return(newerdict)
 
     def load_data(self, file):
         fileInfo = json.load(file)
         self.hero.load_dict(fileInfo["Knight"])  # Loading knight
+        for stat, bonus in self.hero.Bonuses.items():  # turn all the list bonuses to tuples
+            self.hero.Bonuses.update({stat: tuple(bonus)})
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]

@@ -133,12 +133,13 @@ start = True
 # Interactable also applies to npcs so yeah.
 
 x = 500
+entityFactory = Entity.EntityFactory()
 screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
 saveManager = managers.SaveManager(knight, vars(), screenManager)
-BattleManager = Entity.BattleManager(knight)
+battleManager = Entity.BattleManager(knight)
 UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), knight)
+UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager)
 
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test

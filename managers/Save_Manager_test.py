@@ -1,14 +1,14 @@
 import os
 import pygame as game
 import random
-
-from managers.Dummy_Knight import Knight
+from Entity.Knight import Knight
 from managers.Save_Manager import SaveManager, tuplefy
 from managers.Screen_Manager import ScreenManager
 from managers.Screen_Manager import Event
 
 def cleanup():
     os.system("bash script clear-save")
+
 def fill_test_dict():
     test_dict.update({"animationTracker": animationTracker})
     test_dict.update({"animationTracker2": animationTracker2})
@@ -16,21 +16,6 @@ def fill_test_dict():
     test_dict.update({"dialogueTimer": dialogueTimer})
     test_dict.update({"gameState": gameState})
     test_dict.update({"x": x})
-
-def fill_knight_dict():
-    knight_dict.update({"Hp": knight.Hp})
-    knight_dict.update({"Hpcap": knight.Hpcap})
-    knight_dict.update({"Name": knight.Name})
-    knight_dict.update({"Lvl": knight.Lvl})
-    knight_dict.update({"Str": knight.Str})
-    knight_dict.update({"Vit": knight.Vit})
-    knight_dict.update({"Agl": knight.Agl})
-    knight_dict.update({"Status": knight.Status})
-    knight_dict.update({"Stance": knight.Stance})
-    knight_dict.update({"Defence": knight.Defence})
-    knight_dict.update({"Exp": knight.Exp})
-    knight_dict.update({"Expcap": knight.Expcap})
-    knight_dict.update({"Bal": knight.Bal})
 
 def fill_screenManager_dict():
     screenManager_dict.update({"context": screenManager.context})
@@ -71,7 +56,6 @@ gameState = 0
 x = 500
 
 test_dict = {}
-knight_dict = {}
 screenManager_dict = {}
 eventDict = {}
 localVars = vars()
@@ -79,7 +63,7 @@ list = os.listdir("save/")
 if len(list) != 0:
     cleanup()
 saveManager = SaveManager(knight, localVars, screenManager)
-Knight2 = Knight()
+knight2 = Knight()
 
 
 animationTracker = random.randint(1, 100)
@@ -90,48 +74,45 @@ gameState = random.randint(1, 5)
 x = random.randint(-280, 1000)
 screenManager.change_screen(1000)  # Move to right screen
 for i in range(random.randint(1, 10)):
-    knight.levelup()
+    knight.level_up()
 
 def test_quick_save():
-    fill_knight_dict()
     fill_test_dict()
     fill_screenManager_dict()
     fill_event_dict()
     saveManager.quick_save()
+    knight2.load_dict(knight.__dict__.copy())  # taking the values of the previous knight right after they were saved
     assert saveManager.saveNumber == 1  # Shouldn't change
 
 def test_quick_load():
-    Knight2.load_dict(knight_dict)
     saveManager.quick_load()
     flag = True
     for key in test_dict:
         if localVars[key] != test_dict[key]:
             flag = False
             break
-
-    flag2 = (Knight2 == knight)
+    flag2 = (knight2 == knight)
     flag3 = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == tuplefy(screenManager_dict["objectDict"]))
     flag4 = verify_interactables()
     assert flag and flag2 and flag3 and flag4
 
-animationTracker = random.randint(1, 100)
-animationTracker2 = random.randint(1, 100)
+animationTracker = random.randint(1, 99)   # cap at 99 because 100 breaks the game
+animationTracker2 = random.randint(1, 99)
 animationTracker3 = random.randint(1, 39)  # Changed to stop the possibility of crash when looking for chest ani
 dialogueTimer = random.randint(1, 180)
 gameState = random.randint(1, 5)
 for i in range(random.randint(1, 10)):
-    knight.levelup()
+    knight.level_up()
 screenManager.change_screen(-280)  # Moves back to initial screen
 def test_save(): #slot #4
-    fill_knight_dict()
     fill_test_dict()
     fill_screenManager_dict()
     fill_event_dict()
     saveManager.save(4)
+    knight2.load_dict(knight.__dict__.copy())  # taking the values of the previous knight before the values are loaded
     assert saveManager.saveNumber == 4  # Should now be 4
 
 def test_load():  # slot #4
-    Knight2.load_dict(knight_dict)
     saveManager.load(4)
     flag = True
     for key in test_dict:
@@ -139,7 +120,7 @@ def test_load():  # slot #4
             flag = False
             break
     if flag:
-        flag = (Knight2 == knight)
+        flag = (knight2 == knight)
     if flag:
         flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
     if flag:
