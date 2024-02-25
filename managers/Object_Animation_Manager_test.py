@@ -1,6 +1,6 @@
 from managers.Object_Animation_Manager import ObjectAnimationManager
 from managers.Screen_Manager import Event
-from managers.Dummy_Knight import Knight
+from Entity.Knight import Knight
 
 objectAnimationManager = ObjectAnimationManager()
 chestAniL = (4, "Item_Art&Object_Art/Usable/Chest_Opening_L ")

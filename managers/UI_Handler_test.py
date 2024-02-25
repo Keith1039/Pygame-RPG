@@ -2,6 +2,7 @@ import managers
 import pygame as game
 from managers.UI_Manager_test import get_keydown_event
 
+
 game.init()
 
 font = game.font.Font('font/Pixeltype.ttf', 50)
@@ -10,9 +11,10 @@ screen = game.display.set_mode((1422, 800))
 # Initializing things
 screenManager = managers.ScreenManager(screen)
 dummyKnight = managers.Knight()
+battleManager = managers.BattleManager(dummyKnight)
 saveManager = managers.SaveManager(dummyKnight, vars(), screenManager)
 UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, dummyKnight, vars())
+UIHandler = managers.UIHandler(UIManager, saveManager, dummyKnight, vars(), dummyKnight)
 
 # Variables I need for save manager
 start = True  # same as the variable that depends
@@ -20,7 +22,6 @@ animationTracker = 0
 animationTracker2 = 0
 animationTracker3 = 0
 gameState = ""
-x = 0
 x = 0
 
 def test_simulate_start_screen():

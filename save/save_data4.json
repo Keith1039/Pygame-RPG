@@ -36,6 +36,7 @@
       "Stance": "1",
       "growths": {
          "Hpcap": 51,
+         "Mpcap": 51,
          "Str": 51,
          "Vit": 51,
          "Agl": 51,
@@ -46,10 +47,10 @@
       ]
    },
    "rawVariables": {
-      "animationTracker": 79,
-      "animationTracker2": 332,
+      "animationTracker": 77,
+      "animationTracker2": 111,
       "animationTracker3": 39,
-      "x": 460
+      "x": 556
    },
    "screenManager": {
       "context": "Background1",
