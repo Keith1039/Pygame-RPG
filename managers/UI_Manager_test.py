@@ -104,3 +104,104 @@ def test_horizontal_confirmation_input():
 def test_None_UI():
     uiManager.change_UI(None)
     assert True
+
+def test_handle_submenu_input():
+    # remember that handle_submenu_input() doesn't do any validation
+    letters = ["w", "a", "s", "d"]
+    flag = True
+    # go through all cardinal directions and ensure that flag is always False
+    for i in range(len(letters)):
+        flag = uiManager.handle_submenu_input(get_keydown_event(letters[i]))
+        if flag or flag is None:
+            break
+    flag2 = uiManager.handle_submenu_input(get_keydown_event("enter"))
+    flag3 = uiManager.handle_submenu_input(get_keydown_event("esc"))
+    # check the state of all flags and ensure that the slider is 0
+    assert not flag and flag2 and flag3 is None and uiManager.subMenuSlider == -1
+
+def test_player_select_UI():
+    # This test case effectively checks the desired behavior for a submenu
+    uiManager.change_UI("Player Select", False)
+    uiManager.subMenu = True
+    uiManager.subMenuItems = ["Power", "Defensive", "Nimble",  # fill the items list with content
+                                "Power", "Defensive", "Nimble",
+                                "Power", "Defensive", "Nimble",
+                                "Power"]
+    eventList = get_keydown_event("a")
+    uiManager.draw_UI(eventList)  # move left 1 (should not be possible)
+    flag = uiManager.subMenuSlider == 0 and uiManager.subMenuMinIndex == 0 and uiManager.subMenuMaxIndex == 8
+    eventList = get_keydown_event("d")
+    uiManager.draw_UI(eventList)  # move 1 to the right of submenu
+    flag2 = uiManager.subMenuSlider == 1 and uiManager.subMenuMinIndex == 0 and uiManager.subMenuMaxIndex == 8
+    eventList = get_keydown_event("s")
+    for i in range(12):
+        uiManager.draw_UI(eventList)  # move down 1
+    # check if scroll down happened
+    flag3 = uiManager.subMenuMinIndex == uiManager.subMenuMaxIndex == uiManager.subMenuSlider == 9
+    eventList = get_keydown_event("w")
+    uiManager.draw_UI(eventList)  # move up 1
+    # check if scroll up happened
+    flag4 = uiManager.subMenuSlider == 6 and uiManager.subMenuMinIndex == 0 and uiManager.subMenuMaxIndex == 8
+    eventList = get_keydown_event("a")
+    for i in range(3):
+        uiManager.draw_UI(eventList)  # move left 1
+    # see if scroll up can be triggered by moving left
+    flag5 = uiManager.subMenuSlider == 3 and uiManager.subMenuMinIndex == 0 and uiManager.subMenuMaxIndex == 8
+    eventList = get_keydown_event("d")
+    for i in range(50):
+        uiManager.draw_UI(eventList)  # move right 1
+    # see if scroll down is triggered by moving right
+    flag6 = uiManager.subMenuMinIndex == uiManager.subMenuMaxIndex == uiManager.subMenuSlider == 9
+    eventList = get_keydown_event("enter")
+    context, choice = uiManager.draw_UI(eventList)
+    flag7 = context == "Player Select(S)" and choice == "Power"
+    eventList = get_keydown_event("esc")
+    uiManager.draw_UI(eventList)
+    # check if we can exit a submenu via escape and all the values are the correct values
+    flag8 = not uiManager.subMenu and \
+            uiManager.subMenuMaxIndex == uiManager.subMenuSlider == uiManager.subMenuMinIndex == -1 and \
+            len(uiManager.subMenuItems) == 0
+    assert flag and flag2 and flag3 and flag4 and flag5 and flag6 and flag7 and flag8
+
+def test_handle_select_input():
+    uiManager.targetSlider = 0  # set to default values
+    letters = ["w", "a", "s", "d"]
+    flag = True
+    # go through all cardinal directions and ensure that flag is always False
+    for i in range(len(letters)):
+        flag = uiManager.handle_select_inputs(get_keydown_event(letters[i]))
+        if flag or flag is None:
+            break
+    flag2 = uiManager.handle_select_inputs(get_keydown_event("enter"))
+    flag3 = uiManager.handle_select_inputs(get_keydown_event("esc"))
+    # check the state of all flags and ensure that the slider is 0
+    assert not flag and flag2 and flag3 is None and uiManager.targetSlider == 0
+
+def test_target_select_UI():
+    # set up for the test
+    targetable = []
+    for i in range(6):
+        targetable.append((100 + int(i/3) * 300, 100 + i%3 * 250))
+    uiManager.targets = targetable  # set to default values
+    uiManager.targetSlider = 0  # set to default values
+    uiManager.change_UI("Select Target")  # change the ui to target selection
+    eventList = get_keydown_event("d")
+    for i in range(2):
+        uiManager.draw_UI(eventList)  # move 1 to the right
+    flag = uiManager.targetSlider == 3
+    eventList = get_keydown_event("w")
+    uiManager.draw_UI(eventList)
+    flag2 = uiManager.targetSlider == 2
+    eventList = get_keydown_event("s")
+    uiManager.draw_UI(eventList)
+    flag3 = uiManager.targetSlider == 3  # move 1 down
+    for i in range(12):
+        uiManager.draw_UI(eventList)  # move 1 down
+    flag4 = uiManager.targetSlider == 5
+    eventList = get_keydown_event("enter")
+    context, choice = uiManager.draw_UI(eventList)
+    flag5 = context == "Select Target" and choice == (400, 600)
+    eventList = get_keydown_event("esc")
+    uiManager.draw_UI(eventList)
+    flag6 = uiManager.UI == "Player Select"
+    assert flag and flag2 and flag3 and flag4 and flag5 and flag6

@@ -13,7 +13,10 @@
    "Money": 1,
    "Inventory": {"Potion":  1},
    "moveList": [
-      "Attack"
+      "Attack",
+      "Drink Potion",
+      "Angry Shout",
+      "Pilfering Strike"
    ],
    "uniqueBuff": "",
    "Weakness": ""

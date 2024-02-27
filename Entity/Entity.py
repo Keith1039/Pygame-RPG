@@ -22,7 +22,6 @@ class Entity:
         self.Bal = money
         self.Inventory = inventory  # For heroes, it's a bunch of useful items, for monsters it's dropped items
 
-
     def take_damage(self, damage):
         damage = damage - self.Defence  # how much damage you ACTUALLY take
         if damage > 0 and self.Status != "Dead":  # Only allows positive damage to be inflicted on alive opponents
@@ -55,7 +54,17 @@ class Entity:
                 self.Bonuses.update({stat: (0, -1)})  # Reset the buff entry to default value
 
     def correct_stats(self):
+        # fix for the Hp stat
         if self.Hp > self.Hpcap:
             self.Hp = self.Hpcap
+        # fix the Mp stat
+        if self.Mp > self.Mpcap:
+            self.Mp = self.Mpcap
+        elif self.Mp < 0:
+            self.Mp = 0
+        # fix the balance
         if self.Bal < 0:
             self.Bal = 0
+
+    def __lt__(self, other):
+        return other.Agl > self.Agl
