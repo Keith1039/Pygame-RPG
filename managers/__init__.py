@@ -9,3 +9,5 @@ from managers.UI_Handler import UIHandler
 from managers.UI_Manager_test import get_keydown_event
 from Entity.Knight import Knight
 from Entity.Battle_Manager import BattleManager
+from Entity.Move import Move
+from Entity.Entity_Factory import EntityFactory

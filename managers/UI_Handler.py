@@ -2,6 +2,7 @@ import os.path
 import json
 import managers.Save_Manager
 import managers.UI_Manager
+from Entity import Move
 
 # Class that handles the UI inputs
 submenu_choice = ["Skills", "Switch Stance", "Items"]
@@ -72,13 +73,17 @@ class UIHandler():
                     pass
                 # this is an attack of some sort
                 else:
-                    targetable = []
-                    for i in range(len(self.battleManager.enemies)):
-                        # getting the positions of the enemies
-                        targetable.append(self.battleManager.enemies[i][0])
-                    self.UIManager.targets = targetable
-                    self.UIManager.targetSlider = 0
-                    self.UIManager.change_UI("Select Target")
+                    moveInfo = self.battleManager.moveDict[choice]
+                    # Only go to targeting if the move can be used, if not the move cannot be selected
+                    if self.battleManager.parse_restriction(self.knight, moveInfo) \
+                            and self.knight.Mp >= moveInfo["Cost"]:
+                        targetable = []
+                        for i in range(len(self.battleManager.enemies)):
+                            # getting the positions of the enemies
+                            targetable.append(self.battleManager.enemies[i][0])
+                        self.UIManager.targets = targetable
+                        self.UIManager.targetSlider = 0
+                        self.UIManager.change_UI("Select Target")
 
                 pass
 

@@ -1,6 +1,7 @@
 
 class Move:
-    def __init__(self, entity, jsonInfo):
+    def __init__(self, name, entity, jsonInfo):
+        self.name = name
         self.damage = parse_damage_calculation(jsonInfo["Damage Calculation"], entity)  # Damage the move does
         self.type = jsonInfo["Type"]  # The type of move in question
         self.cost = jsonInfo["Cost"]  # The Mp cost of the move
@@ -12,7 +13,6 @@ class Move:
         self.probability = jsonInfo["Probability"]
         self.weight = jsonInfo["Weight"]  # Probability of the move being used (Enemy object only)
         self.description = jsonInfo["Description"]  # Description of the attack being used
-    
 
 def parse_damage_calculation(damageFormula, entity):
     # Function that interprets the string as a simple math formula

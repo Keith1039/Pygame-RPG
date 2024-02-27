@@ -2,7 +2,6 @@ import managers
 import pygame as game
 from managers.UI_Manager_test import get_keydown_event
 
-
 game.init()
 
 font = game.font.Font('font/Pixeltype.ttf', 50)
@@ -11,10 +10,11 @@ screen = game.display.set_mode((1422, 800))
 # Initializing things
 screenManager = managers.ScreenManager(screen)
 dummyKnight = managers.Knight()
+factory = managers.EntityFactory()
 battleManager = managers.BattleManager(dummyKnight)
 saveManager = managers.SaveManager(dummyKnight, vars(), screenManager)
 UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, dummyKnight, vars(), dummyKnight)
+UIHandler = managers.UIHandler(UIManager, saveManager, dummyKnight, vars(), battleManager)
 
 # Variables I need for save manager
 start = True  # same as the variable that depends
@@ -62,3 +62,35 @@ def test_simulate_load_success():
     UIHandler.handle_interaction(context, choice)
     assert not start and UIManager.UI is None  # Load Succeeds
 
+def test_simulate_targeting_transition():
+    battleManager.add_enemy(factory.create_entity("dummy"))
+    UIManager.change_UI("Player Select", False)  # change the UI to targeting
+    eventList = get_keydown_event("enter")  # press enter
+    context, choice = UIManager.draw_UI(eventList)  # process events
+    UIHandler.handle_interaction(context, choice)  # handle the interaction
+    # check if the UI changed and if the position is the same
+    assert UIManager.UI == "Select Target" and UIManager.targets[0] == battleManager.enemies[0][0]
+
+def test_simulate_skill_use():
+    dummyKnight.moveList.append("Super Attack")  # give dummy knight an unusable skill
+    dummyKnight.moveList.append("Pilfering Strike")  # give dummy knight a usable skill
+    eventList = get_keydown_event("esc")  # press escape
+    UIManager.draw_UI(eventList)  # process events
+    eventList = get_keydown_event("s")  # go down 1
+    UIManager.draw_UI(eventList)  # process events
+    eventList = get_keydown_event("enter")  # press enter
+    context, choice = UIManager.draw_UI(eventList)  # process events
+    UIHandler.handle_interaction(context, choice)  # handle the interaction
+    flag = UIManager.subMenu  # check if the submenu is active
+    eventList = get_keydown_event("enter")  # press enter
+    context, choice = UIManager.draw_UI(eventList)  # process events
+    UIHandler.handle_interaction(context, choice)  # handle the interaction
+    # the UI shouldn't have changed
+    flag2 = UIManager.UI == "Player Select" and choice == "Super Attack"
+    eventList = get_keydown_event("d")  # move 1 to the right
+    UIManager.draw_UI(eventList)  # process events
+    eventList = get_keydown_event("enter")  # press enter
+    context, choice = UIManager.draw_UI(eventList)  # process events
+    UIHandler.handle_interaction(context, choice)  # handle the interaction
+    flag3 = UIManager.UI == "Select Target" and choice == "Pilfering Strike"
+    assert flag and flag2 and flag3

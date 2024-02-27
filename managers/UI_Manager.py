@@ -221,9 +221,9 @@ class UIManager:
                             self.subMenuSlider = len(self.subMenuItems) - 1
                     elif self.subMenuSlider < self.subMenuMinIndex and self.subMenuSlider > 0:
                         # guaranteed to be right by virtue of the above conditions
-                        self.subMenuMinIndex = int(self.subMenuSlider / 9) * 9
+                        self.subMenuMaxIndex = self.subMenuMinIndex - 1
                         # new min slider index, assuming full row ( 3 x 3, 9 items in total for the screen)
-                        self.subMenuMaxIndex = self.subMenuMinIndex - 8
+                        self.subMenuMinIndex = int(self.subMenuSlider / 9) * 9
                         # validate theoretical max index
                         if self.subMenuMaxIndex > len(self.subMenuItems):
                             self.subMenuMaxIndex = len(self.subMenuItems) - 1

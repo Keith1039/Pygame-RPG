@@ -58,5 +58,17 @@
       "Probability": null,
       "Weight": 100,
       "Description": ""
+   },
+   "Super Attack": {
+      "Damage Calculation": "Str * 5",
+      "Type": "",
+      "Cost": 0,
+      "Restriction": "Hp > 100%",
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": ""
    }
 }

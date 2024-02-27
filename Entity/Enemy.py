@@ -15,6 +15,7 @@ class Enemy(Entity):
         self.take_damage(damage)
         if self.Status == "Dead":
             self.die(lootpool)
+
     def die(self, lootPool):  # Will not work
         # add values to loot pool upon death
         # None of these should be None
@@ -31,5 +32,3 @@ class Enemy(Entity):
         lootPool.update({"Exp": experience + self.Exp})
         lootPool.update({"Money": money + self.Bal})
         lootPool.update({"Items": itemDict})
-
-
