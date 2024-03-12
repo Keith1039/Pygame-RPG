@@ -66,6 +66,13 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
     elif keys[game.K_l]:
         saveManager.quick_load()  # Needs to be error checked
         NPCManager.apply_context(screenManager.context)  # Updates NPC Animation Manager when loading save
+
+    elif keys[game.K_b]:
+        # start a battle
+        battleManager.enemies.clear()  # clear the enemies
+        for i in range(2):
+            battleManager.add_enemy(entityFactory.create_entity("dummy"))
+        battleManager.battleState = (True, "")
     return textEnable, animationTracker3
 
 def draw_objects(screen, screenManager, spot3):
@@ -143,6 +150,8 @@ UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleMan
 
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test
+buffered_move = ""  # for battlemanager
+target = ()  # for battlemanager
 
 screenManager.change_context("Start")
 while True:
@@ -170,7 +179,7 @@ while True:
             screenManager.change_context("Background1")
     else:
         # Determines players overworld movement
-        if knight.Status != "In Combat":
+        if not battleManager.battleState[0] and battleManager.battleState[1] == "":
             # handles basic movement for the player character
             x, animationTracker = handle_basic_input(keys, knightAni, knight, x, animationTracker)
             # handles the player interaction
@@ -195,7 +204,8 @@ while True:
             if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
                 knight.Status = "Normal"
 
-            elif knight.Status != "Normal":  # Fine for now but won't work for the arrows later
+            elif knight.Status != "Normal" and knight.Status != "Dead":
+                # Fine for now but this needs to be fixed
                 animationTracker3 += 1
 
             x = change_screen(x, screenManager, NPCManager)
@@ -220,6 +230,51 @@ while True:
                 NPCManager.change_tuple(NPCManager.NPCs[z])
                 appendable2 = "(" + str((spot2 + 1) % NPCManager.aniTuple[0] + 1) + ").png"
                 screen.blit(game.image.load(NPCManager.aniTuple[1] + appendable2), (NPCManager.aniTuple[0], 500))
+        elif battleManager.battleState[0]:
+            screen.blit(screenManager.screen, (0, 0))  # draw the screen
+            # draw the knight object here
+
+            # if this condition is ever true that means that the player used a move last turn
+            # and the values need to be reset
+            if buffered_move != "" and target != ():
+                buffered_move = ""
+                target = ()
+            if len(battleManager.turnOrder) == 0:
+                battleManager.reset_turn_order()
+            if battleManager.turnOrder[0] == knight:
+                if UIManager.UI is None:
+                    UIManager.change_UI("Player Select")  # Change the UI to the proper UI
+                context, choice = UIManager.draw_UI(eventList)
+                UIHandler.handle_interaction(context, choice)
+                if battleManager.moveDict.get(choice) is not None:  # See if the move selected is a valid move
+                    buffered_move = choice  # set the buffered move
+                if isinstance(choice, tuple):
+                    target = choice
+                    UIManager.change_UI(None)
+            returnable_strings = battleManager.do_one_turn(buffered_move, target)
+            # if len(returnable_strings) != 0:
+            # integrate dialogue manager here
+            # print(returnable_strings)
+            battleManager.determine_battle_state()  # checks to see if the battle state has changed
+        elif not battleManager.battleState[0] and battleManager.battleState[1] != "":
+            # this means the battle ended and its result needs to be processed
+            battleResult = battleManager.battleState[1]
+            if battleResult == "Hero Wins":
+                knight.get_rewards(battleManager.lootPool)
+                # reset lootpool
+                battleManager.lootPool = {
+                    "Exp": 0,
+                    "Money": 0,
+                    "Items": {
+
+                    }
+
+                }
+                knight.Status = "Normal"  # reset Knight's status to normal
+            elif battleResult == "Hero Loses":
+                # send them back to the start menu and reset their player character?
+                pass
+            battleManager.battleState = (False, "")
         UIManager.draw_health_bar(knight)
         display_frame_rate(font, screen)
     game.display.update()
