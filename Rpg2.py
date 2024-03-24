@@ -145,8 +145,9 @@ screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
 saveManager = managers.SaveManager(knight, vars(), screenManager)
 battleManager = Entity.BattleManager(knight)
+itemManager = managers.ItemManager(knight)
 UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager)
+UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager, itemManager)
 
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test

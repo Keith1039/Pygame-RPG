@@ -6,6 +6,7 @@
    "Name": "dummy",
    "Lvl": 1,
    "Str": 999,
+   "Mag": 999,
    "Vit": 999,
    "Agl": 999,
    "Defence": 1,

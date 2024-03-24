@@ -1,0 +1,125 @@
+{
+   "Longsword": {
+      "Attribute": null,
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Sword": {
+      "Attribute": null,
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Poisoned Sword": {
+      "Attribute": "Poison",
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Silver Sword": {
+      "Attribute": "Silver",
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Rusty Dagger": {
+      "Attribute": null,
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 5,
+      "Mag": 0,
+      "Agl": 10,
+      "Defence": -1,
+      "Movelist": [
+         "Pilfering Strike"
+      ]
+   },
+   "Poisoned Rusty Dagger": {
+      "Attribute": "Poison",
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Runic Blade": {
+      "Attribute": "Magic",
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Silver Runic Blade": {
+      "Attribute": "Silver, Magic",
+      "Type": "Weapon",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Leather Cap": {
+      "Attribute": null,
+      "Type": "Helmet",
+      "Hpcap": 10,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 5,
+      "Movelist": []
+   },
+   "???": {
+      "Attribute": null,
+      "Type": "",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   },
+   "Unarmed": {
+      "Attribute": null,
+      "Type": "",
+      "Hpcap": 0,
+      "Mpcap": 0,
+      "Str": 0,
+      "Mag": 0,
+      "Agl": 0,
+      "Defence": 0,
+      "Movelist": []
+   }
+}

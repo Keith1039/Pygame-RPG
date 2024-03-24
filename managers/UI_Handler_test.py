@@ -13,8 +13,9 @@ dummyKnight = managers.Knight()
 factory = managers.EntityFactory()
 battleManager = managers.BattleManager(dummyKnight)
 saveManager = managers.SaveManager(dummyKnight, vars(), screenManager)
+itemManager = managers.ItemManager(dummyKnight)
 UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, dummyKnight, vars(), battleManager)
+UIHandler = managers.UIHandler(UIManager, saveManager, dummyKnight, vars(), battleManager, itemManager)
 
 # Variables I need for save manager
 start = True  # same as the variable that depends

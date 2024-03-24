@@ -7,4 +7,6 @@ from Entity.Move import Move
 from Entity.Battle_Manager import BattleManager
 from managers.UI_Manager import UIManager
 from managers.UI_Handler import UIHandler
+from managers.Item_Manager import ItemManager
+from managers.Equipment import Equipment
 

@@ -29,6 +29,31 @@ case $args in
 
   create-move)
     python scripts.py create-move "$args2"
+  ;;
+
+  create-item)
+    python scripts.py create-item "$args2"
+  ;;
+
+  create-effects)
+    python scripts.py create-effects
+  ;;
+
+  create-equipment)
+    python scripts.py create-equipment
+  ;;
+
+  create-fusions)
+    python scripts.py create-fusions
+  ;;
+
+  validate-fusions)
+    python scripts.py validate-fusions
+  ;;
+
+  update-saves)
+    python scripts.py update-saves
+
 
 esac
 
