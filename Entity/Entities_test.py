@@ -75,5 +75,32 @@ def test_get_rewards():
     knight.get_rewards(lootpool)  # Testing to see if a second potion is added
     assert knight.Inventory["Potion"] == 2 and knight.Bal == 2 and knight.Lvl == knightLvl + 1
 
+def test_inventory_to_list():
+    # test if the inventory list has the proper elements and has the proper size
+    knight.Inventory.update({"Burn Heal": 1})
+    inventoryCopy = knight.inventory_to_list().copy()
+    assert "Potion x2" in inventoryCopy and "Burn Heal" in inventoryCopy and len(inventoryCopy) == 2
+
+def test_correct_inventory():
+    # tests if the function removes the Elixir key
+    knight.Inventory.update({"Elixir": 0})
+    inventoryDictLen = len(knight.Inventory)
+    knight.correct_inventory()
+    assert inventoryDictLen == len(knight.Inventory) + 1 and knight.Inventory.get("Elixir") is None
+
+def test_equip():
+    # equip and un-equip an item
+    # ItemManager tests if the stats change
+    # check if the stats are properly corrected after equipment changes
+    itemManager = Entity.ItemManager(knight)
+    equipmentName = "Leather Cap"
+    oldHp = knight.Hp
+    equipment = Entity.Equipment(equipmentName, itemManager.equipmentJson[equipmentName])
+    knight.equip(equipment)
+    knight.Hp = knight.Hpcap  # make Hp equal tot he Hpcap
+    flag = knight.equipment[equipment.type] == equipment
+    knight.equip(equipment, remove=True)  # remove the equipment
+    flag2 = knight.equipment[equipment.type] is None
+    assert flag and flag2 and oldHp == knight.Hp
 ################################################################
 

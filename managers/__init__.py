@@ -7,6 +7,8 @@ from managers.UI_Manager import UIManager
 from managers.UI_Manager_draw import *
 from managers.UI_Handler import UIHandler
 from managers.UI_Manager_test import get_keydown_event
+from managers.Item_Manager import ItemManager
+from managers.Equipment import Equipment
 from Entity.Knight import Knight
 from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move

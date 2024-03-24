@@ -1,0 +1,412 @@
+{
+   "Old Bread": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 10,
+      "Sell": 0,
+      "Description": "Well... it's better than nothing right?"
+   },
+   "Potion": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 50,
+      "Sell": 30,
+      "Description": "A medicinal drink with a bitter taste, the formula is a trade secret."
+   },
+   "Ether": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": false,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 90,
+      "Sell": 40,
+      "Description": "A blue drink that's effective in restoring mana. Tastes really bad."
+   },
+   "Hi-Ether": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 90,
+      "Sell": 40,
+      "Description": "A more effective ether... you feel bad for the mages that have to drink this."
+   },
+   "Hi-Potion": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 90,
+      "Sell": 40,
+      "Description": "A refined potion who's effectiveness increased alongside it's bitterness"
+   },
+   "Dragon Tear": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 300,
+      "Sell": 150,
+      "Description": "Tears shed by a benevolent Dragon. It has strong healing properties"
+   },
+   "Medicinal Herbs": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 50,
+      "Sell": 30,
+      "Description": "Local herbs that cure poisons and toxins"
+   },
+   "Bandages": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 50,
+      "Sell": 30,
+      "Description": "A set of clean bandages made to stop bleeding"
+   },
+   "Elixir": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": true,
+      "Buy": 200,
+      "Sell": 100,
+      "Description": "Restores the users health, mana and cures all ailments"
+   },
+   "Ointment": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "Ointment that is very effective when used on burns"
+   },
+   "Paralyze Tonic": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A tonic specifically made for those struck with paralysis"
+   },
+   "Bomb": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 50,
+      "Sell": 30,
+      "Description": "An explosive device that's as deadly as it is heavy"
+   },
+   "Super Bomb": {
+      "Type": "Consumable",
+      "Effect": true,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": true,
+      "Buy": 1000,
+      "Sell": 100,
+      "Description": "An improved bomb, it's said that even dragons fear this explosive device"
+   },
+   "Longsword": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 100,
+      "Sell": 30,
+      "Description": "An old longsword that used to be standard issue for soldiers of a fallen empire"
+   },
+   "Sword": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "An old sword you woke up with, it's sharp blade and design seems to have degraded with time"
+   },
+   "Poisoned Sword": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A sword doused in volatile poison giving it a venomous bite!\nit looks like it will break soon"
+   },
+   "Silver Sword": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A sword with a silver sheen, polished to perfection\nThe perfect tool to slay a wolf!"
+   },
+   "Rusty Dagger": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "An old dagger you woke up with\nOn it's pommel has a mysterious marking of a dragon"
+   },
+   "Poisoned Rusty Dagger": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A dagger doused in volatile poison giving it a venomous bite!\nit looks like it will break soon"
+   },
+   "Runic Blade": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 200,
+      "Sell": 50,
+      "Description": "A sword with mystical runes along it's body"
+   },
+   "Silver Runic Blade": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A runic blade with a silver sheen, polished to perfection\nThe perfect tool to slay a wolf!"
+   },
+   "Leather Cap": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "An old leather cap. It's better than nothing."
+   },
+   "???": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A sword you woke up with. It cannot be pulled from it's sheath\nYou feel an ominous energy from it."
+   },
+   "Unarmed": {
+      "Type": "Equipment",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": ""
+   },
+   "Moonstone": {
+      "Type": "Material",
+      "Effect": false,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 300,
+      "Sell": 100,
+      "Description": "A stone that's said to house the power of the moon Goddess"
+   },
+   "Silver Polish": {
+      "Type": "Material",
+      "Effect": false,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 50,
+      "Sell": 10,
+      "Description": "A polish used to give weapons the power of silver for one battle"
+   },
+   "Volatile Poison": {
+      "Type": "Material",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A dangerous poison that degrades any weapon it touches in exchange for giving it a venomous strike"
+   },
+   "Gospel Of The Dragons": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A book that is at the center of the Dragon Orthodoxy"
+   },
+   "Ruined Journal #1": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A ruined journal, it's aged but it feels familiar"
+   },
+   "Ruined Journal #2": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A ruined journal, the journal is in bad condition with few legible pages"
+   },
+   "Ruined Journal #3": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A ruined journal, blood and other things dirty this journal. only one page remains"
+   },
+   "Demons: A Short History": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A book about the demon race"
+   },
+   "Old Book": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "An old book you found in the caves"
+   },
+   "Items: A Helpful Guide": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A book for new adventurers"
+   },
+   "History Book": {
+      "Type": "Book",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A history book"
+   },
+   "Old Map": {
+      "Type": "Key",
+      "Effect": false,
+      "Purchasable": true,
+      "Fusion": false,
+      "Limited": true,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "An old map the shopkeeper sold you, the map is impossible to read\nyou feel like she cheated you"
+   },
+   "Basement Key": {
+      "Type": "Key",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A key to the basement of the ruined castle"
+   },
+   "Moonlit Map": {
+      "Type": "Key",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": true,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "The true form of the shopkeepers map, the area looks familiar"
+   },
+   "Upstairs Key": {
+      "Type": "Key",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "The key to the upstairs portion of the ruined castle"
+   },
+   "Emblem": {
+      "Type": "Key",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "A golden emblem with a dragon on it. You know what you must now do"
+   },
+   "Werewolf Tooth": {
+      "Type": "Key",
+      "Effect": false,
+      "Purchasable": false,
+      "Fusion": false,
+      "Limited": false,
+      "Buy": 0,
+      "Sell": 0,
+      "Description": "Proof of your victory over the mad priest"
+   }
+}

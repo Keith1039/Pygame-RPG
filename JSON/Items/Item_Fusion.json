@@ -1,0 +1,98 @@
+{
+   "Potion": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Ether": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Medicinal Herbs": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Bandages": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Ointment": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Paralyze Tonic": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Bomb": [
+      [
+         ""
+      ],
+      [
+         ""
+      ]
+   ],
+   "Poisoned Sword": [
+      [
+         "Volatile Poison"
+      ],
+      [
+         "Sword", "Longsword"
+      ]
+   ],
+   "Silver Sword": [
+      [
+         "Silver Polish"
+      ],
+      [
+         "Sword", "Longsword"
+      ]
+   ],
+   "Poisoned Rusty Dagger": [
+      [
+         "Volatile Poison"
+      ],
+      [
+         "Rusty Dagger"
+      ]
+   ],
+   "Silver Runic Blade": [
+      [
+         "Silver Polish"
+      ],
+      [
+         "Runic Blade"
+      ]
+   ],
+   "Moonlit Map": [
+      [
+         "Moonstone"
+      ],
+      [
+         "Old Map"
+      ]
+   ]
+}

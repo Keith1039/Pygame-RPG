@@ -73,7 +73,7 @@ class BattleManager:
 
     def use_move(self, turnObject, move,  targets):
         returnableStrings = []
-        effectList = self.parse_effects(move)  # the function null checks the effects of the move
+        effectList = self.parse_effects(move.effect)  # the function null checks the effects of the move
         for i in range(len(targets)):
             returnableStrings.append(turnObject.Name + " used " + move.name + "!")
             turnObject.Mp -= move.cost  # lower Mp by the cost of the move
@@ -90,10 +90,10 @@ class BattleManager:
             returnableStrings = returnableStrings + self.apply_effects(effectList, turnObject, targets[i])
         return returnableStrings
 
-    def parse_effects(self, move):
+    def parse_effects(self, effectString):
         effectList = []
-        if move is not None and move.effect is not None:
-            effects = move.effect.split(",")
+        if effectString is not None:
+            effects = effectString.split(",")
             if len(effects) % 2 == 0:
                 # immediate effect
                 for i in range(0, len(effects), 2):
@@ -128,12 +128,23 @@ class BattleManager:
             effect = currentEffectTup[1]
             if effect.__class__ == str:
                 effectSplit = effect.split()
-                try:
+                testString = effect.replace("+", "")  # remove +
+                testString = testString.replace("-", "")  # remove -
+                testString = testString.replace("%", "")  # remove %
+                #print(testString)
+                if testString.split()[0].isnumeric():
                     # do if the first string is a number
                     # this is a bad idea waiting to happen if a stat gets hit with this
                     # checks need to be added
                     # This is for immediate effects (healing, fixed damage, etc)
-                    num = int(effectSplit[0])
+                    percentagePos = effect.find("%")
+                    num = 0
+                    if percentagePos != -1:  # healing/damage dealt with percentages
+                        statCap = testString.split()[1] + "cap"  # make the stat we care about
+                        # the numerical equivalent to the percentage we wanted
+                        num = int(effectTarget.__dict__[statCap] * (int(effect[0: percentagePos]) / 100))
+                    else:
+                        num = int(effectSplit[0])
                     stat = effectSplit[1]
                     ################### Make this work for percentages
                     if stat == "Hp" and num < 0:
@@ -147,7 +158,7 @@ class BattleManager:
                     ###################
                     effectTarget.__dict__[stat] += num
 
-                except:
+                else:
                     # if the first string isn't a number then do other things
                     # Assume it is applying a status or something
                     word = effectSplit[0]  # Word determines what gets done
@@ -155,6 +166,11 @@ class BattleManager:
                     if word == "Apply":
                         # Apply a status effect
                         effectString += "is " + result + "ed !" # burn-ed, poison-ed, shock-ed, need something for bleed tho... etc
+                    elif word == "Cure":
+                        # cure a status effect if the right item was used
+                        if result == effectTarget.Status or result == "All":
+                            effectTarget.Status = "Normal"
+
 
             else:
                 # Debuff/buff

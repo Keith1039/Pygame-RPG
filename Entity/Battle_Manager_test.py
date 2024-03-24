@@ -36,17 +36,17 @@ def test_add_enemy():
 
 def test_parse_effects():
     # parse a move with no effect
-    effectListMatrix.append(battleManager.parse_effects(attack))
+    effectListMatrix.append(battleManager.parse_effects(attack.effect))
     flag = len(effectListMatrix[0]) == 0
     # parse the effects of a move with a buff effect
-    effectListMatrix.append(battleManager.parse_effects(buffEffectMove))
+    effectListMatrix.append(battleManager.parse_effects(buffEffectMove.effect))
     # check if the target is correct and check if the second index of the tuple is of the correct type
     flag2 = effectListMatrix[1][0][0] == "S" and isinstance(effectListMatrix[1][0][1], dict)
     # parse the effects of a move with an immediate effect
-    effectListMatrix.append(battleManager.parse_effects(immediateMove))
+    effectListMatrix.append(battleManager.parse_effects(immediateMove.effect))
     # check if the target is correct and check if the second index of the tuple is of the correct type
     flag3 = effectListMatrix[2][0][0] == "T" and isinstance(effectListMatrix[2][0][1], str)
-    effectListMatrix.append(battleManager.parse_effects(healMove))  # add the heal move effect list for later test
+    effectListMatrix.append(battleManager.parse_effects(healMove.effect))  # add the heal move effect list for later test
     # Check the flags
     assert flag and flag2 and flag3
 
