@@ -26,7 +26,7 @@ vars_related_context = jsonInfo.get("vars_related_context")
 battle_related_context = jsonInfo.get("battle_related_context")
 class UIHandler():
     # The things UIHandler will need access to for user input
-    def __init__(self, UIManager, SaveManager, knight, localVars, battleManager):
+    def __init__(self, UIManager, SaveManager, knight, localVars, battleManager, itemManager):
         # Dialogue Manager might have to be here too
         self.UIManager = UIManager  # For changing the UI
         self.saveManager = SaveManager  # For saving and loading on UI
@@ -34,6 +34,7 @@ class UIHandler():
         self.localVars = localVars  # For manipulating variables from player interaction
         # Local vars exists in SaveManager, might just reference that one instead
         self.battleManager = battleManager  # For passing the manager player choice and target
+        self.itemManager = itemManager  # for managing items
     # Main function of the class
     # Takes in the context and the choice that was made and process it
     def handle_interaction(self, context, choice):
@@ -50,7 +51,7 @@ class UIHandler():
                                                 "Power"]
 
             elif choice == "Items":
-                inventory = self.knight.inventory_to_list()
+                inventory = self.itemManager.get_usable_items()
                 self.UIManager.subMenuItems = inventory
 
         elif context is not None and choice is not None:

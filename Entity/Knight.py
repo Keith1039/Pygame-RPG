@@ -1,14 +1,4 @@
 from Entity.Entity import Entity
-weapons = {"sword":10,"poisoned sword":12,"silver sword":20,"rusty dagger":1,"poisoned rusty dagger":2,"lance":5,"silver lance":10,"???":999999,"unarmed":3}
-items_shop_list = ["old map", "old bread","potion"]
-items_shop = {"old map":1000,"old bread":50,"potion":150,"moonstone":300,"silver polish":50}
-items_sell = {"sword":100, "lance":80,"old bread":10, "potion":50, "rusty dagger":20,"silver lance":100,"silver sword":150}
-books = ['Gospel of the dragons',"History book" "Ruined journal #1","Ruined journal #2", "Ruined journal #3", "Demons", "old book", "Items"]
-items = {"Volatile Poison","silver polish","emblem","moonlit map",'Gospel of the dragons', "Ruined journal #1","Ruined journal #2", "Ruined journal #3", "Werewolf tooth"
-"Demons", "old book","History book", "Items","moonstone","basement key", "upstairs key"}
-combinable_items = ["Volitile poison", "silver polish","lance", "rusty dagger", "sword", "old map", "moonstone"]
-consumable_item = {"old bread":20,"potion":50}
-inventory = []
 
 # Statuses: Normal or In-Combat or Dead or opening_chest
 class Knight(Entity):
@@ -58,7 +48,10 @@ class Knight(Entity):
     def inventory_to_list(self):
         itemList = []
         for item, amount in self.Inventory.items():
-            itemList.append(item + " x" + str(amount))
+            if amount > 1:
+                itemList.append(item + " x" + str(amount))
+            else:
+                itemList.append(item)
         return itemList
 
     # Loads the Knight characters stats based on a given dictionary
