@@ -41,12 +41,8 @@ class Knight(Entity):
         money = lootPool.get("Money")
         itemDict = lootPool.get("Items")
         # For loop can become a function when directory structure is done
-        for key in itemDict:
-            if self.Inventory.get(key) is not None:  # sees if there is already an entry to update
-                number = itemDict.get(key)  # How many of the item is in the actual inventory
-                self.Inventory.update({key: number + self.Inventory[key]})  # add drop amount to the loot pool
-            else:
-                self.Inventory.update({key: itemDict[key]})  # Add the key to the loot pool if not already in
+        for key, number in itemDict.items():  # add all items from loot pool to inventory
+            self.add_to_inventory(key, number)
         self.Bal += money       # Add the money gained to the players balance
         self.Exp += experience  # Add the experience to the players Exp bar
         self.level_up()  # see if the player leveled up
@@ -82,6 +78,21 @@ class Knight(Entity):
             self.equipment[equipment.type].remove_stat_bonuses(self)  # remove the buffs from player
             self.equipment.update({equipment.type: None})  # replaces the current equipment slot with None
         self.correct_stats()  # correct the stats
+
+    def add_to_inventory(self, item, amount=1):
+        # if the item isn't in the inventory, add an entry
+        if self.Inventory.get(item) is None:
+            self.Inventory.update({item: amount})
+        else:
+            # if the item is in the inventory, add to the amount present
+            capacity = self.Inventory[item]
+            self.Inventory.update({item: capacity + amount})
+
+    def remove_from_inventory(self, item, amount=1):
+        # removes a certain amount for a specific item
+        capacity = self.Inventory[item]
+        self.Inventory.update({item: capacity - amount})
+        self.correct_inventory()
     # Loads the Knight characters stats based on a given dictionary
     def load_dict(self, knightDict):
         self.__dict__ = knightDict

@@ -4,7 +4,7 @@ from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move
 import pygame as game
 from managers.UI_Manager import UIManager
-
+from managers.Item_Manager import ItemManager
 game.init()
 screen = game.display.set_mode((1422, 800))
 font = game.font.Font('font/Pixeltype.ttf', 50)
@@ -13,13 +13,16 @@ uiManager = UIManager(font, screen)
 factory = EntityFactory()
 knight = Knight()
 dummy = factory.create_entity("dummy")
-battleManager = BattleManager(knight)
+itemManager = ItemManager(knight)
+battleManager = BattleManager(knight, itemManager)
 effectListMatrix = []
 # creating move objects
 attack = Move("Attack", dummy, battleManager.moveDict["Attack"])
 buffEffectMove = Move("Angry Shout", dummy, battleManager.moveDict["Angry Shout"])
 immediateMove = Move("Pilfering Strike", dummy, battleManager.moveDict["Pilfering Strike"])
 healMove = Move("Drink Potion", dummy, battleManager.moveDict["Drink Potion"])
+# AOE moves can only be play tested because they utilise the logic in the do_one_turn function which is play tested
+
 
 def test_add_enemy():
     flag = False
@@ -90,6 +93,16 @@ def test_use_move():
     # check if the knight's attributes to see if they're affected, check if the dummy's Mp decreased
     assert knight.Bal == 0 and knight.Hp == 900 and dummy.Mp == dummy.Mpcap - 120 and len(eventStrings) == 9
 
+def test_use_item():
+    knight.Inventory.update({"Potion": 1})  # add potion to Knight's inventory
+    knight.Inventory.update({"Bomb": 1})  # add Bomb to Knight's inventory
+    potionEffect = itemManager.itemEffectJson["Potion"]["Effect"]  # potion effect string
+    bombEffect = itemManager.itemEffectJson["Bomb"]["Effect"]  # bomb effect string
+    battleManager.use_item(knight, "Potion", potionEffect, [knight])  # use potion on knight
+    battleManager.use_item(knight, "Bomb", bombEffect, [knight])   # illegal use of bomb but who cares right?
+    # should be 899 in real game because of how do_one_turn is coded to have Knight fix its stats after every turn
+    assert knight.Hp == 900 and len(knight.Inventory) == 0
+
 def test_parse_restrictions():
     # NEEDS MORE TEST CASES
     # see if the dummy can use the move
@@ -150,8 +163,32 @@ def test_determine_battle_state():
     battleManager.enemies.clear()
     battleManager.determine_battle_state()
     flag3 = battleManager.battleState == (False, "Hero Wins")
-    # check all of the flags
+    # check all flags
     assert flag and flag2 and flag3
+
+def test_get_enemy_positions():
+    # tests if the list gotten by this function only has tuples
+    for i in range(4):
+        battleManager.add_enemy(factory.create_entity("Dummy"))  # add 4 dummys
+    flag = True
+    posList = battleManager.get_enemy_positions()
+    for a in range(len(posList)):
+        # check if the list is only of tuples and the length of those tuples is 2
+        flag = isinstance(posList[a], tuple) and len(posList[a]) == 2
+        if not flag:
+            break
+    assert flag
+
+def test_get_enemy_objects():
+    flag = True
+    # get a list of enemy objects
+    enemyObjList = battleManager.get_enemy_objects()
+    for i in range(len(enemyObjList)):
+        # check if the object is of the type Enemy
+        flag = enemyObjList[i].__class__.__name__ == "Enemy"
+        if not flag:
+            break
+    assert flag
 
 
 

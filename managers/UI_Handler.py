@@ -7,7 +7,8 @@ from Entity import Move
 # Class that handles the UI inputs
 submenu_choice = ["Skills", "Switch Stance", "Items"]
 stances = ["Power", "Defensive", "Nimble"]
-items = [] # fill it when item Manager happens
+items = list(json.load(open("JSON/Items/Items.json")).keys())
+
 jsonInfo = json.load(open("JSON/Dictionaries/UIHandler.json"))
 # For UIManager
 ui_related_context = jsonInfo.get("ui_related_context")  # Pages who's options go to another UI
@@ -71,22 +72,32 @@ class UIHandler():
                     # if it's usable on enemies go to targeting
                     # if it's usable on enemies AND yourself go to targeting but add knights pos to the list
                     # if the item is only usable on yourself, use it and be done with your turn
-                    pass
+                    target = self.itemManager.get_effect_details(choice)["Target"]
+                    targetable = []
+                    if target == "S":
+                        # add the hero to the list of targets
+                        targetable.append(self.battleManager.heroPos)
+                    elif target == "All":
+                        # add everything into the list of targets
+                        targetable = self.battleManager.get_enemy_positions()
+                        targetable.insert(0, self.battleManager.heroPos)
+                    else:
+                        # add enemies to the list of targets
+                        targetable = self.battleManager.get_enemy_positions()
+                    self.UIManager.targets = targetable
+                    self.UIManager.targetSlider = 0
+                    self.UIManager.change_UI("Select Target")
+
+
                 # this is an attack of some sort
                 else:
                     moveInfo = self.battleManager.moveDict[choice]
                     # Only go to targeting if the move can be used, if not the move cannot be selected
                     if self.battleManager.parse_restriction(self.knight, moveInfo) \
                             and self.knight.Mp >= moveInfo["Cost"]:
-                        targetable = []
-                        for i in range(len(self.battleManager.enemies)):
-                            # getting the positions of the enemies
-                            targetable.append(self.battleManager.enemies[i][0])
-                        self.UIManager.targets = targetable
+                        self.UIManager.targets = self.battleManager.get_enemy_positions()
                         self.UIManager.targetSlider = 0
                         self.UIManager.change_UI("Select Target")
-
-                pass
 
             elif context in save_related_context:
                 slot = choice.find("#")       # Finds the # character because the number is always next to it

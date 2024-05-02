@@ -45,6 +45,29 @@ def test_get_all_sellable():
     # check to see if the 2 dictionaries are the same length as the dict of all items
     assert len(itemManager.itemJson) == (len(nonKeyItemsDict) + len(keyItemsDict))
 
+def test_get_effect_detail():
+    # tests the behavior of the get_effect_details() function
+    effectDetail1 = itemManager.get_effect_details("Bomb")
+    effectDetail2 = itemManager.get_effect_details("Potion")
+    effectList = [effectDetail1, effectDetail2]
+    effectDetail3 = itemManager.get_effect_details("Longsword")
+    flag = True
+    # verifies that, for a valid item with an effect, non-empty key and value pairs are given
+    for i in range(len(effectList)):
+        effectDetail = effectList[i]
+        for item, string in effectDetail.items():
+            flag = string != ""
+            if not flag:
+                break
+        if not flag:
+            break
+    flag2 = True
+    # verifies that, for an invalid item, the dictionary only contains empty string values paired to the keys
+    for item, string in effectDetail3.items():
+        flag2 = string == ""
+        if not flag2:
+            break
+    assert flag and flag2
 def test_get_effect():
     # check if the function works by giving it a valid and invalid item
     effectString1 = itemManager.get_effect("Potion")
@@ -93,12 +116,12 @@ def test_fuse_items():
 
 def test_item_compatibility():
     # this series of tests checks if the item effects can be parsed by battleManager
-    battleManager = BattleManager(knight)  # init BattleManager
-    staticHealingEffect = itemManager.itemEffectJson["Potion"]  # get an effect string that heals the user by X amount
-    percentageHealingEffect = itemManager.itemEffectJson["Dragon Tear"]  # get an effect that heals on a percentage
-    burnHealEffect = itemManager.itemEffectJson["Ointment"]  # get the effect to heal Burn
-    bleedHealEffect = itemManager.itemEffectJson["Bandages"]  # get the effect to heal Bleed
-    multiEffect = itemManager.itemEffectJson["Elixir"]  # get an item that has multiple effects
+    battleManager = BattleManager(knight, itemManager)  # init BattleManager
+    staticHealingEffect = itemManager.get_effect("Potion")  # get an effect string that heals the user by X amount
+    percentageHealingEffect = itemManager.get_effect("Dragon Tear")  # get an effect that heals on a percentage
+    burnHealEffect = itemManager.get_effect("Ointment")  # get the effect to heal Burn
+    bleedHealEffect = itemManager.get_effect("Bandages")  # get the effect to heal Bleed
+    multiEffect = itemManager.get_effect("Elixir")  # get an item that has multiple effects
     # setting up knight object stats
     knight.Status = "Burn"
     knight.Hpcap = 999
