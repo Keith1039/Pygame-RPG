@@ -107,7 +107,10 @@ if __name__ == "__main__":
         for item, itemInfo in jsonInfo.items():
             if itemInfo["Effect"] and newJsonInfo.get(item) is None:
                 newJsonInfo.update({
-                    item: ""
+                    item: {
+                        "Target": "",
+                        "Effect": ""
+                    }
                 })
         json.dump(newJsonInfo, file, indent=3)
         file.close()
@@ -203,5 +206,21 @@ if __name__ == "__main__":
                 json.dump(saveData, file, indent=3)
                 file.close()
         os.chdir("../")
+
+    elif arg == "fix-item-effects":
+        path = "JSON/Items/Item_Effects.json"
+        file = open(path, "r")
+        effectJson = json.load(file)
+        file.close()
+        for item, effect in effectJson.items():
+            templateDict = {
+                "Target": "",
+                "AOE": False,
+                "Effect": effect
+            }
+            effectJson.update({item: templateDict})
+        file = open(path, "w")
+        json.dump(effectJson, file, indent=3)
+        file.close()
 
 

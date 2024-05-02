@@ -1,5 +1,6 @@
 import pygame as game
 import json
+import re
 from managers.UI_Manager_draw import *
 # File responsible for drawing UI
 
@@ -286,6 +287,16 @@ class UIManager:
                 result = self.UI, item
             else:
                 self.screen.blit(self.cursor.cursor, self.cursor.pos)
+        choice = result[1]
+        # strip the amount part from the item
+        if isinstance(choice, str):
+            match = re.search("x[1-9]+", choice)
+            if match:
+                choiceArr = choice.split()  # convert it into an array
+                choiceArr.pop(len(choiceArr) - 1)  # get rid of the amount part of the string
+                choice = " ".join(choiceArr)
+                choice.strip()  # get rid of useless white space
+                result = (result[0], choice)  # set the value of result to this now
         return result
 
     def draw_health_bar(self, knight):

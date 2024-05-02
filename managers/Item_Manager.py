@@ -54,12 +54,19 @@ class ItemManager:
                 })
         return sellableItems
 
-    def get_effect(self, item):
-        # returns the effect string if the item has an effect or returns empty string
+    def get_effect_details(self, item):
+        # returns a dictionary that has the effect information for the item
         if self.itemJson[item]["Effect"]:
             return self.itemEffectJson[item]
         else:
-            return ""
+            return {
+                "Target": "",
+                "AOE": "",
+                "Effect": ""
+            }
+    def get_effect(self, item):
+        # returns the effect string if the item has an effect or returns empty string
+        return self.get_effect_details(item)["Effect"]
 
     def get_parsable_item_info(self, item):
         # return a dictionary that's easier to parse
@@ -92,18 +99,9 @@ class ItemManager:
             listB = fusionMaterials[1]
             if ((material1 in listA) or (material1 in listB)) and ((material2 in listA) or (material2 in listB)):
                 fusionOccured = True
-                if self.knight.Inventory.get(item):
-                    # if the fused item exists in the inventory, get the amount and add 1 to it
-                    amount = self.knight.Inventory[item]
-                    self.knight.Inventory.update({item: 1 + amount})
-                else:
-                    # if the fused item does not exist in the inventory, create an entry for it
-                    self.knight.Inventory.update({item: 1})
+                self.knight.add_to_inventory(item)  # add the inventory
                 # lower the amount in the inventory for the used items
-                amount = self.knight.Inventory[material1]
-                self.knight.Inventory.update({material1: amount - 1})
-                amount = self.knight.Inventory[material2]
-                self.knight.Inventory.update({material2: amount - 1})
-                self.knight.correct_inventory()  # remove any items with 0 amount in inventory
+                self.knight.remove_from_inventory(material1)  # removes 1 from the amount of material1
+                self.knight.remove_from_inventory(material2)  # removes 1 from the amount of material2
         return fusionOccured
 

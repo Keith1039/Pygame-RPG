@@ -23,6 +23,18 @@
       "Weight": 50,
       "Description": "A weak attack that has a medium chance of stealing gold from the target."
    },
+   "Spinning Slash": {
+      "Damage Calculation": "Str * 0.4",
+      "Type": "Attack",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": null,
+      "AOE": true,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": "A weak slash that hits all enemies."
+   },
    "Angry Shout": {
       "Damage Calculation": "",
       "Type": "Buff",

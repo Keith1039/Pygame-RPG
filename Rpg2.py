@@ -71,7 +71,9 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
         # start a battle
         battleManager.enemies.clear()  # clear the enemies
         for i in range(2):
-            battleManager.add_enemy(entityFactory.create_entity("dummy"))
+            battleManager.add_enemy(entityFactory.create_entity("Goblin"))
+        knight.Inventory.update({"Potion": 2})  # add a potion
+        knight.Inventory.update({"Bomb": 1})  # add a bomb
         battleManager.battleState = (True, "")
     return textEnable, animationTracker3
 
@@ -144,8 +146,8 @@ entityFactory = Entity.EntityFactory()
 screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
 saveManager = managers.SaveManager(knight, vars(), screenManager)
-battleManager = Entity.BattleManager(knight)
 itemManager = managers.ItemManager(knight)
+battleManager = Entity.BattleManager(knight, itemManager)
 UIManager = managers.UIManager(font, screen)
 UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager, itemManager)
 
@@ -247,12 +249,18 @@ while True:
                     UIManager.change_UI("Player Select")  # Change the UI to the proper UI
                 context, choice = UIManager.draw_UI(eventList)
                 UIHandler.handle_interaction(context, choice)
-                if battleManager.moveDict.get(choice) is not None:  # See if the move selected is a valid move
+                # See if the move selected is a valid move
+                if battleManager.moveDict.get(choice) is not None or itemManager.itemJson.get(choice) is not None:
                     buffered_move = choice  # set the buffered move
-                if isinstance(choice, tuple):
+                elif isinstance(choice, tuple):
                     target = choice
                     UIManager.change_UI(None)
-            returnable_strings = battleManager.do_one_turn(buffered_move, target)
+            returnable_strings, refresh = battleManager.do_one_turn(buffered_move, target)
+            if refresh:
+                UIManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
+                UIManager.subMenuMaxIndex = len(UIManager.subMenuItems) - 1
+                if UIManager.subMenuSlider >= len(UIManager.subMenuItems) and len(UIManager.subMenuItems) != 0:
+                    UIManager.subMenuSlider -= 1  # move slider back by 1
             # if len(returnable_strings) != 0:
             # integrate dialogue manager here
             # print(returnable_strings)

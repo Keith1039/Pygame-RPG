@@ -102,5 +102,20 @@ def test_equip():
     knight.equip(equipment, remove=True)  # remove the equipment
     flag2 = knight.equipment[equipment.type] is None
     assert flag and flag2 and oldHp == knight.Hp
+
+def test_add_to_inventory():
+    knight.Inventory.clear()  # remove everything from inventory
+    knight.add_to_inventory("Potion")  # add 1 potion to inventory
+    knight.add_to_inventory("Bomb")  # add 1 bomb to inventory
+    knight.add_to_inventory("Potion", 2)  # add another 2 potions to the inventory
+    # check if the inventory is of the right size
+    # checks if the inventory has the proper amounts of each item
+    assert len(knight.Inventory) == 2 and knight.Inventory["Potion"] == 3 and knight.Inventory["Bomb"] == 1
+def test_remove_from_inventory():
+    knight.remove_from_inventory("Potion", 2)  # remove 2 Potions from inventory
+    knight.remove_from_inventory("Bomb")  # remove 1 bomb from inventory
+    # bomb should have been removed from the inventory
+    assert len(knight.Inventory) == 1 and knight.Inventory["Potion"] == 1
+
 ################################################################
 
