@@ -12,9 +12,15 @@ lootpool = {"Exp": 0, "Money": 0, "Items": {}}
 
 def test_take_damage():
     mockEnemy.take_damage(-900)
+    mockEnemy.Defence = 100  # set defence to 100
+    mockEnemy.take_damage(20)  # should do no damage because of the high damage
     flag = mockEnemy.Hp == mockEnemy.Hpcap  # Hp shouldn't change
-    mockEnemy.take_damage(9999)
-    assert flag and mockEnemy.Hp == 0 and mockEnemy.Status == "Dead"
+    mockEnemy.take_damage(20, True)
+    flag2 = mockEnemy.Hp == mockEnemy.Hpcap - 20  # confirm that the mock enemy actually took damage
+    mockEnemy.take_damage(9999)  # kill the mock enemy
+    mockEnemy.Defence = 1  # reset the defence to 1
+
+    assert flag and flag2 and mockEnemy.Hp == 0 and mockEnemy.Status == "Dead"
 
 def test_apply_bonuses():
     mockEnemy.Bonuses.update({"Str": (50, 3), "Vit": (50, 3), "Agl": (50, -1), "Defence": (50, 3)})  # Give enemy buffs

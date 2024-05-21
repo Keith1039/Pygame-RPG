@@ -10,11 +10,13 @@ class Enemy(Entity):
         self.uniqueBuff = jsonInfo["uniqueBuff"]  # For bosses only really
         self.weakness = jsonInfo["Weakness"]  # What stance they're weak to
 
-    def take_attack(self, damage, lootpool):  # take_attack is the Enemy specific version of `take_damage()`
+    def take_attack(self, damage, lootpool, effect=False):
+        # take_attack is the Enemy specific version of `take_damage()`
         # In this case it checks if the attack was fatal and then if it is, invokes the "`die()` function
-        self.take_damage(damage)
+        damageVal = self.take_damage(damage, effect)
         if self.Status == "Dead":
             self.die(lootpool)
+        return damageVal  # returns how much damage the unit took
 
     def die(self, lootPool):  # Will not work
         # add values to loot pool upon death

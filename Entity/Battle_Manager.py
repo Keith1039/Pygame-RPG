@@ -63,6 +63,7 @@ class BattleManager:
                 else:
                     returnable_strings = self.use_move(self.hero, moveObj, [targetObj])
             self.turnOrder.pop(0)  # now that the hero has successfully completed their turn, kick them from turn order
+            #self.print_all_statuses()  ######## DEBUG
         elif objectType == "Enemy":
             usable = False
             loopNum = 0
@@ -79,6 +80,7 @@ class BattleManager:
                 loopNum += 1
             self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
             returnable_strings = self.use_move(turnObject, moveObj, [self.hero])
+            #self.print_all_statuses()  ######## DEBUG
         self.clear_dead_enemies()  # removes dead entities
         self.fix_entity_stats()  # correct the stats of all entities that are still alive
         return returnable_strings, refresh
@@ -91,13 +93,14 @@ class BattleManager:
             turnObject.Mp -= move.cost  # lower Mp by the cost of the move
             if move.type == "Attack":  # if this move is an attack, do damage to the target object
                 # text outputted for attack type moves
-                battleText = targets[i].Name + " took " + str(move.damage) + " damage!"
-                returnableStrings.append(battleText)
                 objectType = targets[i].__class__.__name__
+                damageVal = 0
                 if objectType == "Knight":
-                    targets[i].take_damage(move.damage)
+                    damageVal = targets[i].take_damage(move.damage)
                 else:
-                    targets[i].take_attack(move.damage, self.lootPool)
+                    damageVal = targets[i].take_attack(move.damage, self.lootPool)
+                battleText = targets[i].Name + " took " + str(damageVal) + " damage!"
+                returnableStrings.append(battleText)
             # merge the 2 lists of move strings together
             returnableStrings = returnableStrings + self.apply_effects(effectList, turnObject, targets[i])
         return returnableStrings
@@ -169,17 +172,25 @@ class BattleManager:
                     else:
                         num = int(effectSplit[0])
                     stat = effectSplit[1]
-                    ################### Make this work for percentages
+                    # condition so that people die when they are killed
                     if stat == "Hp" and num < 0:
-                        effectString += "took " + str(abs(num)) + " damage!"
-                    elif stat == "Hp" and num > 0:
+                        damageVal = 0
+                        if effectTarget.__class__.__name__ == "Enemy":
+                            damageVal = effectTarget.take_attack(abs(num), self.lootPool, True)
+                        else:
+                            damageVal = effectTarget.take_damage(abs(num), True)
+                        effectString += "took " + str(damageVal) + " damage!"
+                    else:
+                        # since we're not taking damage, directly add to the stat
+                        effectTarget.__dict__[stat] += num
+                    # all cases for the effect string except for taking damage
+                    if stat == "Hp" and num > 0:
                         effectString += "recovered " + str(num) + " Hp!"
                     elif stat == "Bal" and num < 0:
                         effectString += "lost " + str(abs(num)) + " Gold!"
                     elif stat == "Bal" and num > 0:
                         effectString += "gained " + str(num) + " Gold!"
-                    ###################
-                    effectTarget.__dict__[stat] += num
+
 
                 else:
                     # if the first string isn't a number then do other things
@@ -305,3 +316,11 @@ class BattleManager:
             # adds enemy object to the list
             enemyObjects.append(self.enemies[i][1])
         return enemyObjects
+
+    ########## DEBUG FUNCTIONS (NO TESTING REQUIRED)
+
+    def print_all_statuses(self):
+        self.hero.print_status()
+        d = self.get_enemy_objects()
+        for i in range(len(d)):
+            d[i].print_status()
