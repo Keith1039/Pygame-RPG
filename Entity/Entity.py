@@ -5,7 +5,7 @@ class Entity:
         if inventory is None:
             inventory = {}  # Inventory is a dictionary of it with key pairs (string: int)
         self.Name = name
-        self.Status = "Normal"
+        self.Status = ("Normal", -1)
         self.Lvl = level
         self.Hp = Hp
         self.Hpcap = Hpcap
@@ -26,11 +26,11 @@ class Entity:
     def take_damage(self, damage, effect=False):
         if not effect:  # if it isn't effect damage, consider defence
             damage = damage - self.Defence  # how much damage you ACTUALLY take
-        if damage > 0 and self.Status != "Dead":  # Only allows positive damage to be inflicted on alive opponents
+        if damage > 0 and self.Status[0] != "Dead":  # Only allows positive damage to be inflicted on alive opponents
             self.Hp -= damage
             if self.Hp <= 0:  # Check if you died to the attack
                 self.Hp = 0  # Set hp to 0 or else weird things will start happening
-                self.Status = "Dead"  # Change status to dead
+                self.Status = ("Dead", -1)  # Change status to dead
             return damage
         return 0  # if the damage is below 0
 

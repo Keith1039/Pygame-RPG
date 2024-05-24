@@ -11,7 +11,7 @@ def display_frame_rate(font, screen):
 def handle_basic_input(keys, knightAni, knight, x, animationTracker): # This is just movement for left and right
     # Determines players overworld movement
     prevKnightAni = knightAni.aniArray
-    if knight.Status == "Normal":
+    if knight.fieldStatus == "Normal":
         if keys[game.K_RIGHT]:
             knightAni.change_array("Knight Run R")
             if prevKnightAni != knightAni.aniArray:
@@ -43,20 +43,20 @@ def handle_basic_input(keys, knightAni, knight, x, animationTracker): # This is 
 def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, textEnable, animationTracker3):
     if keys[game.K_UP]:
         for u in range(len(interactables)):
-            status = knight.Status
+            status = knight.fieldStatus
             interactable = interactables[u]
             if interactable.eventType == "Chest":
                 screenManager.objectAni.change_tuple(knight, x, interactable)
-                if status != knight.Status:
+                if status != knight.fieldStatus:
                     # resetting animationTracker
                     animationTracker3 = 0
             elif interactable.eventType == "Dialogue":
                 textEnable = True
-                knight.Status = "In cutscene"
+                knight.fieldStatus = "In cutscene"
                 # Do something
 
             screenManager.objectAni.change_tuple(knight, x, interactable)
-            if status != knight.Status:
+            if status != knight.fieldStatus:
                 # resetting animationTracker
                 animationTracker3 = 0
 
@@ -161,7 +161,7 @@ while True:
     spot = animationTracker // 10
     spot2 = animationTracker2 // 10
     spot3 = animationTracker3 // 10
-    if knight.Status == "Dead":
+    if knight.fieldStatus == "Dead":
         knightAni.change_array("Death")
 
     eventList = game.event.get()
@@ -205,9 +205,9 @@ while True:
             animationTracker2 += 1
             # Animation tracker3 is for objects like chests and arrows
             if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
-                knight.Status = "Normal"
+                knight.fieldStatus = "Normal"
 
-            elif knight.Status != "Normal" and knight.Status != "Dead":
+            elif knight.fieldStatus != "Normal" and knight.fieldStatus != "Dead":
                 # Fine for now but this needs to be fixed
                 animationTracker3 += 1
 
@@ -279,7 +279,7 @@ while True:
                     }
 
                 }
-                knight.Status = "Normal"  # reset Knight's status to normal
+                knight.fieldStatus = "Normal"  # reset Knight's status to normal
             elif battleResult == "Hero Loses":
                 # send them back to the start menu and reset their player character?
                 pass

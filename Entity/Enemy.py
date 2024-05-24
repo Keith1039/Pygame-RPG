@@ -14,7 +14,7 @@ class Enemy(Entity):
         # take_attack is the Enemy specific version of `take_damage()`
         # In this case it checks if the attack was fatal and then if it is, invokes the "`die()` function
         damageVal = self.take_damage(damage, effect)
-        if self.Status == "Dead":
+        if self.Status[0] == "Dead":
             self.die(lootpool)
         return damageVal  # returns how much damage the unit took
 
