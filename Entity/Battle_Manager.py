@@ -8,6 +8,7 @@ class BattleManager:
         # First value in tuple is whether there's a battle going on, second value is the victor
         self.battleState = (False, "")
         self.moveDict = self.get_move_dict()  # fills up the move dictionary
+        self.statusDict = self.get_status_dict()  # retrieves the effect information
         self.hero = knight
         self.itemManager = itemManager
         self.heroPos = (300, 500)  # write it down later
@@ -37,6 +38,13 @@ class BattleManager:
         file.close()
         return jsonInfo
 
+    def get_status_dict(self):
+        # loads the status dictionary from a file
+        file = open("JSON/Status/Status.json", "r")
+        jsonInfo = json.load(file)
+        file.close()
+        return jsonInfo
+
     def do_one_turn(self, move, target):
         # I'll worry about the drawing later
         # One round of battle
@@ -44,43 +52,58 @@ class BattleManager:
         returnable_strings = []
         turnObject = self.turnOrder[0]  # Get the first index object but don't remove it
         objectType = turnObject.__class__.__name__
-        # Note that the move that is given is assumed to have been validated
-        if objectType == "Knight" and move != "" and target != ():
-            targetObj = self.get_entity_from_pos(target)  # get the target object for the attack
-            # we're using an item
-            if move in self.itemManager.itemJson.keys():
-                refresh = True  # set refresh equal to true
-                itemDetails = self.itemManager.get_effect_details(move)  # getting information about the item
-                if itemDetails["AOE"]:
-                    returnable_strings = self.use_item(self.hero, move, itemDetails["Effect"], self.get_enemy_objects())
+        statusEffect = self.statusDict[turnObject.Status[0]]["Effect"]  # get the effect for the status
+        if statusEffect.find("Lose turn") != -1:  # condition to see if the entity loses their turn
+            # this is done so that the player character doesn't have to select a move and target an enemy
+            # only to be told that they can't move anyway
+            statusStrings = self.handle_status(turnObject)
+            returnable_strings += statusStrings
+            self.turnOrder.pop(0)  # remove the user from turn order
+        else:
+            # handle the status effects
+            statusStrings = self.handle_status(turnObject)
+            returnable_strings += statusStrings
+            # Note that the move that is given is assumed to have been validated
+            if objectType == "Knight" and move != "" and target != ():
+                targetObj = self.get_entity_from_pos(target)  # get the target object for the attack
+                # we're using an item
+                if move in self.itemManager.itemJson.keys():
+                    refresh = True  # set refresh equal to true
+                    itemDetails = self.itemManager.get_effect_details(move)  # getting information about the item
+                    if itemDetails["AOE"]:
+                        returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], self.get_enemy_objects())
+                    else:
+                        returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], [targetObj])
+                # if we aren't using an item we're using a move of some sort
                 else:
-                    returnable_strings = self.use_item(self.hero, move, itemDetails["Effect"], [targetObj])
-            # if we aren't using an item we're using a move of some sort
-            else:
-                moveObj = Move(move, self.hero, self.moveDict[move])
-                if moveObj.AOE:  # if the move is an AOE move, target all enemies
-                    returnable_strings = self.use_move(self.hero, moveObj, self.get_enemy_positions())
-                else:
-                    returnable_strings = self.use_move(self.hero, moveObj, [targetObj])
-            self.turnOrder.pop(0)  # now that the hero has successfully completed their turn, kick them from turn order
-            #self.print_all_statuses()  ######## DEBUG
-        elif objectType == "Enemy":
-            usable = False
-            loopNum = 0
-            moveObj = Move("Attack", turnObject, self.moveDict["Attack"])
-            while not usable and loopNum < 20:
-                moveNum = random.randint(0, (len(turnObject.moveList) - 1))
-                move = turnObject.moveList[moveNum]
-                weightNum = random.randint(0, 100)
-                moveInfo = self.moveDict[move]
-                if weightNum <= moveInfo["Weight"] and self.parse_restriction(turnObject, moveInfo)\
-                        and turnObject.Mp >= moveInfo["Cost"]:
-                    usable = True
-                    moveObj = Move(move, turnObject, moveInfo)
-                loopNum += 1
-            self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
-            returnable_strings = self.use_move(turnObject, moveObj, [self.hero])
-            #self.print_all_statuses()  ######## DEBUG
+                    moveObj = Move(move, self.hero, self.moveDict[move])
+                    if moveObj.AOE:  # if the move is an AOE move, target all enemies
+                        returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
+                    else:
+                        returnable_strings += self.use_move(self.hero, moveObj, [targetObj])
+                self.turnOrder.pop(0)  # now that the hero has successfully completed their turn, kick them from turn order
+                #self.print_all_statuses()  ######## DEBUG
+            elif objectType == "Enemy":
+                # handle the status effects
+                statusStrings = self.handle_status(turnObject)
+                returnable_strings += statusStrings
+                usable = False
+                loopNum = 0
+                moveObj = Move("Attack", turnObject, self.moveDict["Attack"])
+                while not usable and loopNum < 20:
+                    moveNum = random.randint(0, (len(turnObject.moveList) - 1))
+                    move = turnObject.moveList[moveNum]
+                    weightNum = random.randint(0, 100)
+                    moveInfo = self.moveDict[move]
+                    if weightNum <= moveInfo["Weight"] and self.parse_restriction(turnObject, moveInfo)\
+                            and turnObject.Mp >= moveInfo["Cost"]:
+                        usable = True
+                        moveObj = Move(move, turnObject, moveInfo)
+                    loopNum += 1
+                    returnable_strings += self.use_move(turnObject, moveObj, [self.hero])
+                self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
+                #self.print_all_statuses()  ######## DEBUG
+        # clear dead enemies should return a string of people who died to returnable strings
         self.clear_dead_enemies()  # removes dead entities
         self.fix_entity_stats()  # correct the stats of all entities that are still alive
         return returnable_strings, refresh
@@ -190,8 +213,6 @@ class BattleManager:
                         effectString += "lost " + str(abs(num)) + " Gold!"
                     elif stat == "Bal" and num > 0:
                         effectString += "gained " + str(num) + " Gold!"
-
-
                 else:
                     # if the first string isn't a number then do other things
                     # Assume it is applying a status or something
@@ -199,13 +220,15 @@ class BattleManager:
                     result = effectSplit[1]
                     if word == "Apply":
                         # Apply a status effect
+                        effectTarget.Status = (result, 0)  # set the status
                         effectString += "is " + result + "ed !" # burn-ed, poison-ed, shock-ed, need something for bleed tho... etc
                     elif word == "Cure":
                         # cure a status effect if the right item was used
-                        if result == effectTarget.Status or result == "All":
-                            effectTarget.Status = "Normal"
-
-
+                        if result == effectTarget.Status[0] or result == "All":
+                            effectTarget.Status = ("Normal", -1)
+                            effectString += effectTarget.Name + " is back to Normal!"
+                        else:
+                            effectString += "it wasn't effective!"
             else:
                 # Debuff/buff
                 stat = list(effect.keys())[0]  # the stat is the first and only key
@@ -266,14 +289,14 @@ class BattleManager:
         # Loop through enemies list and append the not dead enemies to the newEnemies list
         for i in range(len(self.enemies)):
             enemy = self.enemies[i][1]
-            if enemy.Status != "Dead":
+            if enemy.Status[0] != "Dead":
                 newEnemies.append(self.enemies[i])
         self.enemies = newEnemies  # set the enemies list to the newEnemies list
         # Loop through the turnOrder list and append the not dead entities to the newTurnOrder list
         # turnOrder does not need position of the enemy Object
         for i in range(len(self.turnOrder)):
             enemy = self.turnOrder[i]
-            if enemy.Status != "Dead":
+            if enemy.Status[0] != "Dead":
                 newTurnOrder.append(enemy)
         self.turnOrder = newTurnOrder  # set the turnOrder list to the newTurnOrder list
 
@@ -294,11 +317,11 @@ class BattleManager:
                     return self.enemies[i][1]
 
     def determine_battle_state(self):
-        if len(self.enemies) == 0 and self.hero.Status != "Dead":
+        if len(self.enemies) == 0 and self.hero.Status[0] != "Dead":
             self.battleState = (False, "Hero Wins")  # Battle ended, hero wins
-        elif self.hero.Status == "Dead":
+        elif self.hero.Status[0] == "Dead":
             self.battleState = (False, "Hero Loses")  # Battle ended, hero lost
-        elif len(self.enemies) != 0 and self.hero.Status != "Dead":  # Battle is on going
+        elif len(self.enemies) != 0 and self.hero.Status[0] != "Dead":  # Battle is on going
             self.battleState = (True, "")
 
     def get_enemy_positions(self):
@@ -316,6 +339,76 @@ class BattleManager:
             # adds enemy object to the list
             enemyObjects.append(self.enemies[i][1])
         return enemyObjects
+
+    def apply_status_effect(self, entity):
+        returnableStrings = []
+        if entity.Status[1] != -1:
+            # increase the count for the status
+            entity.Status = (entity.Status[0], entity.Status[1] + 1)
+        statusEffect = self.statusDict[entity.Status[0]]["Effect"]
+        if statusEffect != "":
+            effectList = statusEffect.split(",")  # split by
+            for i in range(len(effectList)):
+                effectString = " Because of " + entity.Status[0] + ", " + entity.Name + " "
+                effect = effectList[i]  # the effect we parse
+                effectSplit = effect.split()
+                # REPLACE LATER ON WHEN DOING YOUR FINAL REVISIONS
+                testString = effect.replace("+", "")  # remove +
+                testString = testString.replace("-", "")  # remove -
+                testString = testString.replace("%", "")  # remove %
+                if testString.split()[0].isnumeric():
+                    # do if the first string is a number
+                    # this is a bad idea waiting to happen if a stat gets hit with this
+                    # checks need to be added
+                    # This is for immediate effects (healing, fixed damage, etc)
+                    percentagePos = effect.find("%")
+                    num = 0
+                    if percentagePos != -1:  # healing/damage dealt with percentages
+                        statName = testString.split()[1]
+                        # the numerical equivalent to the percentage we wanted
+                        num = int(entity.__dict__[statName] * (int(effect[0: percentagePos]) / 100))
+                    else:
+                        num = int(effectSplit[0])
+
+                    stat = effectSplit[1]
+                    capPos = stat.find("cap")
+                    if capPos != -1:  # max it so that we inflict damage to Hp instead of Hpcap
+                        stat = stat[0:capPos]
+                    # condition so that people die when they are killed
+                    if stat == "Hp" and num < 0:
+                        # status effect damage counts as effect damage
+                        damageVal = 0
+                        if entity.__class__.__name__ == "Enemy":
+                            damageVal = entity.take_attack(abs(num), self.lootPool, True)
+                        else:
+                            damageVal = entity.take_damage(abs(num), True)
+                        effectString += "took " + str(damageVal) + " damage!"
+                    else:
+                        # since we're not taking damage, directly add to the stat
+                        entity.__dict__[stat] += num
+                    # all cases for the effect string except for taking damage
+                    if stat == "Hp" and num > 0:
+                        effectString += "recovered " + str(num) + " Hp!"
+                    ##### MOST LIKELY USELESS
+                    # elif stat == "Bal" and num < 0:
+                    #     effectString += "lost " + str(abs(num)) + " Gold!"
+                    # elif stat == "Bal" and num > 0:
+                    #     effectString += "gained " + str(num) + " Gold!"
+                else:
+                    if effect == "Lose turn":
+                        effectString += "lost their turn!"  # appends the status string
+                returnableStrings.append(effectString)
+        return returnableStrings
+    def handle_status(self, entity):
+        returnableStrings = self.apply_status_effect(entity)
+        maxCount = self.statusDict[entity.Status[0]]["maxCount"]
+        # checks to see if the status effect has faded away assuming it isn't infinite
+        if entity.Status[1] == maxCount and maxCount != -1:
+            returnableStrings.append(entity.Name + " is back to Normal!")
+            entity.Status = ("Normal", -1)
+        return returnableStrings  # return all status strings
+
+
 
     ########## DEBUG FUNCTIONS (NO TESTING REQUIRED)
 

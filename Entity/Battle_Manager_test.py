@@ -18,6 +18,7 @@ battleManager = BattleManager(knight, itemManager)
 effectListMatrix = []
 # creating move objects
 attack = Move("Attack", dummy, battleManager.moveDict["Attack"])
+statusMove = Move("Venom Strike", dummy, battleManager.moveDict["Venom Strike"])
 buffEffectMove = Move("Angry Shout", dummy, battleManager.moveDict["Angry Shout"])
 immediateMove = Move("Pilfering Strike", dummy, battleManager.moveDict["Pilfering Strike"])
 healMove = Move("Drink Potion", dummy, battleManager.moveDict["Drink Potion"])
@@ -50,6 +51,7 @@ def test_parse_effects():
     # check if the target is correct and check if the second index of the tuple is of the correct type
     flag3 = effectListMatrix[2][0][0] == "T" and isinstance(effectListMatrix[2][0][1], str)
     effectListMatrix.append(battleManager.parse_effects(healMove.effect))  # add the heal move effect list for later test
+    effectListMatrix.append(battleManager.parse_effects(statusMove.effect))  # add status move for later test
     # Check the flags
     assert flag and flag2 and flag3
 
@@ -76,7 +78,10 @@ def test_apply_effects():
         # run apply_effects() and add to the list of event strings
         eventStrings = eventStrings + battleManager.apply_effects(effectList, dummy, knight)
     # Check if all the effects were properly applied
-    assert dummy.Bonuses["Str"] == (5, 3) and knight.Bal == 0 and oldDummyHp + 20 == dummy.Hp and len(eventStrings) == 3
+    flag = dummy.Bonuses["Str"] == (5, 3) and knight.Bal == 0 and oldDummyHp + 20 == dummy.Hp and len(eventStrings) == 4
+    # check to see if the poison was applied
+    flag2 = knight.Status[0] == "Poison" and knight.Status[1] == 0
+    assert flag and flag2
 
 def test_use_move():
     # Buffing knight object's stats, so they survive the dummy object's attack
@@ -122,7 +127,7 @@ def test_reset_turn_order():
             and battleManager.turnOrder[1] == knight)
 
 def test_clear_dead_enemies():
-    battleManager.enemies[0][1].Status = "Dead"  # Change Dummy status to Dead
+    battleManager.enemies[0][1].Status = ("Dead", -1)  # Change Dummy status to Dead
     battleManager.clear_dead_enemies()  # clear the dead enemies
     # Check if the enemies list is empty and only the hero object should be in turn order now
     assert len(battleManager.enemies) == 0 and len(battleManager.turnOrder) == 1
@@ -152,11 +157,11 @@ def test_get_entity_from_pos():
 
 def test_determine_battle_state():
     # kill hero and see if the state is changed appropriately
-    knight.Status = "Dead"
+    knight.Status = ("Dead", -1)
     battleManager.determine_battle_state()
     flag = battleManager.battleState == (False, "Hero Loses")
     # revive hero and determine if the state is changed appropriately
-    knight.Status = "Normal"
+    knight.Status = ("Normal", -1)
     battleManager.determine_battle_state()
     flag2 = battleManager.battleState == (True, "")
     # get rid of all enemies and determine if the state is changed appropriately
@@ -189,6 +194,74 @@ def test_get_enemy_objects():
         if not flag:
             break
     assert flag
+
+def test_apply_status_effect():
+    # change the Hp to something easy to calculate
+    knight.Hp = 999
+    knight.Hpcap = 999
+    returnableStrings = battleManager.apply_status_effect(knight)
+    # check the size of returned array
+    flag = len(returnableStrings) == 0
+    knight.Status = ("Poison", 0)  # poison the knight
+    oldCap = knight.Hpcap
+    returnableStrings = battleManager.apply_status_effect(knight)
+    presumedDamage = int(knight.Hpcap/100 * 10)  # should deal 10% max health damage
+    # check the damage dealt and check to see if the counter for the status increased and the size of str array
+    flag2 = knight.Hpcap - presumedDamage == knight.Hp and knight.Status[1] == 1 and len(returnableStrings) == 1
+    # check to see if the max health damage can kill (it should)
+    oldHp = knight.Hp  # store the knight's Hp before the change
+    knight.Hp = 1
+    returnableStrings = battleManager.apply_status_effect(knight)
+    flag3 = knight.Status[0] == "Dead" and knight.Status[1] == -1 and len(returnableStrings) == 1
+    knight.Hp = oldHp  # restore the knight's Hp
+    knight.Status = ("Burn", 0)  # burn the knight
+    oldHp = knight.Hp
+    presumedDamage = int(knight.Hp/100 * 15)  # should deal 15% current health damage
+    returnableStrings = battleManager.apply_status_effect(knight)
+    # check the damage dealt and check to see if the counter for the status increased and the size of str array
+    flag4 = oldHp - presumedDamage == knight.Hp and knight.Status[1] == 1 and len(returnableStrings) == 1
+    # check to see if current health damage can kill (it shouldn't)
+    knight.Hp = 1
+    returnableStrings = battleManager.apply_status_effect(knight)
+    flag5 = knight.Status[0] == "Burn" and knight.Hp == 1 and len(returnableStrings) == 1
+    assert flag and flag2 and flag3 and flag4 and flag5
+
+
+
+
+
+def test_handle_status_effect():
+    # make the knight strong enough to handle the damage
+    knight.Hp = 999  # refill Hp
+    knight.Defence = 700
+    # prep work
+    knight.Status = ("Paralyze", 0)
+    battleManager.enemies.clear()  # remove all enemies
+    battleManager.turnOrder.clear()  # remove current turn order
+    dummy = factory.create_entity("dummy")  # create a dummy object
+    dummy.Status = ("Freeze", 0)  # freeze dummy
+    battleManager.add_enemy(dummy)
+    # add the objects to the turn order
+    battleManager.turnOrder.append(knight)
+    battleManager.turnOrder.append(dummy)
+    # because of how status that cause people to lose their turns works
+    # we can effectively test the handle_status_effect() function by calling
+    # do_one_turn, the returned string array will tell us if their turn was properly skipped
+    # and the status of the character tells us if the statuses were removed, killing 2 birds with
+    # one stone
+    returnableStrings, refresh = battleManager.do_one_turn("", ())
+    # check size of array, turn order and the status of knight object
+    flag = len(returnableStrings) == 2 and battleManager.turnOrder[0] == dummy and knight.Status[0] == "Normal"
+    presumedDamage = int(dummy.Hpcap/100 * 5)  # damage we assume freeze will do
+    returnableStrings, refresh = battleManager.do_one_turn("", ())
+    flag2 = len(returnableStrings) == 3 and len(battleManager.turnOrder) == 0 and dummy.Hp == dummy.Hpcap - presumedDamage \
+           and dummy.Status[0] == "Normal"
+    returnableStrings = battleManager.handle_status(knight)
+    print(knight.Status)
+    # check to see if the count for infinite statuses stays the same
+    flag3 = len(returnableStrings) == 0 and knight.Status[1] == -1
+    assert flag and flag2 and flag3
+
 
 
 

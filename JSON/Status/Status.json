@@ -1,0 +1,37 @@
+{
+   "Normal": {
+      "maxCount": -1,
+      "Effect": "",
+      "Description": "You're perfectly healthy"
+   },
+   "Dead": {
+      "maxCount": -1,
+      "Effect": "",
+      "Description": "You're dead"
+   },
+   "Bleed": {
+      "maxCount": 3,
+      "Effect": "-10% Hp",
+      "Description": "Lose 10% of your Hp per turn and reduces healing by 50%, cures after 3 turns"
+   },
+   "Paralyze": {
+      "maxCount": 1,
+      "Effect": "Lose turn",
+      "Description": "Lose your turn"
+   },
+   "Burn": {
+      "maxCount": 3,
+      "Effect": "-15% Hp",
+      "Description": "Lose 15% of your Hp per turn, cures after 3 turns"
+   },
+   "Poison": {
+      "maxCount": 5,
+      "Effect": "-10% Hpcap",
+      "Description": "Lose 10% of your max Hp per turn, cures after 5 turns"
+   },
+   "Freeze": {
+      "maxCount": 1,
+      "Effect": "-5% Hpcap, Lose turn",
+      "Description": "Lose your turn and lose 5% of your max Hp"
+   }
+}

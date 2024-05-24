@@ -81,6 +81,7 @@ class SaveManager:
         self.hero.load_dict(fileInfo["Knight"])  # Loading knight
         for stat, bonus in self.hero.Bonuses.items():  # turn all the list bonuses to tuples
             self.hero.Bonuses.update({stat: tuple(bonus)})
+        self.hero.Status = tuple(self.hero.Status)  # turn the list for status into a tuple
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]

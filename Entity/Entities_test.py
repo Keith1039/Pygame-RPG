@@ -20,7 +20,7 @@ def test_take_damage():
     mockEnemy.take_damage(9999)  # kill the mock enemy
     mockEnemy.Defence = 1  # reset the defence to 1
 
-    assert flag and flag2 and mockEnemy.Hp == 0 and mockEnemy.Status == "Dead"
+    assert flag and flag2 and mockEnemy.Hp == 0 and mockEnemy.Status[0] == "Dead"
 
 def test_apply_bonuses():
     mockEnemy.Bonuses.update({"Str": (50, 3), "Vit": (50, 3), "Agl": (50, -1), "Defence": (50, 3)})  # Give enemy buffs

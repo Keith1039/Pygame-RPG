@@ -123,7 +123,7 @@ def test_item_compatibility():
     bleedHealEffect = itemManager.get_effect("Bandages")  # get the effect to heal Bleed
     multiEffect = itemManager.get_effect("Elixir")  # get an item that has multiple effects
     # setting up knight object stats
-    knight.Status = "Burn"
+    knight.Status = ("Burn", 0)
     knight.Hpcap = 999
     knight.Hp = 20
     knight.Mpcap = 999
@@ -138,14 +138,14 @@ def test_item_compatibility():
     battleManager.apply_effects(healingEffectString, knight, None)
     flag = knight.Hp == 120  # knight should have healed 100 Hp from potion effect
     battleManager.apply_effects(bleedHealEffectString, knight, None)
-    flag2 = knight.Status == "Burn"  # using bandages on a burn shouldn't cure it
+    flag2 = knight.Status[0] == "Burn"  # using bandages on a burn shouldn't cure it
     battleManager.apply_effects(burnHealEffectString, knight, None)
-    flag3 = knight.Status == "Normal"  # burn should have been healed by the effect
+    flag3 = knight.Status[0] == "Normal"  # burn should have been healed by the effect
     battleManager.apply_effects(percentageHealingEffectString, knight, None)
     flag4 = 120 + int(.5 * knight.Hpcap) == knight.Hp  # the knight should have been healed by 50% of their max Hp
-    knight.Status = "Bleed"  # make the knight object have the Bleed status
+    knight.Status = ("Bleed", 0)  # make the knight object have the Bleed status
     battleManager.apply_effects(multiEffectString, knight, None)
-    flag5 = knight.Hp == (knight.Hpcap + 120 + int(.5 * knight.Hpcap)) and knight.Status == "Normal" and \
+    flag5 = knight.Hp == (knight.Hpcap + 120 + int(.5 * knight.Hpcap)) and knight.Status[0] == "Normal" and \
             knight.Mp - 1 == knight.Mpcap
     assert flag and flag2 and flag3 and flag4 and flag5
 

@@ -82,5 +82,17 @@
       "Probability": null,
       "Weight": 100,
       "Description": ""
+   },
+   "Venom Strike": {
+      "Damage Calculation": "Str * 1.0",
+      "Type": "Attack",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": "Apply Poison, T",
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": 100,
+      "Weight": 100,
+      "Description": "A strike that fills it's enemy with a lethal poison"
    }
 }
