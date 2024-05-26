@@ -53,6 +53,11 @@ case $args in
 
   update-saves)
     python scripts.py update-saves
+  ;;
+
+  add-status)
+    python scripts.py add-status "$args2"
+
 
 
 esac

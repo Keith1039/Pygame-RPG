@@ -223,22 +223,23 @@ if __name__ == "__main__":
         json.dump(effectJson, file, indent=3)
         file.close()
 
-    elif arg == "format-status-effects":
-        path = "JSON/Status.json"
+    elif arg == "add-status":
+        arg2 = sys.argv[2]  # There will a second argument with this
+        path = "JSON/Status/Status.json"
         file = open(path, "r")
         statusJSON = json.load(file)
         file.close()
-        newStatusJSON = {}
-        for key, value in statusJSON.items():
-            newStatusJSON.update({
-                key: {
+        statusJSON.update({
+                arg2: {
                     "maxCount": 0,
                     "Effect": "",
-                    "Description": value
+                    "Description": ""
                 }
             })
         file = open(path, "w")
-        json.dump(newStatusJSON, file, indent=3)
+        json.dump(statusJSON, file, indent=3)
         file.close()
+
+
 
 

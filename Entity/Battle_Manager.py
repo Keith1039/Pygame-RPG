@@ -104,7 +104,7 @@ class BattleManager:
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
                 #self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
-        self.clear_dead_enemies()  # removes dead entities
+        returnable_strings += self.clear_dead_enemies()  # removes dead entities and add event strings
         self.fix_entity_stats()  # correct the stats of all entities that are still alive
         return returnable_strings, refresh
 
@@ -274,16 +274,17 @@ class BattleManager:
 
     def reset_turn_order(self):
         if len(self.turnOrder) == 0:
-            # add the hero object to the turn order with the agility stat as the first index of the tuple
+            # add the hero object
             self.turnOrder.append(self.hero)
-            # add the enemy objects to the turn order with the agility stat as the first index of the tuple
+            # add the enemy objects
             for i in range(len(self.enemies)):
                 enemy = self.enemies[i][1]
                 self.turnOrder.append(enemy)
             # sort the list, since the tuple has a number in the first index in descending order
-            self.turnOrder.sort(reverse=True)  # WILL BREAK IF MULTIPLE OF THE SAME ENEMY EXISTS IN LIST
+            self.turnOrder.sort(reverse=True)
 
     def clear_dead_enemies(self):
+        returnableStrings = []
         newEnemies = []  # empty list of enemies that aren't dead
         newTurnOrder = []  # empty list of entities that aren't dead
         # Loop through enemies list and append the not dead enemies to the newEnemies list
@@ -291,6 +292,8 @@ class BattleManager:
             enemy = self.enemies[i][1]
             if enemy.Status[0] != "Dead":
                 newEnemies.append(self.enemies[i])
+            else:
+                returnableStrings.append(enemy.Name + " died!")
         self.enemies = newEnemies  # set the enemies list to the newEnemies list
         # Loop through the turnOrder list and append the not dead entities to the newTurnOrder list
         # turnOrder does not need position of the enemy Object
@@ -299,6 +302,7 @@ class BattleManager:
             if enemy.Status[0] != "Dead":
                 newTurnOrder.append(enemy)
         self.turnOrder = newTurnOrder  # set the turnOrder list to the newTurnOrder list
+        return returnableStrings
 
     def fix_entity_stats(self):
         # Goes through all Entities and fixes their stats
