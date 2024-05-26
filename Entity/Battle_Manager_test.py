@@ -128,9 +128,10 @@ def test_reset_turn_order():
 
 def test_clear_dead_enemies():
     battleManager.enemies[0][1].Status = ("Dead", -1)  # Change Dummy status to Dead
-    battleManager.clear_dead_enemies()  # clear the dead enemies
-    # Check if the enemies list is empty and only the hero object should be in turn order now
-    assert len(battleManager.enemies) == 0 and len(battleManager.turnOrder) == 1
+    returnableStrings = battleManager.clear_dead_enemies()  # clear the dead enemies
+    # Check if the enemies list is empty and only the hero object should be in turn order
+    # also checks to see if the event string was added
+    assert len(battleManager.enemies) == 0 and len(battleManager.turnOrder) == 1 and len(returnableStrings) == 1
 
 def test_fix_entity_stats():
     knight.Hp = 999
