@@ -23,33 +23,52 @@ def get_size_of_file(event):
     file.close()
     return i
 
-def mock_draw_dialogue():
-    # Version of draw_dialogue that doesn't do any of the drawing.
-    actualLen = get_size_of_file(mockDialogEvent)
-    len = 1  # Once the file is loaded, the first line is already read
-    text = dialogueManager.prevText
-    flag = dialogueManager.prevText != ""  # When loading the file prevText should have first line
-
-    return flag
 def test_load_file():
-    # Load file just uses open() to get a file object. Loading a valid file should 
-    # actually load the file thus making file not None
+    # check to see if the file loaded and that there is no missing lines
+    # also confirm that the event is activated
     dialogueManager.load_file(mockDialogEvent)
-    assert dialogueManager.file is not None
+    assert len(dialogueManager.dialogue) == get_size_of_file(mockDialogEvent) and \
+        mockDialogEvent.activated
 
-def test_clear_file():
-    # Checks if the file value in the manager is None and the file is cleared properly
-    # Also checks if all the lines were properly read.
-    # Also checks if the events activated value has been changed. Might need to add a
-    # 'repeatable' value to events in the case of repeatable dialogue etc
-    fileLength = get_size_of_file(mockDialogEvent)  # Gets the length of the file
-    dialogueManager.load_file(mockDialogEvent)  # Loads the event
-    file = dialogueManager.file  # Create reference to file to check if closed later
-    length = 0
-    flag = dialogueManager.prevText != ""
-    while flag:
-        game.event.post(game.event.Event(pygame.KEYDOWN, key=game.K_RETURN))  # Creates the keydown event
-        eventList = game.event.get()  # Returns the list of events
-        flag = dialogueManager.draw_dialogue(eventList)  # draw dialogue call
-        length += 1  # Increment the size
-    assert file.closed and dialogueManager.file is None and mockDialogEvent.activated and length == fileLength
+def test_get_new_text():
+    dialogueCopy = dialogueManager.dialogue.copy()
+    initialLen = len(dialogueManager.dialogue)
+    dialogueManager.get_new_text()
+    # check to see if the length changed and see if what was lost was added to backlog
+    flag = initialLen == len(dialogueManager.dialogue) + 1 and len(dialogueManager.backlog) == 1
+    # clear the dialogue
+    dialogueManager.dialogue.clear()
+    # check if this can run on an empty list
+    dialogueManager.get_new_text()
+    # insert the copy into the object
+    dialogueManager.dialogue = dialogueCopy
+    assert flag
+
+def test_load_portrait():
+    text = "Knight: I see, move"
+    returnText = dialogueManager.load_portrait(text)
+    # verify that there is a portrait and the returned text was not modified while confirming the name is correct
+    flag = dialogueManager.portrait is not None and text == returnText and dialogueManager.name == "Knight"
+    text = "IDK"
+    returnText = dialogueManager.load_portrait(text)
+    # check to see if the portrait is none, the name is reset and the returned text wasn't modified
+    flag2 = dialogueManager.portrait is None and text == returnText and dialogueManager.name == ""
+    assert flag and flag2
+
+def test_load_dialogue_list():
+    # check to see if the array was accepted
+    longText = "This is a really long sentence and I can't be bothered to trim it"
+    dialogueManager.load_dialogue_list([longText])
+    assert dialogueManager.dialogue == [longText]
+
+def test_sub_divide_dialogue():
+    longerText = "This is a really long sentence and I can't be bothered to trim it so deal with it how you will because I'm him"
+    # subdivide the long text
+    dialogueManager.sub_divide_dialogue(dialogueManager.dialogue[0])
+    # verify that there is indeed 2 lines for this
+    flag = len(dialogueManager.firstLine) > 0 and len(dialogueManager.secondLine) > 0
+    dialogueManager.sub_divide_dialogue(longerText)
+    # verify that there is indeed 2 lines for this and verify that the rest was appended to the dialogue list
+    flag2 = len(dialogueManager.firstLine) > 0 and len(dialogueManager.secondLine) > 0 \
+        and len(dialogueManager.dialogue) == 2
+    assert flag and flag2
