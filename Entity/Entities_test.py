@@ -1,6 +1,7 @@
 import json
 import Entity
 
+factory = Entity.EntityFactory()
 jsonInfo = json.load(open("JSON/Enemies/dummy.json"))
 mockEnemy = Entity.Enemy(jsonInfo)
 knight = Entity.Knight()
@@ -125,3 +126,18 @@ def test_remove_from_inventory():
 
 ################################################################
 
+# Entity Factory tests
+################################################################
+
+def test_create_entity():
+    name = "Goblin"
+    entity1 = factory.create_entity(name)
+    entity2 = factory.create_entity(name)
+    # check the names
+    flag = entity1.Name == name and entity2.Name == (name + "2")
+    assert flag and factory.createdCount[name] == 2
+
+def test_clear_created_count():
+    # test if the clear works
+    factory.clear_created_count()
+    assert len(factory.createdCount) == 0

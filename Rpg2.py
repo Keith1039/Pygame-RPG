@@ -274,6 +274,7 @@ while True:
                     # load the event strings into the dialogue list
                     dialogueManager.load_dialogue_list(returnable_strings)
         elif not battleManager.battleState[0] and battleManager.battleState[1] != "":
+            entityFactory.clear_created_count()  # clear the dictionary
             # this means the battle ended and its result needs to be processed
             battleResult = battleManager.battleState[1]
             if battleResult == "Hero Wins":
