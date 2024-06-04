@@ -2,71 +2,94 @@ import os
 import pygame as game
 import time
 
-# Dict that will point to the files where the dialogue still is
-text_dict = {}
+# chooses which text box is in use
+text_dict = {False: game.image.load("portraits/text_box.png"), True: game.image.load("portraits/text_box_L.png")}
 # Portrait dict takes in a name and then gets the portrait
 portrait_dict = {"Knight": game.image.load("portraits/Knight.png"), "Rion": game.image.load("portraits/Knight.png")}
 class DialogueManager: 
     def __init__(self, font, screen):
-        self.file = None      # File that's being read from
+        self.name = ""  # name of the character
         self.portrait = None  # Portrait that's displayed on screen
         self.font = font      # Font used to write dialogue
+        self.largeFont = game.font.Font('font/Pixeltype.ttf', 100)
         self.screen = screen  # For drawing things
-        self.name = ""
         self.characterBox = game.image.load("portraits/character_box.png")
         self.textBox = game.image.load("portraits/text_box.png")
-        self.event = None     # Event that's currently loaded
-        self.prevText = ""    # Previous text
-    
+        self.dialogue = []  # list of strings to be displayed
+        self.backlog = []  # text that's been read
+        self.firstLine = []  # further divided dialogue strings
+        self.secondLine = []  # further divided dialogue strings
+
     def load_file(self, event):
         # Loads the file that we read from
-        self.event = event  # Stored event
-        self.file = open(event.path)  # file that's being accessed
-        self.prevText = self.get_text()  # Sets previous text by default
+        file = open(event.path)  # file that's being accessed
+        event.activated = True  # set the event to true
+        flag = True
+        # adds all text in the file to a list
+        while flag:
+            text = file.readline()
+            if text != "":
+                self.dialogue.append(text)
+            else:
+                flag = False
     
     # Returns a single text line. Probably going to have to enforce a char limit too huh...
-    def get_text(self):
-        text = self.file.readline()
-        self.prevText = text
-        # Clears file's value if EOF has been reached.
-        if text == "":
-            self.clear_file()
-        else:
-            text = self.load_portrait(text)
-        return text
-    
-    def clear_file(self):
-        # Clears the file and the event associated with it
-        self.file.close()
-        self.event.activated = True
-        self.event = None
-        self.file = None
+    def get_new_text(self):
+        # moves to next line but removing previous lines
+        if len(self.dialogue) > 0:
+            text = self.dialogue.pop(0)  # pop the next line from queue
+            self.backlog.append(text)  # add popped text to the backlog
 
     def load_portrait(self, text):
         # Finding the character name
         name = ""
-        i = 0
-        for i in range(len(text)):
-            if text[i] == ":":
-                text = text[i+1: len(text)]
-                break
-            else:
-                name += text[i]
-        self.name = name
-        self.prevText = text
+        pos = text.find(":")
+        if pos != -1:
+            # get the name
+            name = text[0: pos]
         self.portrait = portrait_dict.get(name)  # This can be None btw so there has to be logic checking this
+        if self.portrait is not None:
+            # if it is a valid name, change the name to match it
+            self.name = name
+        else:
+            # if it isn't a valid name, reset the value of name
+            self.name = ""
         # Returns text that has name stripped from it
         return text
-    def draw_dialogue(self, eventList):  # For stuff like this reading from event list might be better
-        # Make this able to show previous dialogue when you tab
 
-        text = self.prevText
+    def draw_dialogue(self, eventList, battle=False):
+        self.textBox = text_dict[battle]
+        # TODO Make this able to show previous dialogue when you tab
+        # condition for the very first time this function is run
+        if len(self.firstLine) == 0:
+            self.sub_divide_dialogue(self.dialogue[0])
+        # assigning the two lines of text
+        text = " ".join(self.firstLine)
+        text2 = " ".join(self.secondLine)
         for event in eventList:
             if event.type == game.KEYDOWN:
                 if event.key == game.K_RETURN:
-                    text = self.get_text()
-                    break  # Should break after
-        textSurface = self.font.render(text, False, "Red")
+                    self.get_new_text()
+                    # clear the two line lists
+                    self.firstLine.clear()
+                    self.secondLine.clear()
+                    # subdivide the new dialogue into individual lines
+                    if len(self.dialogue) > 0:
+                        self.sub_divide_dialogue(self.dialogue[0])
+                    break  # loop should end here
+        # sets the portrait and gives us the text without the characters name
+        # we assume the name for portrait is always in the first line
+        text = self.load_portrait(text)
+        text = text.replace(" ", "   ")  # adds proper spacing
+        text = text.replace("\n", "")  # removes new line symbol
+        text2 = text2.replace(" ",  "   ")  # adds proper spacing
+        text2 = text2.replace("\n", "")  # removes new line symbol
+        if not battle:
+            textSurface = self.font.render(text, False, "Red")
+            textSurface2 = self.font.render(text2, False, "Red")
+        else:
+            textSurface = self.largeFont.render(text, False, "Red")
+            textSurface2 = self.largeFont.render(text2, False, "Red")
         if self.portrait is not None:
             nameSurface = self.font.render(self.name, False, "Red")
             self.screen.blit(self.characterBox, (0, 650))
@@ -74,9 +97,55 @@ class DialogueManager:
             self.screen.blit(nameSurface, (20, 620))
             self.screen.blit(self.textBox, (120, 650))
             self.screen.blit(textSurface, (140, 670))
+            self.screen.blit(textSurface2, (140, 720))
+
         else:
-            # This way there's no awkward space where the portrait used to be.
-            self.screen.blit(self.textBox, (0, 650))
-            self.screen.blit(textSurface, (20, 670))
-        # There is an easier way to do this, but it makes my eyes bleed so no :)
-        return text != ""
+            # we have to consider two possibilities here
+            if not battle:
+                self.screen.blit(self.textBox, (0, 650))
+                self.screen.blit(textSurface, (20, 670))
+                self.screen.blit(textSurface2, (20, 720))
+            else:
+                self.screen.blit(self.textBox, (0, 580))
+                self.screen.blit(textSurface, (50, 650))
+                self.screen.blit(textSurface2, (50, 700))
+        return len(self.dialogue) > 0
+
+    def load_dialogue_list(self, dialogueList):
+        # just sets the dialogue list
+        self.dialogue = dialogueList
+
+    def sub_divide_dialogue(self, text):
+        # splits the dialogue string into 2 lines
+        # any extra dialogue is inserted back into the queue to be processed
+        textList = text.split()
+        count = 0
+        onSecondLine = False
+        maxPos = 50  # largest position we have available
+        for i in range(len(textList)):
+            tempText = textList[i]
+            if count + len(tempText) <= maxPos:
+                # add to the count
+                count += len(tempText)
+                if not onSecondLine:
+                    self.firstLine.append(tempText)
+                else:
+                    self.secondLine.append(tempText)
+            elif count + len(tempText) > maxPos:
+                if not onSecondLine:
+                    # insert into the copy of the list
+                    # set the counter to the new first word
+                    count = len(tempText)
+                    # indicate that we're on the second line
+                    onSecondLine = True
+                    # add to the second list
+                    self.secondLine.append(tempText)
+                else:
+                    # if the line is still too long, shove it into the first position of the dialogue
+                    # queue and process it again, end the loop here
+                    # we put it right before the text that is going to get consumed by get_new_text
+                    self.dialogue.insert(1, " ".join(textList[i: len(textList)]))
+                    break
+            count += 3  # adjust for the 3 spaces we add later
+        # print("First line: " + str(self.firstLine))
+        # print("Second line: " + str(self.secondLine))

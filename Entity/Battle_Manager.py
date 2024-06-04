@@ -100,7 +100,7 @@ class BattleManager:
                         usable = True
                         moveObj = Move(move, turnObject, moveInfo)
                     loopNum += 1
-                    returnable_strings += self.use_move(turnObject, moveObj, [self.hero])
+                returnable_strings += self.use_move(turnObject, moveObj, [self.hero])
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
                 #self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
@@ -131,7 +131,7 @@ class BattleManager:
     def use_item(self, turnObject, itemName, itemEffect, targets):
         # function for when an item is used
         returnableStrings = []
-        returnableStrings.append(turnObject.Name + "Used " + itemName + "!")
+        returnableStrings.append(turnObject.Name + " Used " + itemName + "!")
         self.hero.remove_from_inventory(itemName)
         effectList = self.parse_effects(itemEffect)
         for i in range(len(targets)):

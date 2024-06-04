@@ -195,9 +195,11 @@ while True:
 
             # Code for testing the dialogueManager
             if textEnable:
-                if dialogueManager.file is None:
+                if len(dialogueManager.dialogue) == 0:
                     dialogueManager.load_file(mockDialogEvent)
                 textEnable = dialogueManager.draw_dialogue(eventList)
+                if not textEnable:
+                    print(dialogueManager.dialogue)
 
             # Animation tracker is for the knight(player character)
             animationTracker += 1
@@ -236,35 +238,41 @@ while True:
         elif battleManager.battleState[0]:
             screen.blit(screenManager.screen, (0, 0))  # draw the screen
             # draw the knight object here
-
             # if this condition is ever true that means that the player used a move last turn
             # and the values need to be reset
-            if buffered_move != "" and target != ():
-                buffered_move = ""
-                target = ()
-            if len(battleManager.turnOrder) == 0:
-                battleManager.reset_turn_order()
-            if battleManager.turnOrder[0] == knight:
-                if UIManager.UI is None:
-                    UIManager.change_UI("Player Select")  # Change the UI to the proper UI
-                context, choice = UIManager.draw_UI(eventList)
-                UIHandler.handle_interaction(context, choice)
-                # See if the move selected is a valid move
-                if battleManager.moveDict.get(choice) is not None or itemManager.itemJson.get(choice) is not None:
-                    buffered_move = choice  # set the buffered move
-                elif isinstance(choice, tuple):
-                    target = choice
-                    UIManager.change_UI(None)
-            returnable_strings, refresh = battleManager.do_one_turn(buffered_move, target)
-            if refresh:
-                UIManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
-                UIManager.subMenuMaxIndex = len(UIManager.subMenuItems) - 1
-                if UIManager.subMenuSlider >= len(UIManager.subMenuItems) and len(UIManager.subMenuItems) != 0:
-                    UIManager.subMenuSlider -= 1  # move slider back by 1
-            # if len(returnable_strings) != 0:
-            # integrate dialogue manager here
-            # print(returnable_strings)
-            battleManager.determine_battle_state()  # checks to see if the battle state has changed
+
+            # check if the dialogue manager is active
+            if len(dialogueManager.dialogue) > 0:
+                dialogueManager.draw_dialogue(eventList, True)
+                # when we're done reading through the dialogue, check battle state
+                if len(dialogueManager.dialogue) == 0:
+                    battleManager.determine_battle_state()  # checks to see if the battle state has changed
+            else:
+                if buffered_move != "" and target != ():
+                    buffered_move = ""
+                    target = ()
+                if len(battleManager.turnOrder) == 0:
+                    battleManager.reset_turn_order()
+                if battleManager.turnOrder[0] == knight:
+                    if UIManager.UI is None:
+                        UIManager.change_UI("Player Select")  # Change the UI to the proper UI
+                    context, choice = UIManager.draw_UI(eventList)
+                    UIHandler.handle_interaction(context, choice)
+                    # See if the move selected is a valid move
+                    if battleManager.moveDict.get(choice) is not None or itemManager.itemJson.get(choice) is not None:
+                        buffered_move = choice  # set the buffered move
+                    elif isinstance(choice, tuple):
+                        target = choice
+                        UIManager.change_UI(None)
+                returnable_strings, refresh = battleManager.do_one_turn(buffered_move, target)
+                if refresh:
+                    UIManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
+                    UIManager.subMenuMaxIndex = len(UIManager.subMenuItems) - 1
+                    if UIManager.subMenuSlider >= len(UIManager.subMenuItems) and len(UIManager.subMenuItems) != 0:
+                        UIManager.subMenuSlider -= 1  # move slider back by 1
+                if len(returnable_strings) != 0:
+                    # load the event strings into the dialogue list
+                    dialogueManager.load_dialogue_list(returnable_strings)
         elif not battleManager.battleState[0] and battleManager.battleState[1] != "":
             # this means the battle ended and its result needs to be processed
             battleResult = battleManager.battleState[1]
