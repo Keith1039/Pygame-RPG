@@ -142,22 +142,28 @@ class BattleManager:
     def parse_effects(self, effectString):
         effectList = []
         if effectString is not None:
-            effects = effectString.split(",")
-            if len(effects) % 2 == 0:
-                # immediate effect
-                for i in range(0, len(effects), 2):
-                    effect = effects[i]
-                    target = effects[i + 1].strip()
+            splitEffects = effectString.split("|")
+            for i in range(len(splitEffects)):
+                effects = splitEffects[i].split(",")
+                lastVal = effects[-1]  # get the last value in the last
+                lastVal = lastVal.strip()  # strip white space
+                if lastVal != "S" and lastVal != "T":
+                    # implied self effect
+                    effects.append("S")
+                if len(effects) == 2:
+                    # immediate effect
+                    effect = effects[0]
+                    target = effects[1].strip()
                     effectList.append((target, effect))
 
-            elif len(effects) % 3 == 0:
-                # Debuff/buff effect
-                for i in range(0, len(effects), 3):
-                    buffAndStat = effects[i].split()
-                    buff = int(buffAndStat[i])
-                    stat = buffAndStat[i + 1]
-                    target = effects[i + 1].strip()
-                    buff = {stat: (buff, int(effects[i + 2]))}
+                elif len(effects) == 3:
+                    # Debuff/buff effect
+                    buffAndStat = effects[0].split()
+                    buff = int(buffAndStat[0])
+                    stat = buffAndStat[1]
+                    target = effects[2].strip()
+                    buffDuration = effects[1]
+                    buff = {stat: (buff, int(buffDuration))}
                     effectList.append((target, buff))  # tuple with target and the buff
         return effectList
 

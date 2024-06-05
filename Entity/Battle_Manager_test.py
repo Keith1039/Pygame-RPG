@@ -22,6 +22,7 @@ statusMove = Move("Venom Strike", dummy, battleManager.moveDict["Venom Strike"])
 buffEffectMove = Move("Angry Shout", dummy, battleManager.moveDict["Angry Shout"])
 immediateMove = Move("Pilfering Strike", dummy, battleManager.moveDict["Pilfering Strike"])
 healMove = Move("Drink Potion", dummy, battleManager.moveDict["Drink Potion"])
+hybridMove = Move("Defensive Stance", dummy, battleManager.moveDict["Defensive Stance"])
 # AOE moves can only be play tested because they utilise the logic in the do_one_turn function which is play tested
 
 
@@ -52,6 +53,7 @@ def test_parse_effects():
     flag3 = effectListMatrix[2][0][0] == "T" and isinstance(effectListMatrix[2][0][1], str)
     effectListMatrix.append(battleManager.parse_effects(healMove.effect))  # add the heal move effect list for later test
     effectListMatrix.append(battleManager.parse_effects(statusMove.effect))  # add status move for later test
+    effectListMatrix.append(battleManager.parse_effects(hybridMove.effect))  # add the hybrid move for later test
     # Check the flags
     assert flag and flag2 and flag3
 
@@ -78,7 +80,8 @@ def test_apply_effects():
         # run apply_effects() and add to the list of event strings
         eventStrings = eventStrings + battleManager.apply_effects(effectList, dummy, knight)
     # Check if all the effects were properly applied
-    flag = dummy.Bonuses["Str"] == (5, 3) and knight.Bal == 0 and oldDummyHp + 20 == dummy.Hp and len(eventStrings) == 4
+    flag = dummy.Bonuses["Str"] == (5, 3) and knight.Bal == 0 and oldDummyHp + 40 == dummy.Hp and len(eventStrings) == 6 \
+           and dummy.Bonuses["Defence"] == (10, 3)
     # check to see if the poison was applied
     flag2 = knight.Status[0] == "Poison" and knight.Status[1] == 0
     assert flag and flag2
