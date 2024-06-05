@@ -40,7 +40,7 @@
       "Type": "Buff",
       "Cost": 60,
       "Restriction": null,
-      "Effect": "+5 Str, S, 3",
+      "Effect": "+5 Str, 3",
       "AOE": false,
       "Target Number": 1,
       "Probability": null,
@@ -52,7 +52,7 @@
       "Type": "Heal",
       "Cost": 40,
       "Restriction": null,
-      "Effect": "+20 Hp, S",
+      "Effect": "+20 Hp",
       "AOE": false,
       "Target Number": 1,
       "Probability": null,
@@ -94,5 +94,17 @@
       "Probability": 100,
       "Weight": 100,
       "Description": "A strike that fills it's enemy with a lethal poison"
+   },
+   "Defensive Stance": {
+      "Damage Calculation": "",
+      "Type": "",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": "+20 Hp | +10 Defence, 3",
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": "Adopt a defensive position and heal a minor amount of health"
    }
 }
