@@ -122,6 +122,7 @@ font = game.font.Font('font/Pixeltype.ttf', 50)
 
 # Hero Object
 knight = Entity.Knight()
+knight.moveList.append("Double Slash")
 
 # Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
@@ -154,7 +155,7 @@ UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleMan
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test
 buffered_move = ""  # for battlemanager
-target = ()  # for battlemanager
+target = []  # for battlemanager
 
 screenManager.change_context("Start")
 while True:
@@ -198,8 +199,7 @@ while True:
                 if len(dialogueManager.dialogue) == 0:
                     dialogueManager.load_file(mockDialogEvent)
                 textEnable = dialogueManager.draw_dialogue(eventList)
-                if not textEnable:
-                    print(dialogueManager.dialogue)
+
 
             # Animation tracker is for the knight(player character)
             animationTracker += 1
@@ -248,9 +248,9 @@ while True:
                 if len(dialogueManager.dialogue) == 0:
                     battleManager.determine_battle_state()  # checks to see if the battle state has changed
             else:
-                if buffered_move != "" and target != ():
+                if buffered_move != "" and len(target) == battleManager.targetNum:
                     buffered_move = ""
-                    target = ()
+                    target.clear()  # remove the targets from the list
                 if len(battleManager.turnOrder) == 0:
                     battleManager.reset_turn_order()
                 if battleManager.turnOrder[0] == knight:
@@ -261,9 +261,18 @@ while True:
                     # See if the move selected is a valid move
                     if battleManager.moveDict.get(choice) is not None or itemManager.itemJson.get(choice) is not None:
                         buffered_move = choice  # set the buffered move
+                        if battleManager.moveDict.get(choice) is not None:
+                            battleManager.set_target_number(choice)
+                        else:
+                            battleManager.targetNum = 1
                     elif isinstance(choice, tuple):
-                        target = choice
-                        UIManager.change_UI(None)
+                        if len(battleManager.enemies) > 1:  # we don't assume anything
+                            target.append(choice)  # add the choice to the tuple
+                        elif len(battleManager.enemies) == 1:  # if there is 1 enemy assume all hits target them
+                            for i in range(battleManager.targetNum):
+                                target.append(choice)
+                        if len(target) == battleManager.targetNum:  # check if we should leave targeting screen
+                            UIManager.change_UI(None)
                 returnable_strings, refresh = battleManager.do_one_turn(buffered_move, target)
                 if refresh:
                     UIManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed

@@ -11,6 +11,7 @@ class BattleManager:
         self.statusDict = self.get_status_dict()  # retrieves the effect information
         self.hero = knight
         self.itemManager = itemManager
+        self.targetNum = -1  # the amount of targets that need to be selected
         self.heroPos = (300, 500)  # write it down later
         self.enemies = []  # tuple dict with enemy object and the x and y position of the object (max 6)
         self.turnOrder = []  # turn order list for the entities
@@ -63,9 +64,12 @@ class BattleManager:
             # handle the status effects
             statusStrings = self.handle_status(turnObject)
             returnable_strings += statusStrings
+            targets = []  # list of entity objects
             # Note that the move that is given is assumed to have been validated
-            if objectType == "Knight" and move != "" and target != ():
-                targetObj = self.get_entity_from_pos(target)  # get the target object for the attack
+            if objectType == "Knight" and move != "" and len(target) == self.targetNum:
+                for i in range(len(target)):
+                    # get a list of Entity objects from the positions
+                    targets.append(self.get_entity_from_pos(target[i]))
                 # we're using an item
                 if move in self.itemManager.itemJson.keys():
                     refresh = True  # set refresh equal to true
@@ -73,16 +77,17 @@ class BattleManager:
                     if itemDetails["AOE"]:
                         returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], self.get_enemy_objects())
                     else:
-                        returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], [targetObj])
+                        returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], targets)
                 # if we aren't using an item we're using a move of some sort
                 else:
                     moveObj = Move(move, self.hero, self.moveDict[move])
                     if moveObj.AOE:  # if the move is an AOE move, target all enemies
                         returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
                     else:
-                        returnable_strings += self.use_move(self.hero, moveObj, [targetObj])
+                        returnable_strings += self.use_move(self.hero, moveObj, targets)
+                self.targetNum = -1  # reset the target number since the move was done successfully
                 self.turnOrder.pop(0)  # now that the hero has successfully completed their turn, kick them from turn order
-                #self.print_all_statuses()  ######## DEBUG
+                    #self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":
                 # handle the status effects
                 statusStrings = self.handle_status(turnObject)
@@ -100,7 +105,10 @@ class BattleManager:
                         usable = True
                         moveObj = Move(move, turnObject, moveInfo)
                     loopNum += 1
-                returnable_strings += self.use_move(turnObject, moveObj, [self.hero])
+                for z in range(moveObj.targetNumber):
+                    targets.append(self.hero)
+                returnable_strings += self.use_move(turnObject, moveObj, targets)
+                self.targetNum = -1  # reset the target number since the move was done successfully
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
                 #self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
@@ -418,6 +426,10 @@ class BattleManager:
             entity.Status = ("Normal", -1)
         return returnableStrings  # return all status strings
 
+    def set_target_number(self, move):
+        # set the target number based off of the move
+        moveInfo = self.moveDict[move]
+        self.targetNum = moveInfo["Target Number"]
 
 
     ########## DEBUG FUNCTIONS (NO TESTING REQUIRED)

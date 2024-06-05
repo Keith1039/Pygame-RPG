@@ -73,7 +73,7 @@
    },
    "Super Attack": {
       "Damage Calculation": "Str * 5",
-      "Type": "",
+      "Type": "Attack",
       "Cost": 0,
       "Restriction": "Hp > 100%",
       "Effect": null,
@@ -97,7 +97,7 @@
    },
    "Defensive Stance": {
       "Damage Calculation": "",
-      "Type": "",
+      "Type": "Buff",
       "Cost": 0,
       "Restriction": null,
       "Effect": "+20 Hp | +10 Defence, 3",
@@ -106,5 +106,17 @@
       "Probability": null,
       "Weight": 100,
       "Description": "Adopt a defensive position and heal a minor amount of health"
+   },
+   "Double Slash": {
+      "Damage Calculation": "Str * 0.4",
+      "Type": "Attack",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 2,
+      "Probability": null,
+      "Weight": 100,
+      "Description": "Slash enemies twice in quick succession"
    }
 }
