@@ -118,5 +118,29 @@
       "Probability": null,
       "Weight": 100,
       "Description": "Slash enemies twice in quick succession"
+   },
+   "Desperado": {
+      "Damage Calculation": "Str * 10-Hp%",
+      "Type": "Attack",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": "A desperate attack that gets stronger the weaker you are."
+   },
+   "Experienced Strike": {
+      "Damage Calculation": "Str + Lvl",
+      "Type": "Attack",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Description": "The strike of a veteran warrior"
    }
 }
