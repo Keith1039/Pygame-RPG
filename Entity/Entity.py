@@ -7,10 +7,10 @@ class Entity:
         self.Name = name
         self.Status = ("Normal", -1)
         self.Lvl = level
-        self.Hp = Hp
         self.Hpcap = Hpcap
-        self.Mp = Mp
+        self.Hp = Hp
         self.Mpcap = Mpcap
+        self.Mp = Mp
         self.Exp = exp
         self.Bal = money
         self.Str = strength
