@@ -17,15 +17,15 @@ class Entity:
         self.Mag = magic
         self.Vit = vitality
         self.Agl = agility
-        self.Defence = defence
+        self.Def = defence
         self.Bonuses = {  # A dict of all positive and negative effects on Knight character, includes stance bonuses
-            "Str": (0, -1), "Vit": (0, -1), "Agl": (0, -1), "Defence": (0, -1)  # -1 means unlimited duration for bonus
+            "Str": (0, -1), "Vit": (0, -1), "Agl": (0, -1), "Def": (0, -1)  # -1 means unlimited duration for bonus
         }
         self.Inventory = inventory  # For heroes, it's a bunch of useful items, for monsters it's dropped items
 
     def take_damage(self, damage, effect=False):
         if not effect:  # if it isn't effect damage, consider defence
-            damage = damage - self.Defence  # how much damage you ACTUALLY take
+            damage = damage - self.Def  # how much damage you ACTUALLY take
         if damage > 0 and self.Status[0] != "Dead":  # Only allows positive damage to be inflicted on alive opponents
             self.Hp -= damage
             if self.Hp <= 0:  # Check if you died to the attack

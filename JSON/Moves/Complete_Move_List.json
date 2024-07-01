@@ -100,7 +100,7 @@
       "Type": "Buff",
       "Cost": 0,
       "Restriction": null,
-      "Effect": "+20 Hp | +10 Defence, 3",
+      "Effect": "+20 Hp | +10 Def, 3",
       "AOE": false,
       "Target Number": 1,
       "Probability": null,

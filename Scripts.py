@@ -37,7 +37,7 @@ if __name__ == "__main__":
             "Mag": 1,
             "Vit": 1,
             "Agl": 1,
-            "Defence": 1,
+            "Def": 1,
             "Exp": 1,
             "Money": 1,
             "Inventory": {},
@@ -136,7 +136,7 @@ if __name__ == "__main__":
                         "Str": 0,
                         "Mag": 0,
                         "Agl": 0,
-                        "Defence": 0,
+                        "Def": 0,
                         "Movelist": []
                     }
                 })

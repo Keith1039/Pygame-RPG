@@ -4,7 +4,7 @@ class Enemy(Entity):
     def __init__(self, jsonInfo):
         Entity.__init__(self, jsonInfo["Hp"], jsonInfo["Hpcap"], jsonInfo["Mp"], jsonInfo["Mpcap"], jsonInfo["Name"],
                         jsonInfo["Lvl"], jsonInfo["Str"], jsonInfo["Mag"], jsonInfo["Vit"],
-                        jsonInfo["Agl"], jsonInfo["Defence"], jsonInfo["Exp"], jsonInfo["Money"],
+                        jsonInfo["Agl"], jsonInfo["Def"], jsonInfo["Exp"], jsonInfo["Money"],
                         jsonInfo["Inventory"])
         self.moveList = jsonInfo["moveList"]
         self.uniqueBuff = jsonInfo["uniqueBuff"]  # For bosses only really
