@@ -85,7 +85,6 @@ class BattleManager:
                         returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
                     else:
                         returnable_strings += self.use_move(self.hero, moveObj, targets)
-                self.targetNum = -1  # reset the target number since the move was done successfully
                 self.turnOrder.pop(0)  # now that the hero has successfully completed their turn, kick them from turn order
                     #self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":

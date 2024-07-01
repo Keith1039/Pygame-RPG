@@ -65,11 +65,11 @@ def test_apply_effect_buff():
     dummy.Bonuses.update({"Str": strBuff})
     dummy.Bonuses.update({"Agl": aglBuff})
     # call the apply_effect_buff function
-    battleManager.apply_effect_buff(dummy, {"Defence": defBuff})
+    battleManager.apply_effect_buff(dummy, {"Def": defBuff})
     # Checks if the defence buff was successfully applied
     # Check if the buffs that were applied before are still applied after the apply_effect_buff() call
     # This implicitly checks if the turn counts were altered
-    assert dummy.Bonuses["Str"] == strBuff and dummy.Bonuses["Agl"] and dummy.Bonuses["Defence"] == defBuff
+    assert dummy.Bonuses["Str"] == strBuff and dummy.Bonuses["Agl"] and dummy.Bonuses["Def"] == defBuff
 
 def test_apply_effects():
     knight.Bal = 20  # setting knight Bal attribute
@@ -81,7 +81,7 @@ def test_apply_effects():
         eventStrings = eventStrings + battleManager.apply_effects(effectList, dummy, knight)
     # Check if all the effects were properly applied
     flag = dummy.Bonuses["Str"] == (5, 3) and knight.Bal == 0 and oldDummyHp + 40 == dummy.Hp and len(eventStrings) == 6 \
-           and dummy.Bonuses["Defence"] == (10, 3)
+           and dummy.Bonuses["Def"] == (10, 3)
     # check to see if the poison was applied
     flag2 = knight.Status[0] == "Poison" and knight.Status[1] == 0
     assert flag and flag2
@@ -91,7 +91,7 @@ def test_use_move():
     knight.Bal = 20  # give knight 20 dollar for him to get robbed again
     knight.Hp = 999
     knight.Hpcap = 999
-    knight.Defence = 700
+    knight.Def = 700
     # reset eventStrings and make a new list of event strings
     eventStrings = []
     eventStrings = eventStrings + battleManager.use_move(dummy, attack, [knight])  # this should do exactly 99 damage
@@ -237,7 +237,7 @@ def test_apply_status_effect():
 def test_handle_status_effect():
     # make the knight strong enough to handle the damage
     knight.Hp = 999  # refill Hp
-    knight.Defence = 700
+    knight.Def = 700
     # prep work
     knight.Status = ("Paralyze", 0)
     battleManager.enemies.clear()  # remove all enemies

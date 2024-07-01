@@ -7,7 +7,7 @@ file.close()
 
 knight = Knight()
 rustyDagger = Equipment("Rusty Dagger", equipmentJson["Rusty Dagger"])
-stats = ["Hpcap", "Mpcap", "Str", "Mag", "Agl", "Defence"]
+stats = ["Hpcap", "Mpcap", "Str", "Mag", "Agl", "Def"]
 oldStats = knight.__dict__.copy()
 def test_apply_stat_bonuses():
     rustyDagger.apply_stat_bonuses(knight)  # the flag should be triggered

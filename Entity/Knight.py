@@ -9,7 +9,7 @@ class Knight(Entity):
         self.Expcap = expcap
         self.Stance = "1"
         self.growths = {"Hpcap": self.Vit * 1 + 50, "Mpcap": self.Mpcap * 1 + 50, "Str": self.Str * 1 + 50, "Vit": self.Vit * 1 + 50,
-                        "Agl": self.Agl * 1 + 50, "Defence": self.Defence + 50}
+                        "Agl": self.Agl * 1 + 50, "Def": self.Def + 50}
         self.moveList = ["Attack"]
         self.equipment = {
             "Weapon": None,
@@ -30,7 +30,7 @@ class Knight(Entity):
 
         # Reset growths to incorperate new stats
         self.growths = {"Hpcap": self.Vit * 1 + 50, "Mpcap": self.Mpcap * 1 + 50, "Str": self.Str * 1 + 50, "Vit": self.Vit * 1 + 50,
-                        "Agl": self.Agl * 1 + 50, "Defence": self.Defence + 50}
+                        "Agl": self.Agl * 1 + 50, "Def": self.Def + 50}
         while self.Exp >= self.Expcap:  # Account for the potential multiple level up
             self.Lvl += 1  # increase the level for each level up
             self.Exp -= self.Expcap  # Decrease the Exp of the player to prevent multiple level ups

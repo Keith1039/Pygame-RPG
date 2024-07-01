@@ -10,7 +10,7 @@ class Equipment:
         self.Str = jsonInfo["Str"]
         self.Mag = jsonInfo["Mag"]
         self.Agl = jsonInfo["Agl"]
-        self.Defence = jsonInfo["Defence"]
+        self.Def = jsonInfo["Def"]
         self.movelist = jsonInfo["Movelist"]
 
     def apply_stat_bonuses(self, knight):
@@ -23,7 +23,7 @@ class Equipment:
         knight.__dict__["Str"] += self.Str
         knight.__dict__["Mag"] += self.Mag
         knight.__dict__["Agl"] += self.Agl
-        knight.__dict__["Defence"] += self.Defence
+        knight.__dict__["Def"] += self.Def
 
     def remove_stat_bonuses(self, knight):
         if self.statsApplied:  # only lets stats be removed if item was equipped
@@ -36,5 +36,5 @@ class Equipment:
             knight.__dict__["Str"] -= self.Str
             knight.__dict__["Mag"] -= self.Mag
             knight.__dict__["Agl"] -= self.Agl
-            knight.__dict__["Defence"] -= self.Defence
+            knight.__dict__["Def"] -= self.Def
 

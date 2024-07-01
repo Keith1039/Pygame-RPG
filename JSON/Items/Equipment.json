@@ -7,7 +7,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Sword": {
@@ -18,7 +18,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Poisoned Sword": {
@@ -29,7 +29,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Silver Sword": {
@@ -40,7 +40,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Rusty Dagger": {
@@ -51,7 +51,7 @@
       "Str": 5,
       "Mag": 0,
       "Agl": 10,
-      "Defence": -1,
+      "Def": -1,
       "Movelist": [
          "Pilfering Strike"
       ]
@@ -64,7 +64,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Runic Blade": {
@@ -75,7 +75,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Silver Runic Blade": {
@@ -86,7 +86,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Leather Cap": {
@@ -97,7 +97,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 5,
+      "Def": 5,
       "Movelist": []
    },
    "???": {
@@ -108,7 +108,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    },
    "Unarmed": {
@@ -119,7 +119,7 @@
       "Str": 0,
       "Mag": 0,
       "Agl": 0,
-      "Defence": 0,
+      "Def": 0,
       "Movelist": []
    }
 }

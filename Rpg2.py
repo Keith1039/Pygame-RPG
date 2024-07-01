@@ -155,7 +155,7 @@ UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleMan
 interactables = screenManager.interactables
 textEnable = True  # For the purposes of this test
 buffered_move = ""  # for battlemanager
-target = []  # for battlemanager
+targets = []  # for battlemanager
 
 screenManager.change_context("Start")
 while True:
@@ -248,9 +248,10 @@ while True:
                 if len(dialogueManager.dialogue) == 0:
                     battleManager.determine_battle_state()  # checks to see if the battle state has changed
             else:
-                if buffered_move != "" and len(target) == battleManager.targetNum:
-                    buffered_move = ""
-                    target.clear()  # remove the targets from the list
+                if buffered_move != "" and len(targets) == battleManager.targetNum:
+                    buffered_move = ""  # reset the move string
+                    targets.clear()  # remove the targets from the list
+                    battleManager.targetNum = -1  # set target number to -1 (invalid number)
                 if len(battleManager.turnOrder) == 0:
                     battleManager.reset_turn_order()
                 if battleManager.turnOrder[0] == knight:
@@ -267,13 +268,13 @@ while True:
                             battleManager.targetNum = 1
                     elif isinstance(choice, tuple):
                         if len(battleManager.enemies) > 1:  # we don't assume anything
-                            target.append(choice)  # add the choice to the tuple
+                            targets.append(choice)  # add the choice to the tuple
                         elif len(battleManager.enemies) == 1:  # if there is 1 enemy assume all hits target them
                             for i in range(battleManager.targetNum):
-                                target.append(choice)
-                        if len(target) == battleManager.targetNum:  # check if we should leave targeting screen
+                                targets.append(choice)
+                        if len(targets) == battleManager.targetNum:  # check if we should leave targeting screen
                             UIManager.change_UI(None)
-                returnable_strings, refresh = battleManager.do_one_turn(buffered_move, target)
+                returnable_strings, refresh = battleManager.do_one_turn(buffered_move, targets)
                 if refresh:
                     UIManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
                     UIManager.subMenuMaxIndex = len(UIManager.subMenuItems) - 1
