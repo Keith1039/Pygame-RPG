@@ -57,7 +57,11 @@ case $args in
 
   add-status)
     python scripts.py add-status "$args2"
+  ;;
 
+  add-event)
+    python scripts.py add-event "$args2"
+  ;;
 
 
 esac

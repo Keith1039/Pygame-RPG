@@ -42,8 +42,7 @@ class Knight(Entity):
         money = lootPool.get("Money")
         itemDict = lootPool.get("Items")
         # For loop can become a function when directory structure is done
-        for key, number in itemDict.items():  # add all items from loot pool to inventory
-            self.add_to_inventory(key, number)
+        self.add_all_to_inventory(itemDict)
         self.Bal += money       # Add the money gained to the players balance
         self.Exp += experience  # Add the experience to the players Exp bar
         self.level_up()  # see if the player leveled up
@@ -79,6 +78,10 @@ class Knight(Entity):
             self.equipment[equipment.type].remove_stat_bonuses(self)  # remove the buffs from player
             self.equipment.update({equipment.type: None})  # replaces the current equipment slot with None
         self.correct_stats()  # correct the stats
+
+    def add_all_to_inventory(self, itemDict):
+        for key, number in itemDict.items():  # add all items from loot pool to inventory
+            self.add_to_inventory(key, number)
 
     def add_to_inventory(self, item, amount=1):
         # if the item isn't in the inventory, add an entry

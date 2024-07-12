@@ -1,0 +1,38 @@
+{
+   "mockDialogue": {
+      "Range": [],
+      "Event Type": "Dialogue",
+      "Activated": false,
+      "Repeatable": true,
+      "Dialogue Path": "event_text/Test_dialogue.txt",
+      "Context": "",
+      "Items Gained": {}
+   },
+   "mockDialogue2": {
+      "Range": [],
+      "Event Type": "Dialogue",
+      "Activated": false,
+      "Repeatable": false,
+      "Dialogue Path": "event_text/Test_dialogue2.txt",
+      "Context": "",
+      "Items Gained": {}
+   },
+   "testEvent": {
+      "Range": [150, 200],
+      "Event Type": "",
+      "Activated": false,
+      "Repeatable": true,
+      "Dialogue Path": "",
+      "Context": "",
+      "Items Gained": {"Bread":  1}
+   },
+   "testEvent2": {
+      "Range": [],
+      "Event Type": "",
+      "Activated": false,
+      "Repeatable": false,
+      "Dialogue Path": "",
+      "Context": "Unobtainable",
+      "Items Gained": {"Potion":  999}
+   }
+}

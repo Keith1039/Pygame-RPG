@@ -6,17 +6,17 @@
          -1
       ],
       "Lvl": 1,
-      "Hpcap": 835534,
-      "Hp": 835534,
-      "Mpcap": 835534,
-      "Mp": 835534,
+      "Hpcap": 6684622,
+      "Hp": 6684622,
+      "Mpcap": 6684622,
+      "Mp": 6684622,
       "Exp": 0,
       "Bal": 0,
-      "Str": 835534,
+      "Str": 6684622,
       "Mag": 1,
-      "Vit": 835534,
-      "Agl": 835534,
-      "Def": 835534,
+      "Vit": 6684622,
+      "Agl": 6684622,
+      "Def": 6684622,
       "Bonuses": {
          "Str": [
             0,
@@ -40,12 +40,12 @@
       "Expcap": 1,
       "Stance": "1",
       "growths": {
-         "Hpcap": 835584,
-         "Mpcap": 835584,
-         "Str": 835584,
-         "Vit": 835584,
-         "Agl": 835584,
-         "Def": 835584
+         "Hpcap": 6684672,
+         "Mpcap": 6684672,
+         "Str": 6684672,
+         "Vit": 6684672,
+         "Agl": 6684672,
+         "Def": 6684672
       },
       "moveList": [
          "Attack"
@@ -59,11 +59,11 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 35,
-      "animationTracker2": 74,
-      "animationTracker3": 11,
-      "gameState": 3,
-      "x": 83
+      "animationTracker": 65,
+      "animationTracker2": 3,
+      "animationTracker3": 21,
+      "gameState": 5,
+      "x": 854
    },
    "screenManager": {
       "context": "Background1",
@@ -84,13 +84,57 @@
                   500,
                   600
                ],
-               "EventType": "Chest",
+               "Event Type": "Chest",
                "Activated": false,
-               "Path": ""
+               "Dialogue Path": ""
             }
          ],
          "Background2": []
       }
    },
-   "Inventory": {}
+   "eventDict": {
+      "mockDialogue": {
+         "Range": [],
+         "Event Type": "Dialogue",
+         "Activated": false,
+         "Repeatable": true,
+         "Dialogue Path": "event_text/Test_dialogue.txt",
+         "Context": "",
+         "Items Gained": {}
+      },
+      "mockDialogue2": {
+         "Range": [],
+         "Event Type": "Dialogue",
+         "Activated": true,
+         "Repeatable": false,
+         "Dialogue Path": "event_text/Test_dialogue2.txt",
+         "Context": "",
+         "Items Gained": {}
+      },
+      "testEvent": {
+         "Range": [
+            150,
+            200
+         ],
+         "Event Type": "",
+         "Activated": false,
+         "Repeatable": true,
+         "Dialogue Path": "",
+         "Context": "",
+         "Items Gained": {
+            "Bread": 1
+         }
+      },
+      "testEvent2": {
+         "Range": [],
+         "Event Type": "",
+         "Activated": false,
+         "Repeatable": false,
+         "Dialogue Path": "",
+         "Context": "Unobtainable",
+         "Items Gained": {
+            "Potion": 999
+         }
+      }
+   }
 }

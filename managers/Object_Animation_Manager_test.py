@@ -15,7 +15,7 @@ def test_set_Array():
 
 def test_change_tuple():
         knight = Knight()
-        mockJson = {"Range": (500, 600), "EventType": "Chest", "Activated": False}  # minimum viable Event JSON
+        mockJson = {"Range": (500, 600), "Event Type": "Chest", "Activated": False}  # minimum viable Event JSON
         pos = 550
         # Clearing the tuple
         objectAnimationManager.aniTuple = ()

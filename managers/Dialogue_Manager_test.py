@@ -1,5 +1,5 @@
 import pygame
-
+import json
 from managers.Dialogue_Manager import DialogueManager
 import pygame as game
 
@@ -9,11 +9,13 @@ clock = game.time.Clock()
 game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
 font = game.font.Font('font/Pixeltype.ttf', 50)
 dialogueManager = DialogueManager(font, screen)
-mockJson = {"EventType": "Dialogue", "Path": "event_text/Test_dialogue.txt", "Activated": False}
+masterEventDict = json.load(open("JSON/Events/Events.json", "r"))  # load the master dictionary for events
+mockJson = masterEventDict["mockDialogue"]
+mockJson2 = masterEventDict["mockDialogue2"]
 
 def get_size_of_file(event):
     i = 0
-    file = open(event["Path"], "r")
+    file = open(event["Dialogue Path"], "r")
     text = file.readline()
     while text != "":
         text = file.readline()
@@ -23,24 +25,37 @@ def get_size_of_file(event):
 
 def test_load_file():
     # check to see if the file loaded and that there is no missing lines
-    # also confirm that the event is activated
+    # also confirm that the event is not activated and the event is set
     dialogueManager.load_file(mockJson)
     assert len(dialogueManager.dialogue) == get_size_of_file(mockJson) and \
-        mockJson["Activated"]
+        not mockJson["Activated"] and dialogueManager.event == mockJson
 
 def test_get_new_text():
-    dialogueCopy = dialogueManager.dialogue.copy()
     initialLen = len(dialogueManager.dialogue)
     dialogueManager.get_new_text()
     # check to see if the length changed and see if what was lost was added to backlog
     flag = initialLen == len(dialogueManager.dialogue) + 1 and len(dialogueManager.backlog) == 1
     # clear the dialogue
     dialogueManager.dialogue.clear()
-    # check if this can run on an empty list
+    # check to see what happens when we run get_new_text on an empty dialogue list
     dialogueManager.get_new_text()
-    # insert the copy into the object
-    dialogueManager.dialogue = dialogueCopy
-    assert flag
+    flag2 = mockJson["Activated"] and dialogueManager.event is None
+    dialogueManager.load_file(mockJson)
+    # check to see if the manager still accepts the event even if it was previously activated
+    # this is a check for repeatable dialogue
+    flag3 = dialogueManager.event is not None and dialogueManager.event["Activated"]
+    dialogueManager.nextEvents = [mockJson2, mockJson2]  # add two non-repeatable events to the list
+    dialogueManager.dialogue.clear()  # clear the list
+    dialogueManager.get_new_text()
+    # check to see if the new event was successfully processed
+    flag4 = dialogueManager.event == mockJson2 and len(dialogueManager.nextEvents) == 1
+    dialogueManager.dialogue.clear()  # clear the list
+    dialogueManager.get_new_text()
+    # check to see if the non-repeatable event was rejected
+    flag5 = dialogueManager.event is None and len(dialogueManager.nextEvents) == 0
+
+    dialogueManager.load_file(mockJson)  # insert the old dialogue event back in
+    assert flag and flag2 and flag3 and flag4 and flag5
 
 def test_load_portrait():
     text = "Knight: I see, move"

@@ -1,3 +1,5 @@
+import json
+
 import pygame as game
 from sys import exit
 import managers
@@ -40,20 +42,16 @@ def handle_basic_input(keys, knightAni, knight, x, animationTracker): # This is 
         knightAni.change_array("Death")
     return x, animationTracker
 
-def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, textEnable, animationTracker3):
+def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, animationTracker3):
     if keys[game.K_UP]:
         for u in range(len(interactables)):
             status = knight.fieldStatus
             interactable = interactables[u]
-            if interactable["EventType"] == "Chest":
+            if interactable["Event Type"] == "Chest":
                 screenManager.objectAni.change_tuple(knight, x, interactable)
                 if status != knight.fieldStatus:
                     # resetting animationTracker
                     animationTracker3 = 0
-            elif interactable["EventType"] == "Dialogue":
-                textEnable = True
-                knight.fieldStatus = "In cutscene"
-                # Do something
 
             screenManager.objectAni.change_tuple(knight, x, interactable)
             if status != knight.fieldStatus:
@@ -75,7 +73,7 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
         knight.Inventory.update({"Potion": 2})  # add a potion
         knight.Inventory.update({"Bomb": 1})  # add a bomb
         battleManager.battleState = (True, "")
-    return textEnable, animationTracker3
+    return animationTracker3
 
 def draw_objects(screen, screenManager, spot3):
     for f in range(0, len(screenManager.objects), 2):
@@ -87,6 +85,7 @@ def draw_objects(screen, screenManager, spot3):
             tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1])
         screen.blit(tmpSurface, screenManager.objects[f])
     # In the future, this will be done automatically with Omni manager
+
 
 def change_screen(x, screenManager, NPCManager):
     if x > 1000 or x < -280:
@@ -108,10 +107,6 @@ def change_screen(x, screenManager, NPCManager):
                 x = -280
     return x
 interact_functions = {}
-
-# Make this hard coded for now
-mockJson = {"EventType": "Dialogue", "Path": "event_text/Test_dialogue.txt", "Activated": False}
-
 
 # I should have an array of sprite managers and it goes through them
 game.init()
@@ -146,14 +141,17 @@ x = 500
 entityFactory = Entity.EntityFactory()
 screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
-saveManager = managers.SaveManager(knight, vars(), screenManager)
+eventManager = managers.EventManager(knight, dialogueManager)
+saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager)
 itemManager = managers.ItemManager(knight)
 battleManager = Entity.BattleManager(knight, itemManager)
 UIManager = managers.UIManager(font, screen)
 UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager, itemManager)
 
+
+eventManager.push_event("mockDialogue")
+
 interactables = screenManager.interactables
-textEnable = True  # For the purposes of this test
 buffered_move = ""  # for battlemanager
 targets = []  # for battlemanager
 
@@ -172,7 +170,6 @@ while True:
             exit()
 
     # Changing animations
-
     # Gets the players key input
     keys = game.key.get_pressed()
     if start:
@@ -182,12 +179,13 @@ while True:
         if not start and choice == "Start Game":  # If it's not start game then context was already changed
             screenManager.change_context("Background1")
     else:
+        eventManager.process_events(screenManager.context, x) # process any outstanding events before the game code
         # Determines players overworld movement
         if not battleManager.battleState[0] and battleManager.battleState[1] == "":
             # handles basic movement for the player character
             x, animationTracker = handle_basic_input(keys, knightAni, knight, x, animationTracker)
             # handles the player interaction
-            textEnable, animationTracker3, = handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, textEnable, animationTracker3)
+            animationTracker3 = handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, animationTracker3)
 
             # Draws the objects on the screen
             screen.blit(screenManager.screen, (0, 0))
@@ -195,10 +193,10 @@ while True:
             screen.blit(knightSurface, (x, 440))
 
             # Code for testing the dialogueManager
-            if textEnable:
-                if len(dialogueManager.dialogue) == 0:
-                    dialogueManager.load_file(mockJson)
-                textEnable = dialogueManager.draw_dialogue(eventList)
+            if dialogueManager.event is None and len(dialogueManager.nextEvents) > 0:
+                dialogueManager.get_new_text()  # queue up the next event
+            if dialogueManager.event is not None:
+                dialogueManager.draw_dialogue(eventList)
 
 
             # Animation tracker is for the knight(player character)
