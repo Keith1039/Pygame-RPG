@@ -22,8 +22,8 @@ class DialogueManager:
 
     def load_file(self, event):
         # Loads the file that we read from
-        file = open(event.path)  # file that's being accessed
-        event.activated = True  # set the event to true
+        file = open(event["Path"])  # file that's being accessed
+        event["Activated"] = True  # set the event to true
         flag = True
         # adds all text in the file to a list
         while flag:

@@ -1,5 +1,4 @@
 from managers.Object_Animation_Manager import ObjectAnimationManager
-from managers.Screen_Manager import Event
 from Entity.Knight import Knight
 
 objectAnimationManager = ObjectAnimationManager()
@@ -16,12 +15,11 @@ def test_set_Array():
 
 def test_change_tuple():
         knight = Knight()
-        mockJson = {"range": (500, 600), "eventType": "Chest"}
-        interactable = Event(mockJson)
+        mockJson = {"Range": (500, 600), "EventType": "Chest", "Activated": False}  # minimum viable Event JSON
         pos = 550
         # Clearing the tuple
         objectAnimationManager.aniTuple = ()
-        objectAnimationManager.change_tuple(knight, pos, interactable)
+        objectAnimationManager.change_tuple(knight, pos, mockJson)
         assert tuple(objectAnimationManager.aniTuple) == chestAniL and knight.fieldStatus == "Opening Chest"
 
 

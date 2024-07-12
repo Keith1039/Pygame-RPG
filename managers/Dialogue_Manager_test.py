@@ -1,7 +1,6 @@
 import pygame
 
 from managers.Dialogue_Manager import DialogueManager
-from managers.Screen_Manager import Event
 import pygame as game
 
 game.init()
@@ -10,12 +9,11 @@ clock = game.time.Clock()
 game.display.set_caption("Legend of Zeroes, Trails of Cold Meals")
 font = game.font.Font('font/Pixeltype.ttf', 50)
 dialogueManager = DialogueManager(font, screen)
-mockJson = {"eventType": "Dialogue", "path": "event_text/Test_dialogue.txt"}
-mockDialogEvent = Event(mockJson)
+mockJson = {"EventType": "Dialogue", "Path": "event_text/Test_dialogue.txt", "Activated": False}
 
 def get_size_of_file(event):
     i = 0
-    file = open(event.path, "r")
+    file = open(event["Path"], "r")
     text = file.readline()
     while text != "":
         text = file.readline()
@@ -26,9 +24,9 @@ def get_size_of_file(event):
 def test_load_file():
     # check to see if the file loaded and that there is no missing lines
     # also confirm that the event is activated
-    dialogueManager.load_file(mockDialogEvent)
-    assert len(dialogueManager.dialogue) == get_size_of_file(mockDialogEvent) and \
-        mockDialogEvent.activated
+    dialogueManager.load_file(mockJson)
+    assert len(dialogueManager.dialogue) == get_size_of_file(mockJson) and \
+        mockJson["Activated"]
 
 def test_get_new_text():
     dialogueCopy = dialogueManager.dialogue.copy()

@@ -45,12 +45,12 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
         for u in range(len(interactables)):
             status = knight.fieldStatus
             interactable = interactables[u]
-            if interactable.eventType == "Chest":
+            if interactable["EventType"] == "Chest":
                 screenManager.objectAni.change_tuple(knight, x, interactable)
                 if status != knight.fieldStatus:
                     # resetting animationTracker
                     animationTracker3 = 0
-            elif interactable.eventType == "Dialogue":
+            elif interactable["EventType"] == "Dialogue":
                 textEnable = True
                 knight.fieldStatus = "In cutscene"
                 # Do something
@@ -110,8 +110,8 @@ def change_screen(x, screenManager, NPCManager):
 interact_functions = {}
 
 # Make this hard coded for now
-mockJson = {"eventType": "Dialogue", "path": "event_text/Test_dialogue.txt"}
-mockDialogEvent = managers.Event(mockJson)
+mockJson = {"EventType": "Dialogue", "Path": "event_text/Test_dialogue.txt", "Activated": False}
+
 
 # I should have an array of sprite managers and it goes through them
 game.init()
@@ -197,7 +197,7 @@ while True:
             # Code for testing the dialogueManager
             if textEnable:
                 if len(dialogueManager.dialogue) == 0:
-                    dialogueManager.load_file(mockDialogEvent)
+                    dialogueManager.load_file(mockJson)
                 textEnable = dialogueManager.draw_dialogue(eventList)
 
 

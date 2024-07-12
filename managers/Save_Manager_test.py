@@ -2,9 +2,8 @@ import os
 import pygame as game
 import random
 from Entity.Knight import Knight
-from managers.Save_Manager import SaveManager, tuplefy
+from managers.Save_Manager import SaveManager, tuplefy, tuplefy2
 from managers.Screen_Manager import ScreenManager
-from managers.Screen_Manager import Event
 
 def cleanup():
     os.system("bash script clear-save")
@@ -22,27 +21,12 @@ def fill_screenManager_dict():
     screenManager_dict.update({"objectDict": screenManager.objectDict})
 
 def fill_event_dict():
-    interactablesVars = {}
-    for key in screenManager.interactablesDict:
-        eventsVar = []
-        eventsTuple = screenManager.interactablesDict[key]
-        for i in range(len(eventsTuple)):
-            eventsVar.append(vars(eventsTuple[i]))
-        interactablesVars.update({key: tuple(eventsVar)})
-    eventDict.update(interactablesVars)
+    for key, value in screenManager.interactablesDict.items():
+        eventDict.update({key: value})
+
 
 def verify_interactables():
-    flag = True
-    mockJson = {"Range": (300, 400)}
-    event = Event(mockJson)  # Just for init. These values mean nothing
-    for key in screenManager.interactablesDict:
-        i = 0
-        dictVals = eventDict[key]
-        while i < len(dictVals) and flag:
-            event.load(dictVals[i])
-            flag = event == screenManager.interactablesDict[key][i]
-            i += 1
-    return flag
+    return tuplefy2(eventDict) == screenManager.interactablesDict
 # Replicating an actual game
 game.init()
 screen = game.display.set_mode((1422, 800))

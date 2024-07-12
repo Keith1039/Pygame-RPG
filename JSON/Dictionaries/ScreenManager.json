@@ -7,13 +7,13 @@
    "interactables_dict": {
       "Background1": [
          {
-            "range": [
+            "Range": [
                500,
                600
             ],
-            "eventType": "Chest",
-            "activated": false,
-            "path": ""
+            "EventType": "Chest",
+            "Activated": false,
+            "Path": ""
          }
       ],
       "Background2": []
