@@ -11,9 +11,9 @@
                500,
                600
             ],
-            "EventType": "Chest",
+            "Event Type": "Chest",
             "Activated": false,
-            "Path": ""
+            "Dialogue Path": ""
          }
       ],
       "Background2": []

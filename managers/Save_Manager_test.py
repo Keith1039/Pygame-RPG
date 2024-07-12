@@ -1,9 +1,12 @@
 import os
+import json
 import pygame as game
 import random
 from Entity.Knight import Knight
 from managers.Save_Manager import SaveManager, tuplefy, tuplefy2
 from managers.Screen_Manager import ScreenManager
+from managers.Dialogue_Manager import DialogueManager
+from managers.Event_Manager import EventManager
 
 def cleanup():
     os.system("bash script clear-save")
@@ -30,6 +33,7 @@ def verify_interactables():
 # Replicating an actual game
 game.init()
 screen = game.display.set_mode((1422, 800))
+font = game.font.Font('font/Pixeltype.ttf', 50)
 screenManager = ScreenManager(screen)
 knight = Knight()
 animationTracker = 0
@@ -46,10 +50,12 @@ localVars = vars()
 list = os.listdir("save/")
 if len(list) != 0:
     cleanup()
-saveManager = SaveManager(knight, localVars, screenManager)
+
 knight2 = Knight()
+dialogeManager = DialogueManager(font, screen)
+eventManager = EventManager(knight, dialogeManager)
 
-
+saveManager = SaveManager(knight, localVars, screenManager, eventManager)
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)
 animationTracker3 = random.randint(1, 100)
@@ -64,6 +70,7 @@ def test_quick_save():
     fill_test_dict()
     fill_screenManager_dict()
     fill_event_dict()
+    saveManager.eventManager.eventDict["mockDialogue2"]["Activated"] = True  # set this to true
     saveManager.quick_save()
     knight2.load_dict(knight.__dict__.copy())  # taking the values of the previous knight right after they were saved
     assert saveManager.saveNumber == 1  # Shouldn't change
@@ -78,7 +85,8 @@ def test_quick_load():
     flag2 = (knight2 == knight)
     flag3 = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == tuplefy(screenManager_dict["objectDict"]))
     flag4 = verify_interactables()
-    assert flag and flag2 and flag3 and flag4
+    flag5 = saveManager.eventManager.eventDict["mockDialogue2"]["Activated"]
+    assert flag and flag2 and flag3 and flag4 and flag5
 
 animationTracker = random.randint(1, 99)   # cap at 99 because 100 breaks the game
 animationTracker2 = random.randint(1, 99)
@@ -112,7 +120,7 @@ def test_load():  # slot #4
     assert flag
 
 def test_latest_file():  # check if last save is 4
-    newManager = SaveManager(Knight, vars(), screenManager)
+    newManager = SaveManager(Knight, vars(), screenManager, eventManager)
     #cleanup()  # Gets rid of the save files created in the test
     assert newManager.saveNumber == 4  # Should still be 4
 

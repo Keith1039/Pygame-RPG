@@ -1,6 +1,8 @@
 #!/usr/bin/python
 from managers import SaveManager
 from managers import ScreenManager
+from managers import DialogueManager
+from managers import EventManager
 import pygame as game
 from Entity.Knight import Knight
 import sys
@@ -16,7 +18,9 @@ if __name__ == "__main__":
         font = game.font.Font('font/Pixeltype.ttf', 50)
         screenManager = ScreenManager(screen)
         knight = Knight()
-        saveManager = SaveManager(knight, vars(), screenManager)
+        dialogueManager = DialogueManager(font, screen)
+        eventManager = EventManager(knight, dialogueManager)
+        saveManager = SaveManager(knight, vars(), screenManager, eventManager)
         for i in range(4):
             saveManager.save(i+1)
         game.quit()
@@ -236,6 +240,29 @@ if __name__ == "__main__":
                     "Description": ""
                 }
             })
+        file = open(path, "w")
+        json.dump(statusJSON, file, indent=3)
+        file.close()
+
+    elif arg == "add-event":
+        arg2 = sys.argv[2]  # There will a second argument with this
+        path = "JSON/Events/Events.json"
+        file = open(path, "r")
+        statusJSON = json.load(file)
+        file.close()
+        statusJSON.update({
+            arg2: {
+                "Range": [],
+                "Event Type": "",
+                "Activated": False,
+                "Repeatable": False,
+                "Dialogue Path": "",
+                "Context": "",
+                "Items Gained": {
+
+                }
+            }
+        })
         file = open(path, "w")
         json.dump(statusJSON, file, indent=3)
         file.close()

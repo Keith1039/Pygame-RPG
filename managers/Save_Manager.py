@@ -2,11 +2,12 @@ from managers.Screen_Manager import ScreenManager
 from Entity.Knight import Knight
 import os, json
 class SaveManager:
-    def __init__(self, hero,  localVars, screenManager, saveNumber=1):
+    def __init__(self, hero,  localVars, screenManager, eventManager, saveNumber=1):
         self.hero = hero
         self.localVars = localVars
         self.screenManager = screenManager
         self.saveNumber = saveNumber
+        self.eventManager = eventManager
         self.limit = 4
         # Makes the initial save file
         
@@ -64,7 +65,8 @@ class SaveManager:
                 rawVarsDict[key] = self.localVars[key]
         screenManagerDict = {"context": self.screenManager.context, "objectDict": self.screenManager.objectDict,
                             "interactablesDict": self.screenManager.interactablesDict}
-        newerdict = {"Knight": vars(self.hero), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,  "Inventory": inventoryDict}
+        newerdict = {"Knight": vars(self.hero), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,
+                     "eventDict": self.eventManager.eventDict}
         return(newerdict)
 
     def load_data(self, file):
@@ -76,6 +78,7 @@ class SaveManager:
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
+        self.eventManager.eventDict = fileInfo["eventDict"]
         # convert all lists to tuples in the dict
 
         # Loads the event objects with the correct values
