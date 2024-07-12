@@ -6,17 +6,17 @@
          -1
       ],
       "Lvl": 1,
-      "Hp": 104398,
-      "Hpcap": 104398,
-      "Mp": 104398,
-      "Mpcap": 104398,
+      "Hpcap": 835534,
+      "Hp": 835534,
+      "Mpcap": 835534,
+      "Mp": 835534,
       "Exp": 0,
       "Bal": 0,
-      "Str": 104398,
+      "Str": 835534,
       "Mag": 1,
-      "Vit": 104398,
-      "Agl": 104398,
-      "Def": 104398,
+      "Vit": 835534,
+      "Agl": 835534,
+      "Def": 835534,
       "Bonuses": {
          "Str": [
             0,
@@ -40,12 +40,12 @@
       "Expcap": 1,
       "Stance": "1",
       "growths": {
-         "Hpcap": 104448,
-         "Mpcap": 104448,
-         "Str": 104448,
-         "Vit": 104448,
-         "Agl": 104448,
-         "Def": 104448
+         "Hpcap": 835584,
+         "Mpcap": 835584,
+         "Str": 835584,
+         "Vit": 835584,
+         "Agl": 835584,
+         "Def": 835584
       },
       "moveList": [
          "Attack"
@@ -59,11 +59,11 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 19,
-      "animationTracker2": 88,
-      "animationTracker3": 23,
-      "gameState": 1,
-      "x": 719
+      "animationTracker": 35,
+      "animationTracker2": 74,
+      "animationTracker3": 11,
+      "gameState": 3,
+      "x": 83
    },
    "screenManager": {
       "context": "Background1",
@@ -80,13 +80,13 @@
       "interactablesDict": {
          "Background1": [
             {
-               "range": [
+               "Range": [
                   500,
                   600
                ],
-               "eventType": "Chest",
-               "activated": false,
-               "path": ""
+               "EventType": "Chest",
+               "Activated": false,
+               "Path": ""
             }
          ],
          "Background2": []

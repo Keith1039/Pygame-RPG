@@ -15,8 +15,8 @@ class ObjectAnimationManager:
             self.aniTuple = chestAniL
 
     def change_tuple(self, knight, pos, interactable):
-        within_range = pos > interactable.range[0] and pos < interactable.range[1]
-        if within_range and not interactable.activated:
-            self.aniTuple = object_ani_dict.get(interactable.eventType)
+        within_range = pos > interactable["Range"][0] and pos < interactable["Range"][1]
+        if within_range and not interactable["Activated"]:
+            self.aniTuple = object_ani_dict.get(interactable["EventType"])
             knight.fieldStatus = "Opening Chest"
-            interactable.activated = True
+            interactable["Activated"] = True

@@ -62,17 +62,8 @@ class SaveManager:
         for key in self.localVars:
             if key in allowed:
                 rawVarsDict[key] = self.localVars[key]
-
-        # Here to turn the events from the dict to their dictionary form for JSON serialization
-        interactablesVars = {}
-        for key in self.screenManager.interactablesDict:
-            eventsVar = []
-            eventsTuple = self.screenManager.interactablesDict[key]
-            for i in range(len(eventsTuple)):
-                eventsVar.append(vars(eventsTuple[i]))
-            interactablesVars.update({key: tuple(eventsVar)})
         screenManagerDict = {"context": self.screenManager.context, "objectDict": self.screenManager.objectDict,
-                            "interactablesDict": interactablesVars}
+                            "interactablesDict": self.screenManager.interactablesDict}
         newerdict = {"Knight": vars(self.hero), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,  "Inventory": inventoryDict}
         return(newerdict)
 
@@ -85,12 +76,10 @@ class SaveManager:
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
+        # convert all lists to tuples in the dict
+
         # Loads the event objects with the correct values
-        for key in interactablesInfo:
-            dictArray = interactablesInfo[key]
-            for i in range(len(dictArray)):
-                eventDict = dictArray[i]
-                self.screenManager.interactablesDict[key][i].load(eventDict)
+        self.screenManager.interactablesDict = tuplefy2(interactablesInfo)
         tuplefy(self.screenManager.objectDict)
         for key in self.localVars:  # Fill the local variables
             if fileInfo["rawVariables"].get(key) is not None:
@@ -122,3 +111,17 @@ def tuplefy(arrayDict):
                 array[i] = tuple(array[i])
         arrayDict[key] = tuple(arrayDict[key])
     return arrayDict
+
+def tuplefy2(dictionaryDict):
+    # this is for event dictionaries
+    newDict = dictionaryDict.copy()
+    for context in dictionaryDict:
+        tmpList = newDict[context]
+        for i in range(len(tmpList)):  # iterate through the list
+            tmpDict = tmpList[i]
+            for key, value in tmpDict.items():
+                if type(value) == list:
+                    tmpDict.update({key: tuple(value)})  # turn all lists values into tuple
+        newDict.update({context: tuple(tmpList)})  # make the list a tuple
+    return newDict
+

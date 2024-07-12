@@ -2,36 +2,13 @@ import pygame as game
 import json
 from managers.Object_Animation_Manager import ObjectAnimationManager
 
-class Event:
-
-    def __init__(self, eventInfo):
-        self.range = eventInfo.get("range")
-        self.eventType = eventInfo.get("eventType")  # Can't be None
-        self.activated = eventInfo.get("activated")  # Can't be None
-        self.path = eventInfo.get("path")
-
-    def load(self, infoDict):
-        self.range = tuple(infoDict["range"])
-        self.eventType = infoDict["eventType"]
-        self.activated = infoDict["activated"]
-        self.path = infoDict["path"]
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
 def initiate_variables():
     # Function that pulls JSON information to create dictionaries
     file = open("JSON/Dictionaries/ScreenManager.json", "r")  # Opens the file
     screenManagerInfo = json.load(file)  # Load JSON information
     i_dict = screenManagerInfo["interactables_dict"]  # interactables_dict information
-    temp_dict = {}
-    for key in i_dict:  # Go through the array and turn the event dictionary information into Event objects
-        temp_array = []
-        for eventInfo in i_dict[key]:
-            temp_array.append(Event(eventInfo))
-        temp_dict.update({key: tuple(temp_array)})
     file.close()
-    return screenManagerInfo["background_dict"], temp_dict, screenManagerInfo["objects_dict"]  # Return the values
+    return screenManagerInfo["background_dict"], i_dict, screenManagerInfo["objects_dict"]  # Return the values
 
 screen_dict = {("Background1", 1): "Background2", ("Background2", -1): "Background1"}  # For now this can't be JSONED
 background_dict, interactables_dict, objects_dict = initiate_variables()

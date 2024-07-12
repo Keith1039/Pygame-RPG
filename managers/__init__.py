@@ -1,6 +1,6 @@
 from managers.NPC_Animation_Manager import NPCAnimationManager
 from managers.Object_Animation_Manager import ObjectAnimationManager
-from managers.Screen_Manager import ScreenManager, Event
+from managers.Screen_Manager import ScreenManager
 from managers.Dialogue_Manager import DialogueManager
 from managers.Save_Manager import SaveManager
 from managers.UI_Manager import UIManager
