@@ -6,17 +6,17 @@
          -1
       ],
       "Lvl": 1,
-      "Hpcap": 6684622,
-      "Hp": 6684622,
-      "Mpcap": 6684622,
-      "Mp": 6684622,
+      "Hpcap": 13006,
+      "Hp": 13006,
+      "Mpcap": 13006,
+      "Mp": 13006,
       "Exp": 0,
       "Bal": 0,
-      "Str": 6684622,
+      "Str": 13006,
       "Mag": 1,
-      "Vit": 6684622,
-      "Agl": 6684622,
-      "Def": 6684622,
+      "Vit": 13006,
+      "Agl": 13006,
+      "Def": 13006,
       "Bonuses": {
          "Str": [
             0,
@@ -40,12 +40,12 @@
       "Expcap": 1,
       "Stance": "1",
       "growths": {
-         "Hpcap": 6684672,
-         "Mpcap": 6684672,
-         "Str": 6684672,
-         "Vit": 6684672,
-         "Agl": 6684672,
-         "Def": 6684672
+         "Hpcap": 13056,
+         "Mpcap": 13056,
+         "Str": 13056,
+         "Vit": 13056,
+         "Agl": 13056,
+         "Def": 13056
       },
       "moveList": [
          "Attack"
@@ -58,12 +58,38 @@
          "Accessory": null
       }
    },
+   "questManager": {
+      "activeQuests": [
+         {
+            "Quest Type": "Obtain",
+            "Next Quest": "testQuest2",
+            "Target": {
+               "Potion": 1
+            },
+            "Context": "",
+            "Range": [],
+            "Reward": {
+               "Exp": 0,
+               "Money": 0,
+               "Items": {}
+            },
+            "Description": ""
+         }
+      ],
+      "completedQuests": [],
+      "enemiesKilled": {
+         "Goblin": 1
+      },
+      "npcsInteractedWith": {
+         "Lucy": 1
+      }
+   },
    "rawVariables": {
-      "animationTracker": 65,
-      "animationTracker2": 3,
-      "animationTracker3": 21,
-      "gameState": 5,
-      "x": 854
+      "animationTracker": 54,
+      "animationTracker2": 39,
+      "animationTracker3": 12,
+      "gameState": 1,
+      "x": 367
    },
    "screenManager": {
       "context": "Background1",
@@ -99,6 +125,7 @@
          "Activated": false,
          "Repeatable": true,
          "Dialogue Path": "event_text/Test_dialogue.txt",
+         "Quest": "",
          "Context": "",
          "Items Gained": {}
       },
@@ -108,6 +135,7 @@
          "Activated": true,
          "Repeatable": false,
          "Dialogue Path": "event_text/Test_dialogue2.txt",
+         "Quest": "",
          "Context": "",
          "Items Gained": {}
       },
@@ -120,6 +148,7 @@
          "Activated": false,
          "Repeatable": true,
          "Dialogue Path": "",
+         "Quest": "",
          "Context": "",
          "Items Gained": {
             "Bread": 1
@@ -131,6 +160,7 @@
          "Activated": false,
          "Repeatable": false,
          "Dialogue Path": "",
+         "Quest": "",
          "Context": "Unobtainable",
          "Items Gained": {
             "Potion": 999

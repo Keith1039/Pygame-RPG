@@ -10,6 +10,7 @@ from managers.UI_Manager_test import get_keydown_event
 from managers.Item_Manager import ItemManager
 from managers.Equipment import Equipment
 from managers.Event_Manager import EventManager
+from managers.Quest_Manager import QuestManager
 from Entity.Knight import Knight
 from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move

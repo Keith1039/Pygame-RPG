@@ -63,6 +63,9 @@ case $args in
     python scripts.py add-event "$args2"
   ;;
 
+  add-quest)
+    python scripts.py add-quest "$args2"
+
 
 esac
 

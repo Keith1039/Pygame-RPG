@@ -2,12 +2,13 @@ from managers.Screen_Manager import ScreenManager
 from Entity.Knight import Knight
 import os, json
 class SaveManager:
-    def __init__(self, hero,  localVars, screenManager, eventManager, saveNumber=1):
+    def __init__(self, hero,  localVars, screenManager, eventManager, questManager, saveNumber=1):
         self.hero = hero
         self.localVars = localVars
         self.screenManager = screenManager
         self.saveNumber = saveNumber
         self.eventManager = eventManager
+        self.questManager = questManager
         self.limit = 4
         # Makes the initial save file
         
@@ -65,13 +66,20 @@ class SaveManager:
                 rawVarsDict[key] = self.localVars[key]
         screenManagerDict = {"context": self.screenManager.context, "objectDict": self.screenManager.objectDict,
                             "interactablesDict": self.screenManager.interactablesDict}
-        newerdict = {"Knight": vars(self.hero), "rawVariables": rawVarsDict, "screenManager": screenManagerDict,
-                     "eventDict": self.eventManager.eventDict}
+        questManagerDict = {
+            "activeQuests": self.questManager.activeQuests,
+            "completedQuests": self.questManager.completedQuests,
+            "enemiesKilled": self.questManager.enemiesKilled,
+            "npcsInteractedWith": self.questManager.npcsInteractedWith
+        }
+        newerdict = {"Knight": vars(self.hero), "questManager": questManagerDict, "rawVariables": rawVarsDict,
+                     "screenManager": screenManagerDict, "eventDict": self.eventManager.eventDict}
         return(newerdict)
 
     def load_data(self, file):
         fileInfo = json.load(file)
         self.hero.load_dict(fileInfo["Knight"])  # Loading knight
+        self.questManager.__dict__.update(fileInfo["questManager"]) # load questManager
         for stat, bonus in self.hero.Bonuses.items():  # turn all the list bonuses to tuples
             self.hero.Bonuses.update({stat: tuple(bonus)})
         self.hero.Status = tuple(self.hero.Status)  # turn the list for status into a tuple
