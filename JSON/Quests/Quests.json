@@ -1,0 +1,52 @@
+{
+   "testQuest": {
+      "Quest Type": "Obtain",
+      "Next Quest": "testQuest2",
+      "Target": {
+         "Potion": 1
+      },
+      "Context": "",
+      "Range": [],
+      "Reward": {
+         "Exp": 0,
+         "Money": 0,
+         "Items": {}
+      },
+      "Description": ""
+   },
+   "testQuest2": {
+      "Quest Type": "Arrive",
+      "Next Quest": "testQuest3",
+      "Target": {},
+      "Context": "Background2",
+      "Range": [
+         500,
+         600
+      ],
+      "Reward": {
+         "Exp": 1,
+         "Money": 100,
+         "Items": {
+            "Potion":  1
+         }
+      },
+      "Description": ""
+   },
+   "testQuest3": {
+      "Quest Type": "Slay",
+      "Next Quest": "",
+      "Target": {
+         "Goblin": 1
+      },
+      "Context": "",
+      "Range": [],
+      "Reward": {
+         "Exp": 0,
+         "Money": 0,
+         "Items": {
+            "Potion": 2
+         }
+      },
+      "Description": ""
+   }
+}
