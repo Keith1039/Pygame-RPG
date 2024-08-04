@@ -5,6 +5,7 @@
       "Activated": false,
       "Repeatable": true,
       "Dialogue Path": "event_text/Test_dialogue.txt",
+      "Quest": "",
       "Context": "",
       "Items Gained": {}
    },
@@ -14,6 +15,7 @@
       "Activated": false,
       "Repeatable": false,
       "Dialogue Path": "event_text/Test_dialogue2.txt",
+      "Quest": "",
       "Context": "",
       "Items Gained": {}
    },
@@ -23,6 +25,7 @@
       "Activated": false,
       "Repeatable": true,
       "Dialogue Path": "",
+      "Quest": "",
       "Context": "",
       "Items Gained": {"Bread":  1}
    },
@@ -32,6 +35,7 @@
       "Activated": false,
       "Repeatable": false,
       "Dialogue Path": "",
+      "Quest": "",
       "Context": "Unobtainable",
       "Items Gained": {"Potion":  999}
    }

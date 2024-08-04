@@ -3,6 +3,7 @@ from managers import SaveManager
 from managers import ScreenManager
 from managers import DialogueManager
 from managers import EventManager
+from managers import QuestManager
 import pygame as game
 from Entity.Knight import Knight
 import sys
@@ -20,7 +21,8 @@ if __name__ == "__main__":
         knight = Knight()
         dialogueManager = DialogueManager(font, screen)
         eventManager = EventManager(knight, dialogueManager)
-        saveManager = SaveManager(knight, vars(), screenManager, eventManager)
+        questManager = QuestManager(knight)
+        saveManager = SaveManager(knight, vars(), screenManager, eventManager, questManager)
         for i in range(4):
             saveManager.save(i+1)
         game.quit()
@@ -257,6 +259,7 @@ if __name__ == "__main__":
                 "Activated": False,
                 "Repeatable": False,
                 "Dialogue Path": "",
+                "Quest": "",
                 "Context": "",
                 "Items Gained": {
 
@@ -267,6 +270,33 @@ if __name__ == "__main__":
         json.dump(statusJSON, file, indent=3)
         file.close()
 
+    elif arg == "add-quest":
+        arg2 = sys.argv[2]  # There will a second argument with this
+        path = "JSON/Quests/Quests.json"
+        file = open(path, "r")
+        statusJSON = json.load(file)
+        file.close()
+        statusJSON.update({
+            arg2: {
+                "Quest Type": "",
+                "Next Quest": "",
+                "Target": {
 
+                },
+                "Context": "",
+                "Range": [],
+                "Reward": {
+                    "Exp": 0,
+                    "Money": 0,
+                    "Items": {
+
+                    }
+                },
+                "Description": ""
+            }
+        })
+        file = open(path, "w")
+        json.dump(statusJSON, file, indent=3)
+        file.close()
 
 
