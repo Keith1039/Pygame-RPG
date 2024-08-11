@@ -27,7 +27,7 @@
          "Exp": 1,
          "Money": 100,
          "Items": {
-            "Potion":  1
+            "Potion": 1
          }
       },
       "Description": ""
@@ -46,6 +46,19 @@
          "Items": {
             "Potion": 2
          }
+      },
+      "Description": ""
+   },
+   "testEventQuest": {
+      "Quest Type": "Slay",
+      "Next Quest": "",
+      "Target": {"Goblin":  20},
+      "Context": "",
+      "Range": [],
+      "Reward": {
+         "Exp": 0,
+         "Money": 0,
+         "Items": {}
       },
       "Description": ""
    }

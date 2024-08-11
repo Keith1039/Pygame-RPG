@@ -7,7 +7,8 @@ font = game.font.Font('font/Pixeltype.ttf', 50)
 knight = managers.Knight()
 
 dialogueManager = managers.DialogueManager(screen, font)
-eventManager = managers.EventManager(knight, dialogueManager)
+questManager = managers.QuestManager(knight)
+eventManager = managers.EventManager(knight, dialogueManager, questManager)
 
 def test_push_event():
     invalidKey = "Whatever"
@@ -22,6 +23,8 @@ def test_process_events():
     eventManager.push_event("mockDialogue2")
     eventManager.push_event("testEvent")
     eventManager.push_event("testEvent2")
+    # TEST CASES FOR DIALOGUE MANAGER
+    ##########################################################
     flag = len(eventManager.events) == 4  # confirm the 3 events went through
     eventManager.process_events("", 0)  # process the events
     # confirm that only 2 events were processed correctly
@@ -34,5 +37,21 @@ def test_process_events():
     # check to see if the knight received the potions and the items gained were cleared
     flag4 = len(eventManager.events) == 0 and len(eventManager.eventDict["testEvent2"]["Items Gained"]) == 0 \
         and eventManager.knight.Inventory.get("Potion") == 999
-    assert flag and flag2 and flag3 and flag4
+    ##########################################################
+
+    # TEST CASES FOR QUEST MANAGER
+    ##########################################################
+    eventManager.push_event("testQuestEvent")
+    flag5 = len(eventManager.events) == 1  # confirm the event went through
+    eventManager.process_events("", 0)
+    # check to see if the dialogue event was sent and the quest was received
+    flag6 = not eventManager.eventDict["testQuestEvent"]["Activated"] and len(eventManager.events) == 0 \
+        and len(dialogueManager.nextEvents) == 3 and len(questManager.activeQuests) == 1
+    eventManager.push_event("testQuestEvent2")
+    flag7 = len(eventManager.events) == 1  # confirm the event went through
+    eventManager.process_events("", 0)
+    # check to see if the event was activated and the event was properly processed and the quest was received
+    flag8 = eventManager.eventDict["testQuestEvent2"]["Activated"] and len(eventManager.events) == 0 \
+        and len(questManager.activeQuests) == 2
+    assert flag and flag2 and flag3 and flag4 and flag5 and flag6 and flag7 and flag8
 

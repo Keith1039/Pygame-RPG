@@ -53,8 +53,8 @@ if len(list) != 0:
 
 knight2 = Knight()
 dialogeManager = DialogueManager(font, screen)
-eventManager = EventManager(knight, dialogeManager)
 questmanager = QuestManager(knight)
+eventManager = EventManager(knight, dialogeManager, questmanager)
 saveManager = SaveManager(knight, localVars, screenManager, eventManager, questmanager)
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)
