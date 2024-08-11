@@ -4,6 +4,7 @@
    "Mp": 1,
    "Mpcap": 1,
    "Name": "Goblin",
+   "Sprite": "Enemy_Sprites/Goblin/",
    "Lvl": 1,
    "Str": 1,
    "Mag": 1,

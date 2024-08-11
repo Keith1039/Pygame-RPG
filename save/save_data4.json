@@ -1,6 +1,7 @@
 {
    "Knight": {
       "Name": "Rion",
+      "Sprite": "Knight/Cut_Sprites/",
       "Status": [
          "Normal",
          -1
@@ -85,11 +86,11 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 54,
-      "animationTracker2": 39,
-      "animationTracker3": 12,
-      "gameState": 1,
-      "x": 367
+      "animationTracker": 80,
+      "animationTracker2": 68,
+      "animationTracker3": 35,
+      "gameState": 3,
+      "x": 624
    },
    "screenManager": {
       "context": "Background1",
@@ -165,6 +166,26 @@
          "Items Gained": {
             "Potion": 999
          }
+      },
+      "testQuestEvent": {
+         "Range": [],
+         "Event Type": "Quest",
+         "Activated": false,
+         "Repeatable": false,
+         "Dialogue Path": "event_text/Test_dialogue2.txt",
+         "Quest": "testEventQuest",
+         "Context": "",
+         "Items Gained": {}
+      },
+      "testQuestEvent2": {
+         "Range": [],
+         "Event Type": "Quest",
+         "Activated": false,
+         "Repeatable": false,
+         "Dialogue Path": "",
+         "Quest": "testEventQuest",
+         "Context": "",
+         "Items Gained": {}
       }
    }
 }

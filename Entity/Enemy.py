@@ -3,7 +3,7 @@ from Entity.Entity import Entity
 class Enemy(Entity):
     def __init__(self, jsonInfo):
         Entity.__init__(self, jsonInfo["Hp"], jsonInfo["Hpcap"], jsonInfo["Mp"], jsonInfo["Mpcap"], jsonInfo["Name"],
-                        jsonInfo["Lvl"], jsonInfo["Str"], jsonInfo["Mag"], jsonInfo["Vit"],
+                        jsonInfo["Sprite"], jsonInfo["Lvl"], jsonInfo["Str"], jsonInfo["Mag"], jsonInfo["Vit"],
                         jsonInfo["Agl"], jsonInfo["Def"], jsonInfo["Exp"], jsonInfo["Money"],
                         jsonInfo["Inventory"])
         self.moveList = jsonInfo["moveList"]

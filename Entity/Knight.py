@@ -3,8 +3,8 @@ from Entity.Entity import Entity
 # Statuses: Normal or In-Combat or Dead or opening_chest
 class Knight(Entity):
     # The current stats still need to be changed to the default stats later
-    def __init__(self, Hp=1, Hpcap=1, Mp=1, Mpcap=1, name="Rion", level=1, strength=1, magic=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
-        Entity.__init__(self, Hp, Hpcap, Mp, Mpcap, name, level, strength, magic, vitality, agility, defence, exp, money)
+    def __init__(self, Hp=1, Hpcap=1, Mp=1, Mpcap=1, name="Rion", sprite="Knight/Cut_Sprites/", level=1, strength=1, magic=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
+        Entity.__init__(self, Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money)
         self.fieldStatus = "Normal"
         self.Expcap = expcap
         self.Stance = "1"
