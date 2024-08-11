@@ -20,14 +20,19 @@
       "Items Gained": {}
    },
    "testEvent": {
-      "Range": [150, 200],
+      "Range": [
+         150,
+         200
+      ],
       "Event Type": "",
       "Activated": false,
       "Repeatable": true,
       "Dialogue Path": "",
       "Quest": "",
       "Context": "",
-      "Items Gained": {"Bread":  1}
+      "Items Gained": {
+         "Bread": 1
+      }
    },
    "testEvent2": {
       "Range": [],
@@ -37,6 +42,28 @@
       "Dialogue Path": "",
       "Quest": "",
       "Context": "Unobtainable",
-      "Items Gained": {"Potion":  999}
+      "Items Gained": {
+         "Potion": 999
+      }
+   },
+   "testQuestEvent": {
+      "Range": [],
+      "Event Type": "Quest",
+      "Activated": false,
+      "Repeatable": false,
+      "Dialogue Path": "event_text/Test_dialogue2.txt",
+      "Quest": "testEventQuest",
+      "Context": "",
+      "Items Gained": {}
+   },
+   "testQuestEvent2": {
+      "Range": [],
+      "Event Type": "Quest",
+      "Activated": false,
+      "Repeatable": false,
+      "Dialogue Path": "",
+      "Quest": "testEventQuest",
+      "Context": "",
+      "Items Gained": {}
    }
 }
