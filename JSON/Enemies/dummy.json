@@ -4,6 +4,7 @@
    "Mp": 999,
    "Mpcap": 999,
    "Name": "dummy",
+   "Sprite": "Enemy_Sprites/",
    "Lvl": 1,
    "Str": 999,
    "Mag": 999,

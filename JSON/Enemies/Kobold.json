@@ -4,6 +4,7 @@
    "Mp": 1,
    "Mpcap": 1,
    "Name": "Kobold",
+   "Sprite": "Enemy_Sprites/Kobold/",
    "Lvl": 1,
    "Str": 1,
    "Mag": 1,

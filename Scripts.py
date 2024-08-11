@@ -38,6 +38,7 @@ if __name__ == "__main__":
             "Mp": 1,
             "Mpcap": 1,
             "Name": arg2,
+            "Sprite": "Enemy_Sprites/",
             "Lvl": 1,
             "Str": 1,
             "Mag": 1,
