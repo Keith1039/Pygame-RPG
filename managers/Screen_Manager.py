@@ -27,11 +27,11 @@ class ScreenManager:
     # For now there's only going to be two options moving to the left screen and moving to the right screen
     # Moving to right screen = 1
     # Moving to left screen = -1
-    def change_screen(self, pos):
+    def change_screen(self, min_x, max_x, pos):
         mover = 0
-        if pos > 1000:
+        if pos > max_x:
             mover = 1
-        elif pos < -280:
+        elif pos < min_x:
             mover = -1
         prevContext = self.context
         self.context = screen_dict.get((self.context, mover))

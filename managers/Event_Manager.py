@@ -14,7 +14,7 @@ class EventManager():
         if event is not None:  # only valid events get added to the event queue
             self.events.append(event)
 
-    def process_events(self, context, x):
+    def process_events(self, context):
         # master dictionary should be automatically updated if events came from it
         unprocessedEvents = []
         for eventInfo in self.events:
@@ -22,7 +22,7 @@ class EventManager():
             # check if the knight is in range or if range doesn't matter
             eventType = eventInfo["Event Type"]  # the type of the event
             if (eventInfo["Context"] == "" or eventInfo["Context"] == context) and \
-                    (len(eventInfo["Range"]) == 0 or eventInfo["Range"][0] < x < eventInfo["Range"][1]):
+                    (len(eventInfo["Range"]) == 0 or eventInfo["Range"][0] < self.knight.x < eventInfo["Range"][1]):
                 if eventType == "Dialogue":
                     self.dialogueManager.nextEvents.append(eventInfo)  # add to the list of events for dialogueManager
                 elif eventType == "Quest":

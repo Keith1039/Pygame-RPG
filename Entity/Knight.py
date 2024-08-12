@@ -1,15 +1,28 @@
+import pygame as game
 from Entity.Entity import Entity
 
 # Statuses: Normal or In-Combat or Dead or opening_chest
 class Knight(Entity):
     # The current stats still need to be changed to the default stats later
-    def __init__(self, Hp=1, Hpcap=1, Mp=1, Mpcap=1, name="Rion", sprite="Knight/Cut_Sprites/", level=1, strength=1, magic=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
-        Entity.__init__(self, Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money)
-        self.fieldStatus = "Normal"
+    def __init__(self, Hp=1, Hpcap=1, Mp=1, Mpcap=1, name="Knight", sprite="Entity_Sprites/Knight/", level=1, strength=1, magic=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
+        super().__init__(Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money)
+        self.fieldStatus = "Normal"  # indicator for the knight class
+        self.reset_max_animation_val()  # set the limit
+        self.default_x = 0  # default x value
+        self.default_y = 670  # 440 works really well for fights it seems
+        self.x = self.default_x  # set the x value
+        self.y = self.default_y  # set the y value
+        self.flipped = False  # determines whether the sprite is inverted or not
+        filePath = self.Sprite + "Knight_" + self.aniStatus + "_" + str((self.aniTracker // 10) + 1) + ".png"
+        self.image = game.image.load(filePath)  # the image attached to this class (initially)
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.x, self.y)  # center the object to x and y
         self.Expcap = expcap
         self.Stance = "1"
-        self.growths = {"Hpcap": self.Vit * 1 + 50, "Mpcap": self.Mpcap * 1 + 50, "Str": self.Str * 1 + 50, "Vit": self.Vit * 1 + 50,
-                        "Agl": self.Agl * 1 + 50, "Def": self.Def + 50}
+        self.growths = {
+            "Hpcap": self.Vit * 1 + 50, "Mpcap": self.Mpcap * 1 + 50, "Str": self.Str * 1 + 50,
+            "Vit": self.Vit * 1 + 50, "Agl": self.Agl * 1 + 50, "Def": self.Def + 50
+        }
         self.moveList = ["Attack"]
         self.equipment = {
             "Weapon": None,
@@ -18,6 +31,29 @@ class Knight(Entity):
             "Shoes": None,
             "Accessory": None
         }
+
+    def set_image_and_rect(self):
+        filePath = self.Sprite + "Knight_" + self.aniStatus + "_" + str((self.aniTracker // 10) + 1) + ".png"
+        self.image = game.image.load(filePath)  # load the new image
+        if self.flipped:  # if the run is to be flipped
+            self.image = game.transform.flip(self.image, True, False)
+        self.rect = self.image.get_rect()  # get the new
+        self.rect.center = (self.x, self.y)
+
+    def update(self):
+        # this behavior is for overworld behavior
+        self.aniTracker += 1
+        if self.aniTracker % 10 == 0:
+            update = False  # indicator for if an update is needed
+            if (self.aniTracker // 10) + 1 > self.maxAniVal and self.aniStatus == "Death":
+                self.aniTracker = self.maxAniVal * 10  # set it to the max value
+            elif (self.aniTracker // 10) + 1 > self.maxAniVal:
+                self.aniTracker = 0  # reset animation timer
+                update = True  # indicate that an update is needed
+            elif (self.aniTracker // 10) + 1 < self.maxAniVal:
+                update = True  # indicate that an update is needed
+            if update:
+                self.set_image_and_rect()  # sets the image and the rectangle
 
     def level_up(self):
         # add to stats
@@ -98,9 +134,24 @@ class Knight(Entity):
         self.Inventory.update({item: capacity - amount})
         self.correct_inventory()
     # Loads the Knight characters stats based on a given dictionary
-    def load_dict(self, knightDict):
-        self.__dict__ = knightDict
 
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+    def load_dict(self, knightDict):
+        self.__dict__.update(knightDict)
+        self.reset_max_animation_val()  # reset the max animation value
+        self.set_image_and_rect()  # sets the image and the rectangle
+        self.Status = tuple(self.Status)  # turn status back into a tuple
+        self.moveList = list(self.moveList)  # turn the tuple back into a list
+
+    def equals(self, other):
+        fields = ["fieldStatus", "aniStatus", "aniTracker", "x", "y", "flipped", "Name", "Sprite", "Status",
+            "Lvl", "Hpcap", "Hp", "Mpcap", "Mp", "Exp", "Bal", "Str", "Mag", "Vit", "Agl", "Def", "moveList",
+            "equipment", "Inventory"]
+        flag = True
+        for key in fields:
+            flag = self.__dict__[key] == other.__dict__[key]
+            if not flag:
+                print(key)
+                break
+        return flag
+
 

@@ -14,7 +14,8 @@ class ObjectAnimationManager:
         if context == "Background1":
             self.aniTuple = chestAniL
 
-    def change_tuple(self, knight, pos, interactable):
+    def change_tuple(self, knight, interactable):
+        pos = knight.x
         within_range = pos > interactable["Range"][0] and pos < interactable["Range"][1]
         if within_range and not interactable["Activated"]:
             self.aniTuple = object_ani_dict.get(interactable["Event Type"])

@@ -1,53 +1,29 @@
 {
    "Knight": {
-      "Name": "Rion",
-      "Sprite": "Knight/Cut_Sprites/",
+      "fieldStatus": "Normal",
+      "aniStatus": "Idle",
+      "aniTracker": 0,
+      "x": 0,
+      "y": 670,
+      "flipped": false,
+      "Name": "Knight",
+      "Sprite": "Entity_Sprites/Knight/",
       "Status": [
          "Normal",
          -1
       ],
       "Lvl": 1,
-      "Hpcap": 13006,
-      "Hp": 13006,
-      "Mpcap": 13006,
-      "Mp": 13006,
+      "Hpcap": 208846,
+      "Hp": 208846,
+      "Mpcap": 208846,
+      "Mp": 208846,
       "Exp": 0,
       "Bal": 0,
-      "Str": 13006,
+      "Str": 208846,
       "Mag": 1,
-      "Vit": 13006,
-      "Agl": 13006,
-      "Def": 13006,
-      "Bonuses": {
-         "Str": [
-            0,
-            -1
-         ],
-         "Vit": [
-            0,
-            -1
-         ],
-         "Agl": [
-            0,
-            -1
-         ],
-         "Def": [
-            0,
-            -1
-         ]
-      },
-      "Inventory": {},
-      "fieldStatus": "Normal",
-      "Expcap": 1,
-      "Stance": "1",
-      "growths": {
-         "Hpcap": 13056,
-         "Mpcap": 13056,
-         "Str": 13056,
-         "Vit": 13056,
-         "Agl": 13056,
-         "Def": 13056
-      },
+      "Vit": 208846,
+      "Agl": 208846,
+      "Def": 208846,
       "moveList": [
          "Attack"
       ],
@@ -57,7 +33,8 @@
          "Chestplate": null,
          "Shoes": null,
          "Accessory": null
-      }
+      },
+      "Inventory": {}
    },
    "questManager": {
       "activeQuests": [
@@ -86,11 +63,10 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 80,
-      "animationTracker2": 68,
-      "animationTracker3": 35,
-      "gameState": 3,
-      "x": 624
+      "animationTracker": 39,
+      "animationTracker2": 37,
+      "animationTracker3": 21,
+      "gameState": 1
    },
    "screenManager": {
       "context": "Background1",
@@ -108,8 +84,8 @@
          "Background1": [
             {
                "Range": [
-                  500,
-                  600
+                  800,
+                  900
                ],
                "Event Type": "Chest",
                "Activated": false,

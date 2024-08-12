@@ -1,7 +1,13 @@
+import pygame as game
+import os
 # Parent class of hero and monster classes. Saves me the trouble of re-writing a
 # bunch of code
-class Entity:
+class Entity(game.sprite.Sprite):
     def __init__(self, Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money, inventory=None):
+        super().__init__()
+        self.aniStatus = "Idle"
+        self.aniTracker = 0
+        self.maxAniVal = 0
         if inventory is None:
             inventory = {}  # Inventory is a dictionary of it with key pairs (string: int)
         self.Name = name
@@ -23,6 +29,24 @@ class Entity:
             "Str": (0, -1), "Vit": (0, -1), "Agl": (0, -1), "Def": (0, -1)  # -1 means unlimited duration for bonus
         }
         self.Inventory = inventory  # For heroes, it's a bunch of useful items, for monsters it's dropped items
+
+    def get_max_animation_val(self):
+        # gets the maximum number for the animation in use
+        fileList = os.listdir(self.Sprite)  # get the list of files in the given sprite directory
+        referenceString = self.Name + "_" + self.aniStatus + "_"  # what we use to match
+        matchingFiles = []  # a list of all the file names that match the reference string
+        for fileName in fileList:  # loop through the file names
+            if referenceString in fileName:  # if the name matches the reference string, add it to the list
+                matchingFiles.append(fileName)
+        matchingFiles.sort(key=sort_func)  # sort the list
+        final = matchingFiles.pop()  # get the last item in the sortest list (the biggest)
+        final = final.replace(".png", "")  # get rid of the png portion of the file name
+        finalNum = int(final.split("_").pop())  # get the maximum number
+        return finalNum
+
+    def reset_max_animation_val(self):
+        # sets the maxAniVal value to the max value for the given animation
+        self.maxAniVal = self.get_max_animation_val()
 
     def take_damage(self, damage, effect=False):
         if not effect:  # if it isn't effect damage, consider defence
@@ -85,3 +109,7 @@ class Entity:
             elif key != "Hpcap" and key != "Mpcap" and key != "Expcap":
                 statusStr += key + ":" + str(value) + "\n"
         print(statusStr)
+
+def sort_func(e):
+    final = e.replace(".png", "")  # get rid of the png portion of the file name
+    return int(final.split("_").pop())  # get the maximum number

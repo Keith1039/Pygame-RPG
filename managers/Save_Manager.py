@@ -2,8 +2,8 @@ from managers.Screen_Manager import ScreenManager
 from Entity.Knight import Knight
 import os, json
 class SaveManager:
-    def __init__(self, hero,  localVars, screenManager, eventManager, questManager, saveNumber=1):
-        self.hero = hero
+    def __init__(self, knight,  localVars, screenManager, eventManager, questManager, saveNumber=1):
+        self.knight = knight
         self.localVars = localVars
         self.screenManager = screenManager
         self.saveNumber = saveNumber
@@ -58,9 +58,34 @@ class SaveManager:
     def strip_non_json_and_save(self):
         # Creates a dict with the local variables that are json serializeable. Also formats object data
         # Animation trackers are saved because I have a feeling removing them is gonna give a scuffed edge case
-        allowed = ["animationTracker", "animationTracker2", "animationTracker3", "gameState", "x"]
+        allowed = ["animationTracker", "animationTracker2", "animationTracker3", "gameState"]
         rawVarsDict = {}  # The raw values I need for the game (stuff in allowed)
-        inventoryDict = {}  # Players inventory
+        knightDict = {
+            "fieldStatus": self.knight.fieldStatus,
+            "aniStatus": self.knight.aniStatus,
+            "aniTracker": self.knight.aniTracker,
+            "x": self.knight.x,
+            "y": self.knight.y,
+            "flipped": self.knight.flipped,
+            "Name": self.knight.Name,
+            "Sprite": self.knight.Sprite,
+            "Status": self.knight.Status,
+            "Lvl": self.knight.Lvl,
+            "Hpcap": self.knight.Hpcap,
+            "Hp": self.knight.Hp,
+            "Mpcap": self.knight.Mpcap,
+            "Mp": self.knight.Mp,
+            "Exp": self.knight.Exp,
+            "Bal": self.knight.Bal,
+            "Str": self.knight.Str,
+            "Mag": self.knight.Mag,
+            "Vit": self.knight.Vit,
+            "Agl": self.knight.Agl,
+            "Def": self.knight.Def,
+            "moveList": tuple(self.knight.moveList),
+            "equipment": self.knight.equipment,
+            "Inventory": self.knight.Inventory
+        }
         for key in self.localVars:
             if key in allowed:
                 rawVarsDict[key] = self.localVars[key]
@@ -72,17 +97,16 @@ class SaveManager:
             "enemiesKilled": self.questManager.enemiesKilled,
             "npcsInteractedWith": self.questManager.npcsInteractedWith
         }
-        newerdict = {"Knight": vars(self.hero), "questManager": questManagerDict, "rawVariables": rawVarsDict,
+        newerdict = {"Knight": knightDict, "questManager": questManagerDict, "rawVariables": rawVarsDict,
                      "screenManager": screenManagerDict, "eventDict": self.eventManager.eventDict}
         return(newerdict)
 
     def load_data(self, file):
         fileInfo = json.load(file)
-        self.hero.load_dict(fileInfo["Knight"])  # Loading knight
-        self.questManager.__dict__.update(fileInfo["questManager"]) # load questManager
-        for stat, bonus in self.hero.Bonuses.items():  # turn all the list bonuses to tuples
-            self.hero.Bonuses.update({stat: tuple(bonus)})
-        self.hero.Status = tuple(self.hero.Status)  # turn the list for status into a tuple
+        self.knight.load_dict(fileInfo["Knight"])  # Loading knight
+        self.questManager.__dict__.update(fileInfo["questManager"])  # load questManager
+        for stat, bonus in self.knight.Bonuses.items():  # turn all the list bonuses to tuples
+            self.knight.Bonuses.update({stat: tuple(bonus)})
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
