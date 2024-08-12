@@ -17,7 +17,6 @@ def fill_test_dict():
     test_dict.update({"animationTracker3": animationTracker3})
     test_dict.update({"dialogueTimer": dialogueTimer})
     test_dict.update({"gameState": gameState})
-    test_dict.update({"x": x})
 
 def fill_screenManager_dict():
     screenManager_dict.update({"context": screenManager.context})
@@ -41,7 +40,9 @@ animationTracker2 = 0
 animationTracker3 = 0
 dialogueTimer = 0
 gameState = 0 
-x = 500
+
+min_x = -280
+max_x = 1000
 
 test_dict = {}
 screenManager_dict = {}
@@ -61,8 +62,8 @@ animationTracker2 = random.randint(1, 100)
 animationTracker3 = random.randint(1, 100)
 dialogueTimer = random.randint(1, 180)
 gameState = random.randint(1, 5)
-x = random.randint(-280, 1000)
-screenManager.change_screen(1000)  # Move to right screen
+
+screenManager.change_screen(min_x, max_x, 1000)  # Move to right screen
 for i in range(random.randint(1, 10)):
     knight.level_up()
 
@@ -86,7 +87,9 @@ def test_quick_load():
         if localVars[key] != test_dict[key]:
             flag = False
             break
-    flag2 = (knight2 == knight)
+    print(knight2.__dict__)
+    print(knight.__dict__)
+    flag2 = (knight2.equals(knight))
     flag3 = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == tuplefy(screenManager_dict["objectDict"]))
     flag4 = verify_interactables()
     flag5 = saveManager.eventManager.eventDict["mockDialogue2"]["Activated"]
@@ -103,7 +106,7 @@ dialogueTimer = random.randint(1, 180)
 gameState = random.randint(1, 5)
 for i in range(random.randint(1, 10)):
     knight.level_up()
-screenManager.change_screen(-280)  # Moves back to initial screen
+screenManager.change_screen(min_x, max_x, -280)  # Moves back to initial screen
 def test_save(): #slot #4
     fill_test_dict()
     fill_screenManager_dict()
@@ -120,7 +123,7 @@ def test_load():  # slot #4
             flag = False
             break
     if flag:
-        flag = (knight2 == knight)
+        flag = (knight2.equals(knight))
     if flag:
         flag = (screenManager.context == screenManager_dict["context"] and screenManager.objectDict == screenManager_dict["objectDict"])
     if flag:

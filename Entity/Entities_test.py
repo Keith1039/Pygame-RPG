@@ -10,6 +10,15 @@ lootpool = {"Exp": 0, "Money": 0, "Items": {}}
 # Entity method tests
 ################################################################
 
+# we use the knight object for the animation stuff because it has its animations done already
+def test_get_max_animation_val():
+    knight.maxAniVal = 0  # here to show that the max animation val didn't change
+    assert knight.get_max_animation_val() == 10 and knight.maxAniVal == 0
+
+def reset_max_animation_val():
+    knight.aniStatus = "Attack1"  # change the animation
+    knight.reset_max_animation_val()  # reset the max animation value
+    assert knight.maxAniVal == 4
 
 def test_take_damage():
     mockEnemy.take_damage(-900)
@@ -46,6 +55,7 @@ def test_remove_bonuses():
             break
     flag2 = mockEnemy.Bonuses["Vit"] == (0, -1)  # The buff should be removed since the counter for it was zero
     assert flag and flag2
+
 
 ################################################################
 

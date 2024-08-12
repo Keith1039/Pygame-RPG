@@ -10,50 +10,47 @@ def display_frame_rate(font, screen):
     screen.blit(fps, (1300, 0))
 
 # function that deals with player movement
-def handle_basic_input(keys, knightAni, knight, x, animationTracker): # This is just movement for left and right
+def handle_basic_input(keys, knight): # This is just movement for left and right
     # Determines players overworld movement
-    prevKnightAni = knightAni.aniArray
+    prevAniStatus = knight.aniStatus
     if knight.fieldStatus == "Normal":
         if keys[game.K_RIGHT]:
-            knightAni.change_array("Knight Run R")
-            if prevKnightAni != knightAni.aniArray:
-                animationTracker = 0
-
-            else:
-                x += 4
+            knight.aniStatus = "Run"
+            knight.flipped = False
+            if prevAniStatus == knight.aniStatus:
+                knight.x += 4
+                knight.rect.center = (knight.x, knight.y)
 
         elif keys[game.K_LEFT]:
-            knightAni.change_array("Knight Run L")
-            if prevKnightAni != knightAni.aniArray:
-                animationTracker = 0
-
-            else:
-                x -= 4
+            knight.aniStatus = "Run"
+            knight.flipped = True
+            if prevAniStatus == knight.aniStatus:
+                knight.x -= 4
+                knight.rect.center = (knight.x, knight.y)
         else:
-            knightAni.change_array("Idle")
-            if prevKnightAni != knightAni.aniArray:
-                animationTracker = 0
-    elif knightAni.aniArray != Entity.Animation_Manager.knightDeath:
-        knightAni.change_array("Idle")
-        if prevKnightAni != knightAni.aniArray:
-            animationTracker = 0
+            knight.aniStatus = "Idle"
+
+    elif knight.aniStatus != "Death":
+        knight.aniStatus = "Idle"
 
     else:
-        knightAni.change_array("Death")
-    return x, animationTracker
+        knight.aniStatus = "Death"
+    if prevAniStatus != knight.aniStatus:
+        knight.aniTracker = 0
+        knight.reset_max_animation_val()  # reset the max animation value
 
 def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, animationTracker3):
     if keys[game.K_UP]:
-        for u in range(len(interactables)):
+        for u in range(len(screenManager.interactables)):
             status = knight.fieldStatus
             interactable = interactables[u]
             if interactable["Event Type"] == "Chest":
-                screenManager.objectAni.change_tuple(knight, x, interactable)
+                screenManager.objectAni.change_tuple(knight, interactable)
                 if status != knight.fieldStatus:
                     # resetting animationTracker
                     animationTracker3 = 0
 
-            screenManager.objectAni.change_tuple(knight, x, interactable)
+            screenManager.objectAni.change_tuple(knight, interactable)
             if status != knight.fieldStatus:
                 # resetting animationTracker
                 animationTracker3 = 0
@@ -87,25 +84,25 @@ def draw_objects(screen, screenManager, spot3):
     # In the future, this will be done automatically with Omni manager
 
 
-def change_screen(x, screenManager, NPCManager):
-    if x > 1000 or x < -280:
+def change_screen(knight, screenManager, NPCManager):
+    min_x = 50
+    max_x = 1350
+    if knight.x > max_x or knight.x < min_x:
         # Code for switching screens
         prev_screen = screenManager.screen
-        screenManager.change_screen(x)
-        #interactable = screenManager.interactables
+        screenManager.change_screen(min_x, max_x, knight.x)
         NPCManager.apply_context(screenManager.context)
 
         # You only change screens when the conditions are met, else you run in place
-        if x > 1000 and prev_screen != screenManager.screen:
-            x = -260
-        elif x < -280 and prev_screen != screenManager.screen:
-            x = 980
+        if knight.x > max_x and prev_screen != screenManager.screen:
+            knight.x = min_x
+        elif knight.x < min_x and prev_screen != screenManager.screen:
+            knight.x = max_x
         else:
-            if x > 1000:
-                x = 1000
+            if knight.x > max_x:
+                knight.x = max_x
             else:
-                x = -280
-    return x
+                knight.x = min_x
 interact_functions = {}
 
 # I should have an array of sprite managers and it goes through them
@@ -121,14 +118,9 @@ knight.moveList.append("Double Slash")
 
 # Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
-knightSurface = game.image.load("Knight/Cut_Sprites/Attack_1 (1).png")
 
-knightAni = Entity.AnimationManager()
-knightAni.change_array("Knight Attack")
 NPCManager = managers.NPCAnimationManager()
-prevKnightAni = []
 
-animationTracker = 0
 animationTracker2 = 0
 animationTracker3 = 0
 
@@ -156,13 +148,14 @@ interactables = screenManager.interactables
 buffered_move = ""  # for battlemanager
 targets = []  # for battlemanager
 
+entityGroup = game.sprite.Group(knight)  # make a sprite group
+
 screenManager.change_context("Start")
 while True:
-    spot = animationTracker // 10
     spot2 = animationTracker2 // 10
     spot3 = animationTracker3 // 10
     if knight.fieldStatus == "Dead":
-        knightAni.change_array("Death")
+        knight.aniStatus = "Dead"
 
     eventList = game.event.get()
     for event in eventList:
@@ -180,18 +173,19 @@ while True:
         if not start and choice == "Start Game":  # If it's not start game then context was already changed
             screenManager.change_context("Background1")
     else:
-        eventManager.process_events(screenManager.context, x) # process any outstanding events before the game code
+        eventManager.process_events(screenManager.context)  # process any outstanding events before the game code
         # Determines players overworld movement
         if not battleManager.battleState[0] and battleManager.battleState[1] == "":
             # handles basic movement for the player character
-            x, animationTracker = handle_basic_input(keys, knightAni, knight, x, animationTracker)
+            handle_basic_input(keys, knight)
             # handles the player interaction
             animationTracker3 = handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, animationTracker3)
 
             # Draws the objects on the screen
             screen.blit(screenManager.screen, (0, 0))
             draw_objects(screen, screenManager, spot3)
-            screen.blit(knightSurface, (x, 440))
+            entityGroup.update()
+            entityGroup.draw(screen)
 
             # Code for testing the dialogueManager
             if dialogueManager.event is None and len(dialogueManager.nextEvents) > 0:
@@ -200,8 +194,6 @@ while True:
                 dialogueManager.draw_dialogue(eventList)
 
 
-            # Animation tracker is for the knight(player character)
-            animationTracker += 1
             # Animation tracker2 is for the NPCs
             animationTracker2 += 1
             # Animation tracker3 is for objects like chests and arrows
@@ -212,22 +204,11 @@ while True:
                 # Fine for now but this needs to be fixed
                 animationTracker3 += 1
 
-            x = change_screen(x, screenManager, NPCManager)
-
-            # Here to stop death animation from looping
-            if animationTracker >= 99 and knightAni.aniArray == Entity.Animation_Manager.knightDeath:
-                animationTracker = 99
-
-            # if the end is reached, loop over for knight
-            elif animationTracker >= (10 * knightAni.aniArray[0] - 1):
-                animationTracker = 0
+            change_screen(knight, screenManager, NPCManager)
 
             # This will need to be changed to support multiple NPCs
             if len(NPCManager.aniTuple) != 0 and animationTracker2 >= (10 * NPCManager.aniTuple[0] - 1):
                 animationTracker2 = 0
-            # Load Knight image
-            appendable = "(" + str(spot + 1) + ").png"
-            knightSurface = game.image.load(knightAni.aniArray[1] + appendable)
 
             # this needs to be changed for later
             for z in range(len(NPCManager.NPCs)):
@@ -235,6 +216,7 @@ while True:
                 appendable2 = "(" + str((spot2 + 1) % NPCManager.aniTuple[0] + 1) + ").png"
                 screen.blit(game.image.load(NPCManager.aniTuple[1] + appendable2), (NPCManager.aniTuple[0], 500))
         elif battleManager.battleState[0]:
+
             screen.blit(screenManager.screen, (0, 0))  # draw the screen
             # draw the knight object here
             # if this condition is ever true that means that the player used a move last turn
