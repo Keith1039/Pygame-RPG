@@ -60,6 +60,7 @@ class DialogueManager:
         self.portrait = portrait_dict.get(name)  # This can be None btw so there has to be logic checking this
         if self.portrait is not None:
             # if it is a valid name, change the name to match it
+            self.portrait = game.transform.scale(self.portrait, (150, 150))
             self.name = name
         else:
             # if it isn't a valid name, reset the value of name
@@ -104,7 +105,7 @@ class DialogueManager:
             if self.portrait is not None:
                 nameSurface = self.font.render(self.name, False, "Red")
                 self.screen.blit(self.characterBox, (0, 650))
-                self.screen.blit(self.portrait, (15, 670))
+                self.screen.blit(self.portrait, (5, 600))
                 self.screen.blit(nameSurface, (20, 620))
                 self.screen.blit(self.textBox, (120, 650))
                 self.screen.blit(textSurface, (140, 670))

@@ -35,7 +35,8 @@ spacings_y = jsonInfo.get("spacings_y")
 draw_function_dict = {"Load Game": draw_save_UI, "Player Select": draw_background}
 
 portraitOrb = game.image.load("UI/Orb.png")
-portrait = game.image.load("portraits/small_knight.png")
+portrait = game.image.load("portraits/Knight.png")
+portrait = game.transform.scale(portrait, (150, 150))
 circle = game.image.load("UI/circle.png")
 separator = game.image.load("UI/smaller_separator.png")
 semiCircle = game.image.load("UI/semiCircle.png")
@@ -329,7 +330,7 @@ class UIManager:
         # Drawing portrait circle
         self.screen.blit(circle, (0, 0))
         self.screen.blit(portraitOrb, (0, 0))
-        self.screen.blit(portrait, (5, 0))
+        self.screen.blit(portrait, (0, -65))
 
     def draw_menu_and_assets(self, assets):
         # Draw the remaining information
