@@ -9,7 +9,7 @@ class Knight(Entity):
         self.fieldStatus = "Normal"  # indicator for the knight class
         self.reset_max_animation_val()  # set the limit
         self.default_x = 0  # default x value
-        self.default_y = 670  # 440 works really well for fights it seems
+        self.default_y = 590  # default y value 350 works for battles
         self.x = self.default_x  # set the x value
         self.y = self.default_y  # set the y value
         self.flipped = False  # determines whether the sprite is inverted or not
@@ -37,6 +37,7 @@ class Knight(Entity):
         self.image = game.image.load(filePath)  # load the new image
         if self.flipped:  # if the run is to be flipped
             self.image = game.transform.flip(self.image, True, False)
+        self.image = game.transform.scale(self.image, (450, 300))  # scale the image
         self.rect = self.image.get_rect()  # get the new
         self.rect.center = (self.x, self.y)
 

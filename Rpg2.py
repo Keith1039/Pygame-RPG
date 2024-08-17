@@ -184,14 +184,14 @@ while True:
             # Draws the objects on the screen
             screen.blit(screenManager.screen, (0, 0))
             draw_objects(screen, screenManager, spot3)
-            entityGroup.update()
-            entityGroup.draw(screen)
+            entityGroup.update()  # update all the sprites in the group
+            entityGroup.draw(screen)  # draw all the sprites
 
             # Code for testing the dialogueManager
             if dialogueManager.event is None and len(dialogueManager.nextEvents) > 0:
                 dialogueManager.get_new_text()  # queue up the next event
             if dialogueManager.event is not None:
-                dialogueManager.draw_dialogue(eventList)
+                dialogueManager.draw_dialogue(eventList)  # draw the dialogue
 
 
             # Animation tracker2 is for the NPCs

@@ -8,8 +8,8 @@
       "Background1": [
          {
             "Range": [
-               800,
-               900
+               880,
+               920
             ],
             "Event Type": "Chest",
             "Activated": false,
