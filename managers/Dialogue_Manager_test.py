@@ -1,4 +1,3 @@
-import pygame
 import json
 from managers.Dialogue_Manager import DialogueManager
 import pygame as game
@@ -60,11 +59,11 @@ def test_get_new_text():
 def test_load_portrait():
     text = "Knight: I see, move"
     returnText = dialogueManager.load_portrait(text)
-    # verify that there is a portrait and the returned text was not modified while confirming the name is correct
-    flag = dialogueManager.portrait is not None and text == returnText and dialogueManager.name == "Knight"
+    # verify that there is a portrait and the returned text was stripped of it's name and the name is stored
+    flag = dialogueManager.portrait is not None and returnText == "I see, move" and dialogueManager.name == "Knight"
     text = "IDK"
     returnText = dialogueManager.load_portrait(text)
-    # check to see if the portrait is none, the name is reset and the returned text wasn't modified
+    # check to see if the portrait is none, the name is reset and the returned text wasn't modified (in this case)
     flag2 = dialogueManager.portrait is None and text == returnText and dialogueManager.name == ""
     assert flag and flag2
 

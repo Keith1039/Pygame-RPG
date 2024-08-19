@@ -154,5 +154,3 @@ class Knight(Entity):
                 print(key)
                 break
         return flag
-
-

@@ -7,8 +7,8 @@ class BattleManager:
     def __init__(self, knight, itemManager):
         # First value in tuple is whether there's a battle going on, second value is the victor
         self.battleState = (False, "")
-        self.moveDict = self.get_move_dict()  # fills up the move dictionary
-        self.statusDict = self.get_status_dict()  # retrieves the effect information
+        self.moveDict = get_move_dict()  # fills up the move dictionary
+        self.statusDict = get_status_dict()  # retrieves the effect information
         self.hero = knight
         self.itemManager = itemManager
         self.targetNum = -1  # the amount of targets that need to be selected
@@ -30,21 +30,6 @@ class BattleManager:
         x = 900 + int(i / 3) * 300
         y = 100 + (i % 3) * 250
         self.enemies.append(((x, y), enemy))
-
-
-    def get_move_dict(self):
-        # Loads the move dictionary from a file
-        file = open("JSON/Moves/Complete_Move_List.json", "r")
-        jsonInfo = json.load(file)
-        file.close()
-        return jsonInfo
-
-    def get_status_dict(self):
-        # loads the status dictionary from a file
-        file = open("JSON/Status/Status.json", "r")
-        jsonInfo = json.load(file)
-        file.close()
-        return jsonInfo
 
     def do_one_turn(self, move, target):
         # I'll worry about the drawing later
@@ -85,8 +70,8 @@ class BattleManager:
                         returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
                     else:
                         returnable_strings += self.use_move(self.hero, moveObj, targets)
-                self.turnOrder.pop(0)  # now that the hero has successfully completed their turn, kick them from turn order
-                    #self.print_all_statuses()  ######## DEBUG
+                self.turnOrder.pop(0)  # after the player has moved, kick them from turn order
+                # self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":
                 # handle the status effects
                 statusStrings = self.handle_status(turnObject)
@@ -109,7 +94,7 @@ class BattleManager:
                 returnable_strings += self.use_move(turnObject, moveObj, targets)
                 self.targetNum = -1  # reset the target number since the move was done successfully
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
-                #self.print_all_statuses()  ######## DEBUG
+                # self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
         returnable_strings += self.clear_dead_enemies()  # removes dead entities and add event strings
         self.fix_entity_stats()  # correct the stats of all entities that are still alive
@@ -144,7 +129,6 @@ class BattleManager:
         for i in range(len(targets)):
             returnableStrings = returnableStrings + self.apply_effects(effectList, turnObject, targets[i])
         return returnableStrings
-
 
     def parse_effects(self, effectString):
         effectList = []
@@ -198,7 +182,7 @@ class BattleManager:
                     # do if the first string is a number
                     # this is a bad idea waiting to happen if a stat gets hit with this
                     # checks need to be added
-                    # This is for immediate effects (healing, fixed damage, etc)
+                    # This is for immediate effects (healing, fixed damage, etc.)
                     percentagePos = effect.find("%")
                     num = 0
                     if percentagePos != -1:  # healing/damage dealt with percentages
@@ -234,7 +218,7 @@ class BattleManager:
                     if word == "Apply":
                         # Apply a status effect
                         effectTarget.Status = (result, 0)  # set the status
-                        effectString += "is " + result + "ed !" # burn-ed, poison-ed, shock-ed, need something for bleed tho... etc
+                        effectString += "is " + result + "ed !"  # burn-ed, poison-ed, shock-ed, missing one for bleed
                     elif word == "Cure":
                         # cure a status effect if the right item was used
                         if result == effectTarget.Status[0] or result == "All":
@@ -377,7 +361,7 @@ class BattleManager:
                     # do if the first string is a number
                     # this is a bad idea waiting to happen if a stat gets hit with this
                     # checks need to be added
-                    # This is for immediate effects (healing, fixed damage, etc)
+                    # This is for immediate effects (healing, fixed damage, etc.)
                     percentagePos = effect.find("%")
                     num = 0
                     if percentagePos != -1:  # healing/damage dealt with percentages
@@ -438,3 +422,17 @@ class BattleManager:
         d = self.get_enemy_objects()
         for i in range(len(d)):
             d[i].print_status()
+
+def get_move_dict():
+    # Loads the move dictionary from a file
+    file = open("JSON/Moves/Complete_Move_List.json", "r")
+    jsonInfo = json.load(file)
+    file.close()
+    return jsonInfo
+
+def get_status_dict():
+    # loads the status dictionary from a file
+    file = open("JSON/Status/Status.json", "r")
+    jsonInfo = json.load(file)
+    file.close()
+    return jsonInfo

@@ -21,6 +21,3 @@ def test_change_tuple():
         objectAnimationManager.aniTuple = ()
         objectAnimationManager.change_tuple(knight, mockJson)
         assert tuple(objectAnimationManager.aniTuple) == chestAniL and knight.fieldStatus == "Opening Chest"
-
-
-

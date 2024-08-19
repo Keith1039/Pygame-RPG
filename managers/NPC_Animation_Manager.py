@@ -13,8 +13,3 @@ class NPCAnimationManager:
 
     def change_tuple(self, name):
         self.aniTuple = NPC_ani_tuple_dict.get(name)
-
-
-
-
-

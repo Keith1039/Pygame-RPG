@@ -1,12 +1,10 @@
-import os
 import pygame as game
-import time
 
 # chooses which text box is in use
 text_dict = {False: game.image.load("portraits/text_box.png"), True: game.image.load("portraits/text_box_L.png")}
 # Portrait dict takes in a name and then gets the portrait
 portrait_dict = {"Knight": game.image.load("portraits/Knight.png"), "Rion": game.image.load("portraits/Knight.png")}
-class DialogueManager: 
+class DialogueManager:
     def __init__(self, font, screen):
         self.name = ""  # name of the character
         self.portrait = None  # Portrait that's displayed on screen
@@ -49,7 +47,6 @@ class DialogueManager:
             if len(self.nextEvents) > 0:
                 self.load_file(self.nextEvents.pop(0))  # load the next dialogue event in the list
 
-
     def load_portrait(self, text):
         # Finding the character name
         name = ""
@@ -62,11 +59,12 @@ class DialogueManager:
             # if it is a valid name, change the name to match it
             self.portrait = game.transform.scale(self.portrait, (150, 150))
             self.name = name
+            text = text[pos + 1:]  # split the name from the rest of the text since it is a valid name
         else:
             # if it isn't a valid name, reset the value of name
             self.name = ""
-        # Returns text that has name stripped from it
-        return text
+        # Returns text that has name stripped from it and strip white space
+        return text.strip()
 
     def draw_dialogue(self, eventList, battle=False):
         if len(self.dialogue) > 0:
@@ -121,7 +119,6 @@ class DialogueManager:
                     self.screen.blit(self.textBox, (0, 580))
                     self.screen.blit(textSurface, (50, 650))
                     self.screen.blit(textSurface2, (50, 700))
-
 
     def load_dialogue_list(self, dialogueList):
         # just sets the dialogue list

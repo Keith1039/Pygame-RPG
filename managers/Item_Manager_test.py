@@ -1,4 +1,3 @@
-import json
 from Entity import Knight
 from managers import ItemManager
 from managers import BattleManager

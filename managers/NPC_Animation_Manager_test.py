@@ -10,4 +10,3 @@ def test_change_tuple_B2A():
     npcManager.apply_context("Background2")
     npcManager.change_tuple(npcManager.NPCs[0])
     assert len(npcManager.aniTuple) == 2 and len(npcManager.NPCs) == 1
-
