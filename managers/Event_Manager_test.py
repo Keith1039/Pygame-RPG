@@ -57,4 +57,3 @@ def test_process_events():
     flag8 = eventManager.eventDict["testQuestEvent2"]["Activated"] and len(eventManager.events) == 0 \
         and len(questManager.activeQuests) == 2
     assert flag and flag2 and flag3 and flag4 and flag5 and flag6 and flag7 and flag8
-

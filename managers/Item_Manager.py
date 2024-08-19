@@ -6,7 +6,6 @@ class ItemManager:
         equipmentPath = "JSON/Items/Equipment.json"
         itemFusionPath = "JSON/Items/Item_Fusion.json"
 
-
         file = open(itemsPath, "r")
         file2 = open(itemsEffectPath, "r")
         file3 = open(equipmentPath, "r")
@@ -64,6 +63,7 @@ class ItemManager:
                 "AOE": "",
                 "Effect": ""
             }
+
     def get_effect(self, item):
         # returns the effect string if the item has an effect or returns empty string
         return self.get_effect_details(item)["Effect"]
@@ -76,7 +76,6 @@ class ItemManager:
         itemInfo.pop("Limited")  # remove Limited key
         itemInfo.pop("Fusion")  # remove the fusion portion
         return itemInfo
-
 
     def get_usable_items(self):
         # This function returns an array of usable items from the Knights inventory
@@ -93,15 +92,14 @@ class ItemManager:
         return consumables
 
     def fuse_items(self, material1, material2):
-        fusionOccured = False  # indicator for if a fusion happened
+        fusionOccurred = False  # indicator for if a fusion happened
         for item, fusionMaterials in self.itemFusionJson.items():
             listA = fusionMaterials[0]
             listB = fusionMaterials[1]
             if ((material1 in listA) or (material1 in listB)) and ((material2 in listA) or (material2 in listB)):
-                fusionOccured = True
+                fusionOccurred = True
                 self.knight.add_to_inventory(item)  # add the inventory
                 # lower the amount in the inventory for the used items
                 self.knight.remove_from_inventory(material1)  # removes 1 from the amount of material1
                 self.knight.remove_from_inventory(material2)  # removes 1 from the amount of material2
-        return fusionOccured
-
+        return fusionOccurred

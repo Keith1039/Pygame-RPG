@@ -55,4 +55,3 @@ class ScreenManager:
         self.context = context
         self.screen = game.image.load(background_dict.get(self.context))  # Draws the screen based on the new context
         self.apply_context()  # Applies the current context to reload the other things on screen
-

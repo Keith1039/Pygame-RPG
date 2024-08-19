@@ -82,7 +82,3 @@ def get_quest_dict():
     questDict = json.load(file)
     file.close()
     return questDict
-
-
-
-

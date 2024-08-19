@@ -1,5 +1,4 @@
 import os
-import json
 import pygame as game
 import random
 from Entity.Knight import Knight
@@ -134,4 +133,3 @@ def test_latest_file():  # check if last save is 4
     newManager = SaveManager(Knight, vars(), screenManager, eventManager, questmanager)
     #cleanup()  # Gets rid of the save files created in the test
     assert newManager.saveNumber == 4  # Should still be 4
-

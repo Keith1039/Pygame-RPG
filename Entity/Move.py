@@ -1,4 +1,3 @@
-import ast
 
 class Move:
     def __init__(self, name, entity, jsonInfo):
@@ -92,6 +91,7 @@ def parse_special_symbols(parseString, entity):
                 break
         # we return the value we get from parsing
         return apply_symbol(int(multiplier), specialSymbol, entity)
+
 def apply_symbol(multiplier, specialSymbol, entity):
     # converts the special symbol and multiplier into a tangible number
     specialSymbolVal = 0

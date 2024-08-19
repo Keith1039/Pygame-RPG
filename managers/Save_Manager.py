@@ -32,7 +32,7 @@ class SaveManager:
     # REMEMBER TO ERROR PROOF THIS. MAYBE OVERWRITE SLOT 0 OR READ FROM SLOT 0 IF AN INVALID SLOT IS GIVEN
     # The above is if someone edits file data
     def quick_save(self):
-        if self.saveNumber <= self.limit and self.saveNumber > 0:
+        if 0 < self.saveNumber <= self.limit:
             # Saves in the most recent slot
             self.file = open(self.file.name, "w")
             gameValues = self.strip_non_json_and_save()
@@ -42,9 +42,9 @@ class SaveManager:
         else:
             print("Invalid Slot")
 
-    def save(self, slot=int):
+    def save(self, slot):
         # Saves in a specified slot
-        if slot > 0 and slot <= self.limit:
+        if 0 < slot <= self.limit:
             self.saveNumber = slot
             self.file = open("save/save_data" + str(slot) + ".json", "w")
             gameValues = self.strip_non_json_and_save()
@@ -54,10 +54,9 @@ class SaveManager:
             print("Invalid slot")
         self.store_save_info()
 
-    
     def strip_non_json_and_save(self):
         # Creates a dict with the local variables that are json serializeable. Also formats object data
-        # Animation trackers are saved because I have a feeling removing them is gonna give a scuffed edge case
+        # Animation trackers are saved because removing them might cause a weird edge case
         allowed = ["animationTracker", "animationTracker2", "animationTracker3", "gameState"]
         rawVarsDict = {}  # The raw values I need for the game (stuff in allowed)
         knightDict = {
@@ -99,7 +98,7 @@ class SaveManager:
         }
         newerdict = {"Knight": knightDict, "questManager": questManagerDict, "rawVariables": rawVarsDict,
                      "screenManager": screenManagerDict, "eventDict": self.eventManager.eventDict}
-        return(newerdict)
+        return newerdict
 
     def load_data(self, file):
         fileInfo = json.load(file)
@@ -122,7 +121,7 @@ class SaveManager:
         file.close()
 
     def quick_load(self):
-        if self.saveNumber <= self.limit and self.saveNumber > 0:
+        if 0 < self.saveNumber <= self.limit:
             # Loads the most recent save, a 'Continue' option
             # Users will be able to pick the save file graphically (hopefully) so no error checking should be required
             file = open("save/save_data" + str(self.saveNumber) + ".json", "r")
@@ -130,8 +129,8 @@ class SaveManager:
         else:
             print("Invalid file")
 
-    def load(self, slot=int):
-        if slot <= self.limit and slot > 0:  # Verifies if the file exists
+    def load(self, slot):
+        if 0 < slot <= self.limit:  # Verifies if the file exists
             file = open("save/save_data" + str(slot) + ".json", "r")
             self.load_data(file)
         else:
