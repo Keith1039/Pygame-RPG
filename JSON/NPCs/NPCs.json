@@ -1,0 +1,26 @@
+{
+   "testNPC": {
+      "Name": "Gossiper",
+      "Sprite": "NPC_Sprites/Gossiper/",
+      "Scale": [300, 300],
+      "Dialogue": ["testEvent"],
+      "Context": "test",
+      "Pos": [500, 650]
+   },
+   "Gossiper": {
+      "Name": "Gossiper",
+      "Sprite": "NPC_Sprites/Gossiper/",
+      "Scale": [
+         300,
+         300
+      ],
+      "Dialogue": [
+         "Gossiper1"
+      ],
+      "Context": "Background2",
+      "Pos": [
+         500,
+         650
+      ]
+   }
+}

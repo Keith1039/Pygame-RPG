@@ -300,4 +300,26 @@ if __name__ == "__main__":
         json.dump(statusJSON, file, indent=3)
         file.close()
 
+    elif arg == "add-NPC":
+        arg2 = sys.argv[2]  # There will a second argument with this
+        path = "JSON/NPCs/NPCs.json"
+        file = open(path, "r")
+        statusJSON = json.load(file)
+        file.close()
+        statusJSON.update({
+            arg2: {
+                "Name": arg2,
+                "Sprite": "NPC_Sprites/" + arg2 + "/",
+                "Scale": [],
+                "Dialogue": [],
+                "Context": "",
+                "Pos": []
+            }
+        })
+        file = open(path, "w")
+        json.dump(statusJSON, file, indent=3)
+        file.close()
+
+        #add - NPC
+
 

@@ -65,5 +65,25 @@
       "Quest": "testEventQuest",
       "Context": "",
       "Items Gained": {}
+   },
+   "Gossiper1": {
+      "Range": [],
+      "Event Type": "Dialogue",
+      "Activated": false,
+      "Repeatable": true,
+      "Dialogue Path": "event_text/Gossiper1.txt",
+      "Quest": "",
+      "Context": "",
+      "Items Gained": {}
+   },
+   "genericDialogue": {
+      "Range": [],
+      "Event Type": "Dialogue",
+      "Activated": false,
+      "Repeatable": true,
+      "Dialogue Path": "event_text/genericDialogue.txt",
+      "Quest": "",
+      "Context": "",
+      "Items Gained": {}
    }
 }
