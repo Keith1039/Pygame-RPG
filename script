@@ -2,6 +2,7 @@
 
 args=$1
 args2=$2
+args3=$3
 
 case $args in
   clear-save)
@@ -65,6 +66,27 @@ case $args in
 
   add-quest)
     python scripts.py add-quest "$args2"
+  ;;
+
+  add-NPC)
+    python scripts.py add-NPC "$args2"
+    mkdir NPC_Sprites/"$args2"
+  ;;
+
+  add-animation-NPC)
+    num=1
+    for i in NPC_SPRITES/"$args2"/tile*.png
+      do mv "$i" NPC_SPRITES/"$args2"/"$args2"_"$args3"_"$num".png
+      num=$((num + 1))
+    done
+  ;;
+
+  add-animation-Entity)
+    num=1
+    for i in Entity_Sprites/"$args2"/tile*.png
+      do mv "$i" NPC_SPRITES/"$args2"/"$args2"_"$args3"_"$num".png
+      num=$((num + 1))
+    done
 
 
 esac

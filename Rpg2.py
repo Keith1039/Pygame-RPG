@@ -1,4 +1,3 @@
-import json
 
 import pygame as game
 from sys import exit
@@ -60,7 +59,7 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
 
     elif keys[game.K_l]:
         saveManager.quick_load()  # Needs to be error checked
-        NPCManager.apply_context(screenManager.context)  # Updates NPC Animation Manager when loading save
+        NPCManager.get_NPCs(screenManager.context)
 
     elif keys[game.K_b]:
         # start a battle
@@ -91,13 +90,14 @@ def change_screen(knight, screenManager, NPCManager):
         # Code for switching screens
         prev_screen = screenManager.screen
         screenManager.change_screen(min_x, max_x, knight.x)
-        NPCManager.apply_context(screenManager.context)
 
         # You only change screens when the conditions are met, else you run in place
-        if knight.x > max_x and prev_screen != screenManager.screen:
-            knight.x = min_x
-        elif knight.x < min_x and prev_screen != screenManager.screen:
-            knight.x = max_x
+        if prev_screen != screenManager.screen:
+            NPCManager.get_NPCs(screenManager.context)
+            if knight.x > max_x and prev_screen != screenManager.screen:
+                knight.x = min_x
+            elif knight.x < min_x and prev_screen != screenManager.screen:
+                knight.x = max_x
         else:
             if knight.x > max_x:
                 knight.x = max_x
@@ -119,9 +119,6 @@ knight.moveList.append("Double Slash")
 # Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
 
-NPCManager = managers.NPCAnimationManager()
-
-animationTracker2 = 0
 animationTracker3 = 0
 
 start = True
@@ -140,6 +137,7 @@ itemManager = managers.ItemManager(knight)
 battleManager = Entity.BattleManager(knight, itemManager)
 UIManager = managers.UIManager(font, screen)
 UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager, itemManager)
+NPCManager = Entity.NPCManager(knight)
 
 
 eventManager.push_event("mockDialogue")
@@ -152,7 +150,6 @@ entityGroup = game.sprite.Group(knight)  # make a sprite group
 
 screenManager.change_context("Start")
 while True:
-    spot2 = animationTracker2 // 10
     spot3 = animationTracker3 // 10
     if knight.fieldStatus == "Dead":
         knight.aniStatus = "Dead"
@@ -184,8 +181,23 @@ while True:
             # Draws the objects on the screen
             screen.blit(screenManager.screen, (0, 0))
             draw_objects(screen, screenManager, spot3)
+
+            # draw the rectangle behind Knight
+            # game.draw.rect(screen, (255, 0, 0), knight.rect)
             entityGroup.update()  # update all the sprites in the group
             entityGroup.draw(screen)  # draw all the sprites
+
+            # draw the rectangle around NPCs
+            # for sprite in NPCManager.NPCGroup.sprites():
+            #     game.draw.rect(screen, (150, 150, 150), sprite.rect)
+
+            NPCManager.NPCGroup.update()  # update sprites
+            NPCManager.NPCGroup.draw(screen)  # draw the NPCs
+
+            collidingSprite = NPCManager.get_colliding()  # the NPC that the player can interact with
+            event = NPCManager.get_interaction_event(eventList)  # should only ever be one event at a time
+            if event is not None:  # check if there is an event to push
+                eventManager.push_event(event)  # push the event
 
             # Code for testing the dialogueManager
             if dialogueManager.event is None and len(dialogueManager.nextEvents) > 0:
@@ -193,9 +205,6 @@ while True:
             if dialogueManager.event is not None:
                 dialogueManager.draw_dialogue(eventList)  # draw the dialogue
 
-
-            # Animation tracker2 is for the NPCs
-            animationTracker2 += 1
             # Animation tracker3 is for objects like chests and arrows
             if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
                 knight.fieldStatus = "Normal"
@@ -206,15 +215,7 @@ while True:
 
             change_screen(knight, screenManager, NPCManager)
 
-            # This will need to be changed to support multiple NPCs
-            if len(NPCManager.aniTuple) != 0 and animationTracker2 >= (10 * NPCManager.aniTuple[0] - 1):
-                animationTracker2 = 0
 
-            # this needs to be changed for later
-            for z in range(len(NPCManager.NPCs)):
-                NPCManager.change_tuple(NPCManager.NPCs[z])
-                appendable2 = "(" + str((spot2 + 1) % NPCManager.aniTuple[0] + 1) + ").png"
-                screen.blit(game.image.load(NPCManager.aniTuple[1] + appendable2), (NPCManager.aniTuple[0], 500))
         elif battleManager.battleState[0]:
 
             screen.blit(screenManager.screen, (0, 0))  # draw the screen
