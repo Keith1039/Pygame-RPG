@@ -5,6 +5,7 @@ from Entity.Move import Move
 import pygame as game
 from managers.UI_Manager import UIManager
 from managers.Item_Manager import ItemManager
+
 game.init()
 screen = game.display.set_mode((1422, 800))
 font = game.font.Font('font/Pixeltype.ttf', 50)

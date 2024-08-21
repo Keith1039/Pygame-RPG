@@ -1,8 +1,8 @@
-import json
+import Utils
 
 class EventManager():
     def __init__(self, knight, dialogueManager, questManager):
-        self.eventDict = get_event_dict()
+        self.eventDict = Utils.get_event_dict()
         self.events = []
         self.knight = knight
         self.dialogueManager = dialogueManager
@@ -38,10 +38,3 @@ class EventManager():
                 # if the event condition isn't triggered, the event is added to the unprocessed list
                 unprocessedEvents.append(eventInfo)
         self.events = unprocessedEvents  # set the event list
-
-
-def get_event_dict():
-    file = open("JSON/Events/Events.json", "r")
-    d = json.load(file)
-    file.close()
-    return d

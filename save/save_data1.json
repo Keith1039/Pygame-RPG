@@ -4,7 +4,7 @@
       "aniStatus": "Idle",
       "aniTracker": 0,
       "x": 0,
-      "y": 670,
+      "y": 590,
       "flipped": false,
       "Name": "Knight",
       "Sprite": "Entity_Sprites/Knight/",
@@ -13,17 +13,17 @@
          -1
       ],
       "Lvl": 1,
-      "Hpcap": 208846,
-      "Hp": 208846,
-      "Mpcap": 208846,
-      "Mp": 208846,
+      "Hpcap": 1671118,
+      "Hp": 1671118,
+      "Mpcap": 1671118,
+      "Mp": 1671118,
       "Exp": 0,
       "Bal": 0,
-      "Str": 208846,
+      "Str": 1671118,
       "Mag": 1,
-      "Vit": 208846,
-      "Agl": 208846,
-      "Def": 208846,
+      "Vit": 1671118,
+      "Agl": 1671118,
+      "Def": 1671118,
       "moveList": [
          "Attack"
       ],
@@ -63,10 +63,10 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 39,
-      "animationTracker2": 37,
-      "animationTracker3": 21,
-      "gameState": 1
+      "animationTracker": 7,
+      "animationTracker2": 71,
+      "animationTracker3": 12,
+      "gameState": 5
    },
    "screenManager": {
       "context": "Background1",
@@ -84,8 +84,8 @@
          "Background1": [
             {
                "Range": [
-                  800,
-                  900
+                  880,
+                  920
                ],
                "Event Type": "Chest",
                "Activated": false,
@@ -162,6 +162,60 @@
          "Quest": "testEventQuest",
          "Context": "",
          "Items Gained": {}
+      },
+      "Gossiper1": {
+         "Range": [],
+         "Event Type": "Dialogue",
+         "Activated": false,
+         "Repeatable": true,
+         "Dialogue Path": "event_text/Gossiper1.txt",
+         "Quest": "",
+         "Context": "",
+         "Items Gained": {}
+      },
+      "genericDialogue": {
+         "Range": [],
+         "Event Type": "Dialogue",
+         "Activated": false,
+         "Repeatable": true,
+         "Dialogue Path": "event_text/genericDialogue.txt",
+         "Quest": "",
+         "Context": "",
+         "Items Gained": {}
+      }
+   },
+   "NPCDict": {
+      "testNPC": {
+         "Name": "Gossiper",
+         "Sprite": "NPC_Sprites/Gossiper/",
+         "Scale": [
+            300,
+            300
+         ],
+         "Dialogue": [
+            "genericDialogue"
+         ],
+         "Context": "test",
+         "Pos": [
+            500,
+            650
+         ]
+      },
+      "Gossiper": {
+         "Name": "Gossiper",
+         "Sprite": "NPC_Sprites/Gossiper/",
+         "Scale": [
+            300,
+            300
+         ],
+         "Dialogue": [
+            "Gossiper1"
+         ],
+         "Context": "Background2",
+         "Pos": [
+            500,
+            650
+         ]
       }
    }
 }

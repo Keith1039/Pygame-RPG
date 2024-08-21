@@ -7,6 +7,7 @@ from managers.Screen_Manager import ScreenManager
 from managers.Dialogue_Manager import DialogueManager
 from managers.Event_Manager import EventManager
 from managers.Quest_Manager import QuestManager
+from managers import NPCManager
 def cleanup():
     os.system("bash script clear-save")
 
@@ -55,7 +56,8 @@ knight2 = Knight()
 dialogeManager = DialogueManager(font, screen)
 questmanager = QuestManager(knight)
 eventManager = EventManager(knight, dialogeManager, questmanager)
-saveManager = SaveManager(knight, localVars, screenManager, eventManager, questmanager)
+npcManager = NPCManager(knight)
+saveManager = SaveManager(knight, localVars, screenManager, eventManager, questmanager, npcManager)
 animationTracker = random.randint(1, 100)
 animationTracker2 = random.randint(1, 100)
 animationTracker3 = random.randint(1, 100)
@@ -75,6 +77,7 @@ def test_quick_save():
     saveManager.questManager.enemiesKilled.update({"Goblin": 1})
     saveManager.questManager.npcsInteractedWith.update({"Lucy": 1})
     saveManager.questManager.add_quest("testQuest")
+    npcManager.NPCDict["testNPC"]["Dialogue"] = ["genericDialogue"]
     saveManager.quick_save()
     knight2.load_dict(knight.__dict__.copy())  # taking the values of the previous knight right after they were saved
     assert saveManager.saveNumber == 1  # Shouldn't change
@@ -96,7 +99,8 @@ def test_quick_load():
     flag6 = len(saveManager.questManager.activeQuests) == 1 and \
         saveManager.questManager.enemiesKilled.get("Goblin") is not None and \
         saveManager.questManager.npcsInteractedWith.get("Lucy") is not None
-    assert flag and flag2 and flag3 and flag4 and flag5 and flag6
+    flag7 = npcManager.NPCDict["testNPC"]["Dialogue"] == ["genericDialogue"]
+    assert flag and flag2 and flag3 and flag4 and flag5 and flag6 and flag7
 
 animationTracker = random.randint(1, 99)   # cap at 99 because 100 breaks the game
 animationTracker2 = random.randint(1, 99)
@@ -130,6 +134,6 @@ def test_load():  # slot #4
     assert flag
 
 def test_latest_file():  # check if last save is 4
-    newManager = SaveManager(Knight, vars(), screenManager, eventManager, questmanager)
+    newManager = SaveManager(Knight, vars(), screenManager, eventManager, questmanager, npcManager)
     #cleanup()  # Gets rid of the save files created in the test
     assert newManager.saveNumber == 4  # Should still be 4

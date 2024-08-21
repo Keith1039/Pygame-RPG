@@ -38,7 +38,7 @@ def handle_basic_input(keys, knight): # This is just movement for left and right
         knight.aniTracker = 0
         knight.reset_max_animation_val()  # reset the max animation value
 
-def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, animationTracker3):
+def handle_player_interaction(keys, knight, saveManager, screenManager, npcManager, animationTracker3):
     if keys[game.K_UP]:
         for u in range(len(screenManager.interactables)):
             status = knight.fieldStatus
@@ -59,7 +59,7 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, NPCManag
 
     elif keys[game.K_l]:
         saveManager.quick_load()  # Needs to be error checked
-        NPCManager.get_NPCs(screenManager.context)
+        npcManager.get_NPCs(screenManager.context)
 
     elif keys[game.K_b]:
         # start a battle
@@ -83,7 +83,7 @@ def draw_objects(screen, screenManager, spot3):
     # In the future, this will be done automatically with Omni manager
 
 
-def change_screen(knight, screenManager, NPCManager):
+def change_screen(knight, screenManager, npcManager):
     min_x = 50
     max_x = 1350
     if knight.x > max_x or knight.x < min_x:
@@ -93,7 +93,7 @@ def change_screen(knight, screenManager, NPCManager):
 
         # You only change screens when the conditions are met, else you run in place
         if prev_screen != screenManager.screen:
-            NPCManager.get_NPCs(screenManager.context)
+            npcManager.get_NPCs(screenManager.context)
             if knight.x > max_x and prev_screen != screenManager.screen:
                 knight.x = min_x
             elif knight.x < min_x and prev_screen != screenManager.screen:
@@ -132,12 +132,13 @@ screenManager = managers.ScreenManager(tempScreen)
 dialogueManager = managers.DialogueManager(font, screen)
 questManager = managers.QuestManager(knight)
 eventManager = managers.EventManager(knight, dialogueManager, questManager)
-saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager)
+npcManager = Entity.NPCManager(knight)
+saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager, npcManager)
 itemManager = managers.ItemManager(knight)
 battleManager = Entity.BattleManager(knight, itemManager)
 UIManager = managers.UIManager(font, screen)
 UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager, itemManager)
-NPCManager = Entity.NPCManager(knight)
+
 
 
 eventManager.push_event("mockDialogue")
@@ -176,7 +177,7 @@ while True:
             # handles basic movement for the player character
             handle_basic_input(keys, knight)
             # handles the player interaction
-            animationTracker3 = handle_player_interaction(keys, knight, saveManager, screenManager, NPCManager, animationTracker3)
+            animationTracker3 = handle_player_interaction(keys, knight, saveManager, screenManager, npcManager, animationTracker3)
 
             # Draws the objects on the screen
             screen.blit(screenManager.screen, (0, 0))
@@ -188,14 +189,14 @@ while True:
             entityGroup.draw(screen)  # draw all the sprites
 
             # draw the rectangle around NPCs
-            # for sprite in NPCManager.NPCGroup.sprites():
+            # for sprite in npcManager.NPCGroup.sprites():
             #     game.draw.rect(screen, (150, 150, 150), sprite.rect)
 
-            NPCManager.NPCGroup.update()  # update sprites
-            NPCManager.NPCGroup.draw(screen)  # draw the NPCs
+            npcManager.NPCGroup.update()  # update sprites
+            npcManager.NPCGroup.draw(screen)  # draw the NPCs
 
-            collidingSprite = NPCManager.get_colliding()  # the NPC that the player can interact with
-            event = NPCManager.get_interaction_event(eventList)  # should only ever be one event at a time
+            collidingSprite = npcManager.get_colliding()  # the NPC that the player can interact with
+            event = npcManager.get_interaction_event(eventList)  # should only ever be one event at a time
             if event is not None:  # check if there is an event to push
                 eventManager.push_event(event)  # push the event
 
@@ -213,7 +214,7 @@ while True:
                 # Fine for now but this needs to be fixed
                 animationTracker3 += 1
 
-            change_screen(knight, screenManager, NPCManager)
+            change_screen(knight, screenManager, npcManager)
 
 
         elif battleManager.battleState[0]:

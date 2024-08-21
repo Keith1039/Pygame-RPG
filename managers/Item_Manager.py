@@ -1,4 +1,5 @@
 import json
+import Utils
 class ItemManager:
     def __init__(self, knight):
         itemsPath = "JSON/Items/Items.json"
@@ -11,16 +12,13 @@ class ItemManager:
         file3 = open(equipmentPath, "r")
         file4 = open(itemFusionPath, "r")
 
-        self.itemJson = json.load(file)
-        self.itemEffectJson = json.load(file2)
-        self.equipmentJson = json.load(file3)
-        self.itemFusionJson = json.load(file4)
+        self.itemJson = Utils.get_item_dict()
+        self.itemEffectJson = Utils.get_item_effect_dict()
+        self.equipmentJson = Utils.get_equipment_dict()
+        self.itemFusionJson = Utils.get_item_fusion_dict()
         self.knight = knight
 
-        file.close()
-        file2.close()
-        file3.close()
-        file4.close()
+
 
     def determine_limited(self, item):
         flag = False

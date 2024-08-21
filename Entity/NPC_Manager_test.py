@@ -24,11 +24,25 @@ def test_get_NPCs():
     flag2 = len(npcManager.NPCGroup.sprites()) == 1
     assert flag and flag2
 
+def test_save_and_empty():
+    npc = npcManager.NPCGroup.sprites()[0]
+    oldDialogue = npc.Dialogue.copy()  # the old dialogue of the NPC object
+    npc.Dialogue = ["newDialogue"]
+    npcManager.save_and_empty()  # save and empty the sprite
+    #print(npcManager.NPCDict)
+    flag = len(npcManager.NPCGroup.sprites()) == 0
+    npc = npcManager.create_NPC(npcName)  # creat the new NPC
+    npcManager.NPCGroup.add(npc)  # recreate the npc and add it back to the group
+    flag2 = npc.Dialogue == ["newDialogue"]   # check the dialogue
+    npc.Dialogue = oldDialogue  # set the dialogue back to the old one
+    assert flag and flag2
+
+
 def test_update_NPC():
     npcManager.update_NPC("NONAME", ["stuff", "stuff"])  # try to update an NPC that doesn't exist
     # check to see if no new sprites were added and that the sprite that is in the list doesn't match
-    flag = len(npcManager.NPCGroup.sprites()) == 1 and npcManager.NPCGroup.sprites()[0].Name == "Gossiper"
-    npcManager.update_NPC("Gossiper", ["testEvent2", "testEvent3"])
+    flag = len(npcManager.NPCGroup.sprites()) == 1 and npcManager.NPCGroup.sprites()[0].Name == "testNPC"
+    npcManager.update_NPC("testNPC", ["testEvent2", "testEvent3"])
     npc = npcManager.NPCGroup.sprites()[0]  # get the NPC
     flag2 = len(npc.Dialogue) == 3  # we ensure order is maintained on the NPC_test.py file
     assert flag and flag2

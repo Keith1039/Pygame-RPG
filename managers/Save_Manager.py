@@ -1,14 +1,16 @@
 from managers.Screen_Manager import ScreenManager
 from Entity.Knight import Knight
+from Entity.NPC_Manager import NPCManager
 import os, json
 class SaveManager:
-    def __init__(self, knight,  localVars, screenManager, eventManager, questManager, saveNumber=1):
+    def __init__(self, knight,  localVars, screenManager, eventManager, questManager, NPCManager, saveNumber=1):
         self.knight = knight
         self.localVars = localVars
         self.screenManager = screenManager
         self.saveNumber = saveNumber
         self.eventManager = eventManager
         self.questManager = questManager
+        self.NPCManager = NPCManager
         self.limit = 4
         # Makes the initial save file
         
@@ -96,8 +98,11 @@ class SaveManager:
             "enemiesKilled": self.questManager.enemiesKilled,
             "npcsInteractedWith": self.questManager.npcsInteractedWith
         }
+        self.NPCManager.save_and_empty()  # save current changes to the dictionary
+        self.NPCManager.get_NPCs(self.screenManager.context)  # get the NPCs back
         newerdict = {"Knight": knightDict, "questManager": questManagerDict, "rawVariables": rawVarsDict,
-                     "screenManager": screenManagerDict, "eventDict": self.eventManager.eventDict}
+                     "screenManager": screenManagerDict, "eventDict": self.eventManager.eventDict,
+                     "NPCDict": self.NPCManager.NPCDict}
         return newerdict
 
     def load_data(self, file):
@@ -109,6 +114,8 @@ class SaveManager:
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
+        self.NPCManager.NPCDict = fileInfo["NPCDict"]  # set the NPC dict
+        self.NPCManager.get_NPCs(self.screenManager.context)  # reset the NPCs
         self.eventManager.eventDict = fileInfo["eventDict"]
         # convert all lists to tuples in the dict
 

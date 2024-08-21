@@ -11,7 +11,9 @@ from managers.Item_Manager import ItemManager
 from managers.Equipment import Equipment
 from managers.Event_Manager import EventManager
 from managers.Quest_Manager import QuestManager
+from Utils import *
 from Entity.Knight import Knight
 from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move
 from Entity.Entity_Factory import EntityFactory
+from Entity.NPC_Manager import NPCManager
