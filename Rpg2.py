@@ -136,8 +136,8 @@ npcManager = Entity.NPCManager(knight)
 saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager, npcManager)
 itemManager = managers.ItemManager(knight)
 battleManager = Entity.BattleManager(knight, itemManager)
-UIManager = managers.UIManager(font, screen)
-UIHandler = managers.UIHandler(UIManager, saveManager, knight, vars(), battleManager, itemManager)
+uiManager = managers.UIManager(font, screen)
+uiHandler = managers.UIHandler(uiManager, saveManager, knight, vars(), battleManager, itemManager)
 
 
 
@@ -166,8 +166,8 @@ while True:
     keys = game.key.get_pressed()
     if start:
         screen.blit(screenManager.screen, (0, 0))
-        context, choice = UIManager.draw_UI(eventList)
-        UIHandler.handle_interaction(context, choice)
+        context, choice = uiManager.draw_UI(eventList)
+        uiHandler.handle_interaction(context, choice)
         if not start and choice == "Start Game":  # If it's not start game then context was already changed
             screenManager.change_context("Background1")
     else:
@@ -238,10 +238,10 @@ while True:
                 if len(battleManager.turnOrder) == 0:
                     battleManager.reset_turn_order()
                 if battleManager.turnOrder[0] == knight:
-                    if UIManager.UI is None:
-                        UIManager.change_UI("Player Select")  # Change the UI to the proper UI
-                    context, choice = UIManager.draw_UI(eventList)
-                    UIHandler.handle_interaction(context, choice)
+                    if uiManager.UI is None:
+                        uiManager.change_UI("Player Select")  # Change the UI to the proper UI
+                    context, choice = uiManager.draw_UI(eventList)
+                    uiHandler.handle_interaction(context, choice)
                     # See if the move selected is a valid move
                     if battleManager.moveDict.get(choice) is not None or itemManager.itemJson.get(choice) is not None:
                         buffered_move = choice  # set the buffered move
@@ -256,13 +256,13 @@ while True:
                             for i in range(battleManager.targetNum):
                                 targets.append(choice)
                         if len(targets) == battleManager.targetNum:  # check if we should leave targeting screen
-                            UIManager.change_UI(None)
+                            uiManager.change_UI(None)
                 returnable_strings, refresh = battleManager.do_one_turn(buffered_move, targets)
                 if refresh:
-                    UIManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
-                    UIManager.subMenuMaxIndex = len(UIManager.subMenuItems) - 1
-                    if UIManager.subMenuSlider >= len(UIManager.subMenuItems) and len(UIManager.subMenuItems) != 0:
-                        UIManager.subMenuSlider -= 1  # move slider back by 1
+                    uiManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
+                    uiManager.subMenuMaxIndex = len(uiManager.subMenuItems) - 1
+                    if uiManager.subMenuSlider >= len(uiManager.subMenuItems) and len(uiManager.subMenuItems) != 0:
+                        uiManager.subMenuSlider -= 1  # move slider back by 1
                 if len(returnable_strings) != 0:
                     # load the event strings into the dialogue list
                     dialogueManager.load_dialogue_list(returnable_strings)
@@ -286,7 +286,7 @@ while True:
                 # send them back to the start menu and reset their player character?
                 pass
             battleManager.battleState = (False, "")
-        UIManager.draw_health_bar(knight)
+        uiManager.draw_health_bar(knight)
         display_frame_rate(font, screen)
     game.display.update()
     clock.tick(60)
