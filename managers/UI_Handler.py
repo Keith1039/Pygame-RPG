@@ -27,9 +27,9 @@ vars_related_context = jsonInfo.get("vars_related_context")
 battle_related_context = jsonInfo.get("battle_related_context")
 class UIHandler():
     # The things UIHandler will need access to for user input
-    def __init__(self, UIManager, SaveManager, knight, localVars, battleManager, itemManager):
+    def __init__(self, uiManager, SaveManager, knight, localVars, battleManager, itemManager):
         # Dialogue Manager might have to be here too
-        self.UIManager = UIManager  # For changing the UI
+        self.uiManager = uiManager  # For changing the UI
         self.saveManager = SaveManager  # For saving and loading on UI
         self.knight = knight  # For access to inventory as well as battle interaction
         self.localVars = localVars  # For manipulating variables from player interaction
@@ -41,26 +41,26 @@ class UIHandler():
     def handle_interaction(self, context, choice):
         # submenu for battle
         if context == "Player Select" and choice in submenu_choice:
-            self.UIManager.subMenu = True
+            self.uiManager.subMenu = True
             if choice == "Skills":
                 # Get all the skills except for the first one ("Attack")
-                self.UIManager.subMenuItems = self.knight.moveList[1:]
+                self.uiManager.subMenuItems = self.knight.moveList[1:]
             elif choice == "Switch Stance":
-                self.UIManager.subMenuItems = ["Power", "Defensive", "Nimble",
+                self.uiManager.subMenuItems = ["Power", "Defensive", "Nimble",
                                                 "Power", "Defensive", "Nimble",
                                                 "Power", "Defensive", "Nimble",
                                                 "Power"]
 
             elif choice == "Items":
                 inventory = self.itemManager.get_usable_items()
-                self.UIManager.subMenuItems = inventory
+                self.uiManager.subMenuItems = inventory
 
         elif context is not None and choice is not None:
             #print(context)
             #print(choice)
             #print("..........................................")
             if [context, choice] in ui_related_context:
-                self.UIManager.change_UI(choice)  # Just change to the new UI
+                self.uiManager.change_UI(choice)  # Just change to the new UI
 
             elif context.find("(S)") != -1 or choice == "Attack":
                 if choice in stances:
@@ -84,9 +84,9 @@ class UIHandler():
                     else:
                         # add enemies to the list of targets
                         targetable = self.battleManager.get_enemy_positions()
-                    self.UIManager.targets = targetable
-                    self.UIManager.targetSlider = 0
-                    self.UIManager.change_UI("Select Target")
+                    self.uiManager.targets = targetable
+                    self.uiManager.targetSlider = 0
+                    self.uiManager.change_UI("Select Target")
 
 
                 # this is an attack of some sort
@@ -95,9 +95,9 @@ class UIHandler():
                     # Only go to targeting if the move can be used, if not the move cannot be selected
                     if self.battleManager.parse_restriction(self.knight, moveInfo) \
                             and self.knight.Mp >= moveInfo["Cost"]:
-                        self.UIManager.targets = self.battleManager.get_enemy_positions()
-                        self.UIManager.targetSlider = 0
-                        self.UIManager.change_UI("Select Target")
+                        self.uiManager.targets = self.battleManager.get_enemy_positions()
+                        self.uiManager.targetSlider = 0
+                        self.uiManager.change_UI("Select Target")
 
             elif context in save_related_context:
                 slot = choice.find("#")       # Finds the # character because the number is always next to it
@@ -109,7 +109,7 @@ class UIHandler():
                     if os.path.isfile(filePath):
                         self.saveManager.load(slot)
                         self.localVars.update({"start": False})  # Leave the Start screen (probably a better way for this)
-                        self.UIManager.change_UI(None)  # Clear UI
+                        self.uiManager.change_UI(None)  # Clear UI
                 # self.saveManager
                 pass
             elif context in knight_related_context:
@@ -122,7 +122,7 @@ class UIHandler():
                 # There's got to be a better way of dealing with this
                 if context == "Start" and choice == "Start Game":
                     self.localVars.update({"start": False})
-                    self.UIManager.change_UI(None)  # Clear UI
+                    self.uiManager.change_UI(None)  # Clear UI
                 elif context == "Start" and choice == "Continue":
                     slot = self.saveManager.saveNumber
                     # Implement a check to see if save has been tampered with for all save file loads
@@ -130,5 +130,5 @@ class UIHandler():
                     if flag:
                         self.saveManager.quick_load()  # Load the file
                         self.localVars.update({"start": False})  # Leave the Start screen
-                        self.UIManager.change_UI(None)  # Clear UI
+                        self.uiManager.change_UI(None)  # Clear UI
                     pass
