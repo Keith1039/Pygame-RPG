@@ -1,5 +1,5 @@
 import random
-import json
+import Utils
 
 from Entity.Move import Move
 
@@ -7,8 +7,8 @@ class BattleManager:
     def __init__(self, knight, itemManager):
         # First value in tuple is whether there's a battle going on, second value is the victor
         self.battleState = (False, "")
-        self.moveDict = get_move_dict()  # fills up the move dictionary
-        self.statusDict = get_status_dict()  # retrieves the effect information
+        self.moveDict = Utils.get_move_dict()  # fills up the move dictionary
+        self.statusDict = Utils.get_status_dict()  # retrieves the effect information
         self.hero = knight
         self.itemManager = itemManager
         self.targetNum = -1  # the amount of targets that need to be selected
@@ -422,17 +422,3 @@ class BattleManager:
         d = self.get_enemy_objects()
         for i in range(len(d)):
             d[i].print_status()
-
-def get_move_dict():
-    # Loads the move dictionary from a file
-    file = open("JSON/Moves/Complete_Move_List.json", "r")
-    jsonInfo = json.load(file)
-    file.close()
-    return jsonInfo
-
-def get_status_dict():
-    # loads the status dictionary from a file
-    file = open("JSON/Status/Status.json", "r")
-    jsonInfo = json.load(file)
-    file.close()
-    return jsonInfo

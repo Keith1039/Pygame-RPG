@@ -1,9 +1,8 @@
-import json
+import Utils
 from managers.Equipment import Equipment
 from managers import Knight
-file = open("JSON/Items/Equipment.json", "r")
-equipmentJson = json.load(file)  # dict with all equipment info
-file.close()
+
+equipmentJson = Utils.get_equipment_dict()  # dict with all equipment info
 
 knight = Knight()
 rustyDagger = Equipment("Rusty Dagger", equipmentJson["Rusty Dagger"])

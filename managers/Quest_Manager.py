@@ -1,7 +1,7 @@
-import json
+import Utils
 class QuestManager:
     def __init__(self, knight):
-        self.questDict = get_quest_dict()
+        self.questDict = Utils.get_quest_dict()
         self.knight = knight  # reference to the knight object
         self.activeQuests = []  # a list of quests the player is engaging in
         self.completedQuests = []  # a list of quests completed by the player

@@ -1,9 +1,9 @@
 from Entity.NPC import NPC
-import json
+import Utils
 
-file = open("JSON/NPCs/NPCs.json", "r")
-npc = NPC(json.load(file)["testNPC"])
-file.close()
+jsonInfo = Utils.get_NPC_dict()
+npc = NPC(jsonInfo["testNPC"])
+
 
 def test_update():
     npc.update()  # update the sprite

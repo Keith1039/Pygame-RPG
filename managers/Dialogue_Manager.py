@@ -4,7 +4,7 @@ import os
 text_dict = {False: game.image.load("portraits/text_box.png"), True: game.image.load("portraits/text_box_L.png")}
 # Portrait dict takes in a name and then gets the portrait
 portraitLocation = "portraits/"
-portrait_dict = {"Knight": game.image.load("portraits/Knight.png"), "Rion": game.image.load("portraits/Knight.png")}
+
 class DialogueManager:
     def __init__(self, font, screen):
         self.name = ""  # name of the character

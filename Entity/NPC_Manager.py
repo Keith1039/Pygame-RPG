@@ -1,11 +1,12 @@
+import Utils
 from Entity.NPC import NPC
 import pygame as game
-import json
+
 
 class NPCManager:
 
     def __init__(self, knight):
-        self.NPCDict = get_NPC_dict()  # reference to the dictionary of NPCs
+        self.NPCDict = Utils.get_NPC_dict()  # reference to the dictionary of NPCs
         self.NPCGroup = game.sprite.Group()  # NPC group for the sprites
         self.knight = knight  # reference to the knight object
         #self.eventManager = eventManager  # reference to the event manager
@@ -15,8 +16,14 @@ class NPCManager:
         # the list of NPCs
         return NPC(self.NPCDict[name])  # return an NPC object
 
-    def get_NPCs(self, context):
+    def save_and_empty(self):
+        # saves the changed NPC information and then empties the Sprite Group
+        for sprite in self.NPCGroup.sprites():
+            self.NPCDict[sprite.Name]["Dialogue"] = sprite.Dialogue  # update the dialogue list
         self.NPCGroup.empty()  # remove all sprites from the group
+
+    def get_NPCs(self, context):
+        self.save_and_empty()
         npcList = []  # a list of NPCs to be added
         for key, NPCDict in self.NPCDict.items():  # loop through the npc dictionary
             NPCContext = NPCDict["Context"]  # get the context for that key
@@ -49,11 +56,3 @@ class NPCManager:
                     if event.key == game.K_UP:  # check if they're pressing the up key
                         return colliding.get_event_key()  # return the event key
         return None  # return nothing
-
-
-
-def get_NPC_dict():
-    file = open("JSON/NPCs/NPCs.json", "r")  # open the file
-    jsonInfo = json.load(file)  # load the file
-    file.close()  # close the file
-    return jsonInfo  # return JSON dict

@@ -1,7 +1,7 @@
 {
    "testNPC": {
-      "Name": "Gossiper",
-      "Sprite": "NPC_Sprites/Gossiper/",
+      "Name": "testNPC",
+      "Sprite": "NPC_Sprites/testNPC/",
       "Scale": [300, 300],
       "Dialogue": ["testEvent"],
       "Context": "test",
