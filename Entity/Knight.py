@@ -50,7 +50,7 @@ class Knight(Entity):
             elif (self.aniTracker // 10) + 1 > self.maxAniVal:
                 self.aniTracker = 0  # reset animation timer
                 update = True  # indicate that an update is needed
-            elif (self.aniTracker // 10) + 1 < self.maxAniVal:
+            elif (self.aniTracker // 10) + 1 <= self.maxAniVal:
                 update = True  # indicate that an update is needed
             if update:
                 self.set_image_and_rect()  # sets the image and the rectangle

@@ -34,4 +34,26 @@ def get_item_fusion_dict():
 def get_equipment_dict():
     return get_json_from_file_path("JSON/Items/Equipment.json")
 
+def get_object_def_dict():
+    return get_json_from_file_path("JSON/Objects/Object_def.json")
+
+def get_object_dict():
+    return get_json_from_file_path("JSON/Objects/Objects.json")
+
+def get_complete_object_dict():
+    completeDict = {}
+    objectDict = get_object_dict()
+    objectDefDict = get_object_def_dict()
+    for key, jsonInfo in objectDict.items():
+        objectDefInfo = objectDefDict[jsonInfo["Object Type"]]
+        jsonInfo.update(objectDefInfo)
+        jsonInfo.update({
+            "aniStatus": "Idle",
+            "aniTracker": 0
+        })
+        completeDict.update({key: jsonInfo})
+    return completeDict
+
+
+
 

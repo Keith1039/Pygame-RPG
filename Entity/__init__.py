@@ -7,6 +7,8 @@ from Entity.Move import *
 from Entity.Battle_Manager import BattleManager
 from Entity.NPC import NPC
 from Entity.NPC_Manager import NPCManager
+from Entity.Object import Object
+from Entity.Object_Manager import ObjectManager
 from Utils.Getters import *
 from managers.UI_Manager import UIManager
 from managers.UI_Handler import UIHandler

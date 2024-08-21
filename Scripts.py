@@ -277,11 +277,43 @@ if __name__ == "__main__":
         npcDict.update({
             arg2: {
                 "Name": arg2,
-                "Sprite": "NPC_Sprites/" + arg2 + "/",
+                "Sprite": "Object_Sprites/" + arg2 + "/",
                 "Scale": [],
                 "Dialogue": [],
                 "Context": "",
                 "Pos": []
+            }
+        })
+        file = open(path, "w")
+        json.dump(npcDict, file, indent=3)
+        file.close()
+
+    elif arg == "add-object":
+        arg2 = sys.argv[2]  # There will a second argument with this
+        path = "JSON/Objects/Objects.json"
+        npcDict = Utils.get_object_dict()
+        npcDict.update({
+            arg2: {
+                "Name": arg2,
+                "Object Type": "",
+                "Flipped": False,
+                "Context": "",
+                "Pos": [],
+                "Events": []
+            }
+        })
+        file = open(path, "w")
+        json.dump(npcDict, file, indent=3)
+        file.close()
+
+    elif arg == "add-object-def":
+        arg2 = sys.argv[2]  # There will a second argument with this
+        path = "JSON/Objects/Object_def.json"
+        npcDict = Utils.get_object_def_dict()
+        npcDict.update({
+            arg2: {
+                "Sprite": "NPC_Sprites/" + arg2 + "/",
+                "Scale": []
             }
         })
         file = open(path, "w")

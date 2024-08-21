@@ -1,0 +1,18 @@
+{
+   "testObject": {
+      "Name": "testObject",
+      "Object Type": "Treasure_Chest",
+      "Flipped": false,
+      "Context": "test",
+      "Pos": [500, 500],
+      "Events": ["testEvent"]
+   },
+   "chest1": {
+      "Name": "chest1",
+      "Object Type": "Treasure_Chest",
+      "Flipped": true,
+      "Context": "Background1",
+      "Pos": [1000, 700],
+      "Events": []
+   }
+}
