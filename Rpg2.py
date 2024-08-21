@@ -38,23 +38,8 @@ def handle_basic_input(keys, knight): # This is just movement for left and right
         knight.aniTracker = 0
         knight.reset_max_animation_val()  # reset the max animation value
 
-def handle_player_interaction(keys, knight, saveManager, screenManager, npcManager, animationTracker3):
-    if keys[game.K_UP]:
-        for u in range(len(screenManager.interactables)):
-            status = knight.fieldStatus
-            interactable = interactables[u]
-            if interactable["Event Type"] == "Chest":
-                screenManager.objectAni.change_tuple(knight, interactable)
-                if status != knight.fieldStatus:
-                    # resetting animationTracker
-                    animationTracker3 = 0
-
-            screenManager.objectAni.change_tuple(knight, interactable)
-            if status != knight.fieldStatus:
-                # resetting animationTracker
-                animationTracker3 = 0
-
-    elif keys[game.K_s]:
+def handle_player_interaction(keys, knight, saveManager, screenManager, npcManager):
+    if keys[game.K_s]:
         saveManager.quick_save()  # Needs to be error checked
 
     elif keys[game.K_l]:
@@ -69,18 +54,8 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, npcManag
         knight.Inventory.update({"Potion": 2})  # add a potion
         knight.Inventory.update({"Bomb": 1})  # add a bomb
         battleManager.battleState = (True, "")
-    return animationTracker3
 
-def draw_objects(screen, screenManager, spot3):
-    for f in range(0, len(screenManager.objects), 2):
-        appendable3 = "(" + str(spot3 + 1) + ").png"
-        if screenManager.objects[f + 1]:
-            tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1] + appendable3)
 
-        else:
-            tmpSurface = game.image.load(screenManager.objectAni.aniTuple[1])
-        screen.blit(tmpSurface, screenManager.objects[f])
-    # In the future, this will be done automatically with Omni manager
 
 
 def change_screen(knight, screenManager, npcManager):
@@ -94,6 +69,7 @@ def change_screen(knight, screenManager, npcManager):
         # You only change screens when the conditions are met, else you run in place
         if prev_screen != screenManager.screen:
             npcManager.get_NPCs(screenManager.context)
+            objectManager.get_objects(screenManager.context)
             if knight.x > max_x and prev_screen != screenManager.screen:
                 knight.x = min_x
             elif knight.x < min_x and prev_screen != screenManager.screen:
@@ -119,7 +95,7 @@ knight.moveList.append("Double Slash")
 # Think I'll go for the 1422 x 800 route from now on
 tempScreen = game.image.load("Background_Art/gothic_chapel_portfolio_1422x800.png")
 
-animationTracker3 = 0
+
 
 start = True
 
@@ -133,11 +109,13 @@ dialogueManager = managers.DialogueManager(font, screen)
 questManager = managers.QuestManager(knight)
 eventManager = managers.EventManager(knight, dialogueManager, questManager)
 npcManager = Entity.NPCManager(knight)
+objectManager = Entity.ObjectManager(knight)
 saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager, npcManager)
 itemManager = managers.ItemManager(knight)
 battleManager = Entity.BattleManager(knight, itemManager)
 uiManager = managers.UIManager(font, screen)
 uiHandler = managers.UIHandler(uiManager, saveManager, knight, vars(), battleManager, itemManager)
+
 
 
 
@@ -151,7 +129,6 @@ entityGroup = game.sprite.Group(knight)  # make a sprite group
 
 screenManager.change_context("Start")
 while True:
-    spot3 = animationTracker3 // 10
     if knight.fieldStatus == "Dead":
         knight.aniStatus = "Dead"
 
@@ -170,6 +147,8 @@ while True:
         uiHandler.handle_interaction(context, choice)
         if not start and choice == "Start Game":  # If it's not start game then context was already changed
             screenManager.change_context("Background1")
+            npcManager.get_NPCs(screenManager.context)  # get NPCs for this context
+            objectManager.get_objects(screenManager.context)  # get objects for this context change
     else:
         eventManager.process_events(screenManager.context)  # process any outstanding events before the game code
         # Determines players overworld movement
@@ -177,11 +156,16 @@ while True:
             # handles basic movement for the player character
             handle_basic_input(keys, knight)
             # handles the player interaction
-            animationTracker3 = handle_player_interaction(keys, knight, saveManager, screenManager, npcManager, animationTracker3)
+            handle_player_interaction(keys, knight, saveManager, screenManager, npcManager)
 
             # Draws the objects on the screen
             screen.blit(screenManager.screen, (0, 0))
-            draw_objects(screen, screenManager, spot3)
+
+            # draw the rectangle around objects
+            # for sprite in objectManager.objectGroup.sprites():
+            #     game.draw.rect(screen, (150, 150, 150), sprite.rect)
+            objectManager.objectGroup.update()  # update object sprites
+            objectManager.objectGroup.draw(screen)  # draw the sprites
 
             # draw the rectangle behind Knight
             # game.draw.rect(screen, (255, 0, 0), knight.rect)
@@ -200,19 +184,16 @@ while True:
             if event is not None:  # check if there is an event to push
                 eventManager.push_event(event)  # push the event
 
+            # collidingObject = objectManager.get_colliding()  # the object the player is colliding with
+            event = objectManager.get_interaction_event(eventList)  # should only ever be one event at a time
+            if event is not None:  # check if there's an event to push
+                eventManager.push_event(event)  # push the vent
+
             # Code for testing the dialogueManager
             if dialogueManager.event is None and len(dialogueManager.nextEvents) > 0:
                 dialogueManager.get_new_text()  # queue up the next event
             if dialogueManager.event is not None:
                 dialogueManager.draw_dialogue(eventList)  # draw the dialogue
-
-            # Animation tracker3 is for objects like chests and arrows
-            if len(screenManager.objectAni.aniTuple) != 0 and animationTracker3 == (10 * screenManager.objectAni.aniTuple[0] - 1):
-                knight.fieldStatus = "Normal"
-
-            elif knight.fieldStatus != "Normal" and knight.fieldStatus != "Dead":
-                # Fine for now but this needs to be fixed
-                animationTracker3 += 1
 
             change_screen(knight, screenManager, npcManager)
 

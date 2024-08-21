@@ -85,5 +85,15 @@
       "Quest": "",
       "Context": "",
       "Items Gained": {}
+   },
+   "chestEmpty": {
+      "Range": [],
+      "Event Type": "Dialogue",
+      "Activated": false,
+      "Repeatable": false,
+      "Dialogue Path": "event_text/chestEmpty.txt",
+      "Quest": "",
+      "Context": "",
+      "Items Gained": {}
    }
 }

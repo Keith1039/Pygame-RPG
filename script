@@ -88,6 +88,17 @@ case $args in
       do mv "$i" NPC_SPRITES/"$args2"/"$args2"_"$args3"_"$num".png
       num=$((num + 1))
     done
+  ;;
+
+  add-object-def)
+    python scripts.py add-object-def "$args2"
+    mkdir Object_Sprites/"$args2"
+  ;;
+
+  add-object)
+    python scripts.py add-object "$args2"
+  ;;
+
 
 
 esac
