@@ -4,11 +4,13 @@ from managers import ScreenManager
 from managers import DialogueManager
 from managers import EventManager
 from managers import QuestManager
+from Entity.NPC_Manager import NPCManager
 import pygame as game
 from Entity.Knight import Knight
 import sys
 import json
 import os
+import Utils
 
 if __name__ == "__main__":
     arg = sys.argv[1]
@@ -20,9 +22,10 @@ if __name__ == "__main__":
         screenManager = ScreenManager(screen)
         knight = Knight()
         dialogueManager = DialogueManager(font, screen)
-        eventManager = EventManager(knight, dialogueManager)
         questManager = QuestManager(knight)
-        saveManager = SaveManager(knight, vars(), screenManager, eventManager, questManager)
+        eventManager = EventManager(knight, dialogueManager, questManager)
+        npcManager = NPCManager(knight)
+        saveManager = SaveManager(knight, vars(), screenManager, eventManager, questManager, knight)
         for i in range(4):
             saveManager.save(i+1)
         game.quit()
@@ -58,11 +61,9 @@ if __name__ == "__main__":
     elif arg == "create-move":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Moves/Complete_Move_List.json"
-        file = open(path, "r")
-        jsonInfo = json.load(file)
-        file.close()
+        moveDict = Utils.get_move_dict()
         file = open(path, "w")
-        jsonInfo.update({
+        moveDict.update({
             arg2: {
                 "Damage Calculation": "",
                 "Type": "",
@@ -76,17 +77,15 @@ if __name__ == "__main__":
                 "Description": ""
             }
         })
-        json.dump(jsonInfo, file, indent=3)
+        json.dump(moveDict, file, indent=3)
         file.close()
 
     elif arg == "create-item":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Items/Items.json"
-        file = open(path, "r")
-        jsonInfo = json.load(file)
-        file.close()
+        itemDict = Utils.get_item_dict()
         file = open(path, "w")
-        jsonInfo.update({
+        itemDict.update({
             arg2: {
                 "Type": "Consumable",
                 "Effect": False,
@@ -98,43 +97,33 @@ if __name__ == "__main__":
                 "Description": ""
             }
         })
-        json.dump(jsonInfo, file, indent=3)
+        json.dump(itemDict, file, indent=3)
         file.close()
 
     elif arg == "create-effects":
-        path = "JSON/Items/Items.json"
-        path2 = "JSON/Items/Item_Effects.json"
-        file = open(path, "r")
-        file2 = open(path2, "r")
-        jsonInfo = json.load(file)
-        newJsonInfo = json.load(file2)
-        file.close()
-        file2.close()
-        file = open(path2, "w")
-        for item, itemInfo in jsonInfo.items():
-            if itemInfo["Effect"] and newJsonInfo.get(item) is None:
-                newJsonInfo.update({
+        path = "JSON/Items/Item_Effects.json"
+        itemDict = Utils.get_item_dict()
+        itemEffectDict = Utils.get_item_effect_dict()
+        file = open(path, "w")
+        for item, itemInfo in itemDict.items():
+            if itemInfo["Effect"] and itemEffectDict.get(item) is None:
+                itemEffectDict.update({
                     item: {
                         "Target": "",
                         "Effect": ""
                     }
                 })
-        json.dump(newJsonInfo, file, indent=3)
+        json.dump(itemEffectDict, file, indent=3)
         file.close()
 
     elif arg == "create-equipment":
-        path = "JSON/Items/Items.json"
-        path2 = "JSON/Items/Equipment.json"
-        file = open(path, "r")
-        file2 = open(path2, "r")
-        jsonInfo = json.load(file)
-        newJsonInfo = json.load(file2)
-        file.close()
-        file2.close()
-        file = open(path2, "w")
-        for item, itemInfo in jsonInfo.items():
-            if itemInfo["Type"] == "Equipment" and newJsonInfo.get(item) is None:
-                newJsonInfo.update({
+        path = "JSON/Items/Equipment.json"
+        itemDict = Utils.get_item_dict()
+        equipmentDict = Utils.get_equipment_dict()
+        file = open(path, "w")
+        for item, itemInfo in itemDict.items():
+            if itemInfo["Type"] == "Equipment" and equipmentDict.get(item) is None:
+                equipmentDict.update({
                     item: {
                         "Attribute": None,
                         "Type": "",
@@ -147,51 +136,40 @@ if __name__ == "__main__":
                         "Movelist": []
                     }
                 })
-        json.dump(newJsonInfo, file, indent=3)
+        json.dump(equipmentDict, file, indent=3)
         file.close()
 
     elif arg == "create-fusions":
-        path = "JSON/Items/Items.json"
-        path2 = "JSON/Items/Item_Fusion.json"
-        file = open(path, "r")
-        file2 = open(path2, "r")
-        jsonInfo = json.load(file)
-        fusionJson = json.load(file2)
-        file.close()
-        file2.close()
-        file = open(path2, "w")
-        for item, itemInfo in jsonInfo.items():
-            if fusionJson.get(item) is None and itemInfo["Fusion"]:
-                fusionJson.update({item: [[""], [""]]})
-        json.dump(fusionJson, file, indent=3)
+        path = "JSON/Items/Item_Fusion.json"
+        itemDict = Utils.get_item_dict()
+        fusionDict = Utils.get_item_fusion_dict()
+        file = open(path, "w")
+        for item, itemInfo in itemDict.items():
+            if fusionDict.get(item) is None and itemInfo["Fusion"]:
+                fusionDict.update({item: [[""], [""]]})
+        json.dump(fusionDict, file, indent=3)
         file.close()
 
     elif arg == "validate-fusions":
-        path = "JSON/Items/Items.json"
-        path2 = "JSON/Items/Item_Fusion.json"
-        file = open(path, "r")
-        file2 = open(path2, "r")
-        jsonInfo = json.load(file)
-        fusionJson = json.load(file2)
-        file.close()
-        file2.close()
+        itemDict = Utils.get_item_dict()
+        fusionsDict = Utils.get_item_fusion_dict()
         wrongKeys = []
         wrongMaterials = []
         wrongMaterialsPair = {}
 
-        for item, fusionItems in fusionJson.items():
-            if jsonInfo.get(item) is None:
+        for item, fusionItems in fusionsDict.items():
+            if itemDict.get(item) is None:
                 wrongKeys.append(item)  # this item doesn't exist in the items dict
             else:
                 materialsA = fusionItems[0]
                 materialsB = fusionItems[1]
                 for i in range(len(materialsA)):
                     material = materialsA[i]
-                    if jsonInfo.get(material) is None:
+                    if itemDict.get(material) is None:
                         wrongMaterials.append(material)
                 for i in range(len(materialsB)):
                     material = materialsB[i]
-                    if jsonInfo.get(material) is None:
+                    if itemDict.get(material) is None:
                         wrongMaterials.append(material)
                 if len(wrongMaterials) != 0:
                     wrongMaterialsPair.update({item: tuple(wrongMaterials)})
@@ -216,27 +194,23 @@ if __name__ == "__main__":
 
     elif arg == "fix-item-effects":
         path = "JSON/Items/Item_Effects.json"
-        file = open(path, "r")
-        effectJson = json.load(file)
-        file.close()
-        for item, effect in effectJson.items():
+        itemEffectsDict = Utils.get_item_effect_dict()
+        for item, effect in itemEffectsDict.items():
             templateDict = {
                 "Target": "",
                 "AOE": False,
                 "Effect": effect
             }
-            effectJson.update({item: templateDict})
+            itemEffectsDict.update({item: templateDict})
         file = open(path, "w")
-        json.dump(effectJson, file, indent=3)
+        json.dump(itemEffectsDict, file, indent=3)
         file.close()
 
     elif arg == "add-status":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Status/Status.json"
-        file = open(path, "r")
-        statusJSON = json.load(file)
-        file.close()
-        statusJSON.update({
+        statusDict = Utils.get_status_dict()
+        statusDict.update({
                 arg2: {
                     "maxCount": 0,
                     "Effect": "",
@@ -244,16 +218,14 @@ if __name__ == "__main__":
                 }
             })
         file = open(path, "w")
-        json.dump(statusJSON, file, indent=3)
+        json.dump(statusDict, file, indent=3)
         file.close()
 
     elif arg == "add-event":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Events/Events.json"
-        file = open(path, "r")
-        statusJSON = json.load(file)
-        file.close()
-        statusJSON.update({
+        eventDict = Utils.get_event_dict()
+        eventDict.update({
             arg2: {
                 "Range": [],
                 "Event Type": "",
@@ -268,16 +240,14 @@ if __name__ == "__main__":
             }
         })
         file = open(path, "w")
-        json.dump(statusJSON, file, indent=3)
+        json.dump(eventDict, file, indent=3)
         file.close()
 
     elif arg == "add-quest":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Quests/Quests.json"
-        file = open(path, "r")
-        statusJSON = json.load(file)
-        file.close()
-        statusJSON.update({
+        questDict = Utils.get_quest_dict()
+        questDict.update({
             arg2: {
                 "Quest Type": "",
                 "Next Quest": "",
@@ -297,16 +267,14 @@ if __name__ == "__main__":
             }
         })
         file = open(path, "w")
-        json.dump(statusJSON, file, indent=3)
+        json.dump(questDict, file, indent=3)
         file.close()
 
     elif arg == "add-NPC":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/NPCs/NPCs.json"
-        file = open(path, "r")
-        statusJSON = json.load(file)
-        file.close()
-        statusJSON.update({
+        npcDict = Utils.get_NPC_dict()
+        npcDict.update({
             arg2: {
                 "Name": arg2,
                 "Sprite": "NPC_Sprites/" + arg2 + "/",
@@ -317,9 +285,5 @@ if __name__ == "__main__":
             }
         })
         file = open(path, "w")
-        json.dump(statusJSON, file, indent=3)
+        json.dump(npcDict, file, indent=3)
         file.close()
-
-        #add - NPC
-
-
