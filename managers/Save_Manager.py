@@ -61,6 +61,8 @@ class SaveManager:
         # Animation trackers are saved because removing them might cause a weird edge case
         allowed = ["animationTracker", "animationTracker2", "animationTracker3", "gameState"]
         rawVarsDict = {}  # The raw values I need for the game (stuff in allowed)
+        if (self.knight.aniTracker // 10 + 1) > self.knight.maxAniVal:  # check to see if Knight has an illegal value
+            self.knight.update(True)  # force the update
         knightDict = {
             "fieldStatus": self.knight.fieldStatus,
             "aniStatus": self.knight.aniStatus,

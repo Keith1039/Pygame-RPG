@@ -18,10 +18,13 @@ def test_create_object():
 def test_save_and_empty():
     obj = objectManager.create_object("testObject")  # create a test object
     obj.Events = []  # set it to an empty list
+    # make it so that it's past the limit but doesn't trigger the interval normally
+    obj.aniTracker = obj.maxAniVal * 10 + 1
     objectManager.objectGroup.add(obj)  # add the object to the group
     objectManager.save_and_empty()  # save and empty the changes
     obj = objectManager.create_object("testObject")  # create a test object
-    assert obj.Events == []  # check to see if the change stayed
+    # aniTracker is 0 because it isn't opening, otherwise it would be -1
+    assert obj.Events == [] and obj.aniTracker == 0  # check to see if the changes stayed
 
 def test_get_objects():
     objectManager.get_objects("INVALID")  # give in a context that makes no sense

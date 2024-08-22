@@ -31,12 +31,17 @@ class NPC(game.sprite.Sprite):
         self.rect.center = self.Pos  # set the new pos
 
     # simpler version of the Entity update function
-    def update(self):
+    def update(self, force=False):
         self.aniTracker += 1  # increment the tracker
-        if self.aniTracker % 10 == 0:  # every 10 frames we shift the animation
+        if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or when we force it
+            update = False
             if (self.aniTracker // 10) + 1 > self.maxAniVal:
                 self.aniTracker = 0  # reset animation timer
-            self.set_image_and_rect()  # if the above condition is triggered we know an update is going to happen
+                update = True  # indicate that an update is needed
+            elif (self.aniTracker // 10) + 1 <= self.maxAniVal:
+                update = True  # indicate that an update is needed
+            if update:  # check if we need to update
+                self.set_image_and_rect()  # if the above condition is triggered we know an update is going to happen
 
     def add_event_keys(self, events):
         self.Dialogue += events  # add the events to the NPCs dialogue queue

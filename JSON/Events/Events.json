@@ -90,7 +90,7 @@
       "Range": [],
       "Event Type": "Dialogue",
       "Activated": false,
-      "Repeatable": false,
+      "Repeatable": true,
       "Dialogue Path": "event_text/chestEmpty.txt",
       "Quest": "",
       "Context": "",

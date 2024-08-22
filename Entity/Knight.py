@@ -32,7 +32,10 @@ class Knight(Entity):
         }
 
     def set_image_and_rect(self):
-        filePath = self.Sprite + "Knight_" + self.aniStatus + "_" + str((self.aniTracker // 10) + 1) + ".png"
+        spot = str((self.aniTracker // 10) + 1)  # the frame of the animation
+        if self.aniTracker == -1:  # check if we have a -1
+            spot = str(self.maxAniVal)  # set the spot to the max
+        filePath = self.Sprite + self.Name + "_" + self.aniStatus + "_" + spot + ".png"  # create the file path
         self.image = game.image.load(filePath)  # load the new image
         if self.flipped:  # if the run is to be flipped
             self.image = game.transform.flip(self.image, True, False)  # flip across y axis
@@ -40,13 +43,14 @@ class Knight(Entity):
         self.rect = self.image.get_rect()  # get the new rectangle
         self.rect.center = (self.x, self.y)  # center the rectangle to the players coordinates
 
-    def update(self):
+    def update(self, force=False):
         # this behavior is for overworld behavior
-        self.aniTracker += 1  # increment the tracker
-        if self.aniTracker % 10 == 0:  # every 10 frames we shift the animation
+        if self.aniTracker != -1:  # -1 means that the animation is stuck for it
+            self.aniTracker += 1  # increment the tracker
+        if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or if we force it
             update = False  # indicator for if an update is needed
             if (self.aniTracker // 10) + 1 > self.maxAniVal and self.aniStatus == "Death":
-                self.aniTracker = self.maxAniVal * 10  # set it to the max value
+                self.aniTracker = -1  # set it so that it can't change
             elif (self.aniTracker // 10) + 1 > self.maxAniVal:
                 self.aniTracker = 0  # reset animation timer
                 update = True  # indicate that an update is needed

@@ -20,7 +20,7 @@ class ObjectManager:
             objDict = self.objectDict[object.Name]
             # updates the dictionary key/value pairs for the current object
             if (object.aniTracker // 10) + 1 > object.maxAniVal:  # check if the tracker is invalid
-                object.update()  # update the sprite so it can handle it
+                object.update(True)  # force the sprite info to update
             objDict.update({
                 "Events": object.Events,
                 "aniStatus": object.aniStatus,
