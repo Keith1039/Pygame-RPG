@@ -110,7 +110,7 @@ questManager = managers.QuestManager(knight)
 eventManager = managers.EventManager(knight, dialogueManager, questManager)
 npcManager = Entity.NPCManager(knight)
 objectManager = Entity.ObjectManager(knight)
-saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager, npcManager)
+saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager, npcManager, objectManager)
 itemManager = managers.ItemManager(knight)
 battleManager = Entity.BattleManager(knight, itemManager)
 uiManager = managers.UIManager(font, screen)
@@ -162,10 +162,10 @@ while True:
             screen.blit(screenManager.screen, (0, 0))
 
             # draw the rectangle around objects
-            # for sprite in objectManager.objectGroup.sprites():
+            # for sprite in objectManager.interactableGroup.sprites():
             #     game.draw.rect(screen, (150, 150, 150), sprite.rect)
-            objectManager.objectGroup.update()  # update object sprites
-            objectManager.objectGroup.draw(screen)  # draw the sprites
+            objectManager.interactableGroup.update()  # update object sprites
+            objectManager.interactableGroup.draw(screen)  # draw the sprites
 
             # draw the rectangle behind Knight
             # game.draw.rect(screen, (255, 0, 0), knight.rect)
@@ -173,11 +173,11 @@ while True:
             entityGroup.draw(screen)  # draw all the sprites
 
             # draw the rectangle around NPCs
-            # for sprite in npcManager.NPCGroup.sprites():
+            # for sprite in npcManager.interactableGroup.sprites():
             #     game.draw.rect(screen, (150, 150, 150), sprite.rect)
 
-            npcManager.NPCGroup.update()  # update sprites
-            npcManager.NPCGroup.draw(screen)  # draw the NPCs
+            npcManager.interactableGroup.update()  # update sprites
+            npcManager.interactableGroup.draw(screen)  # draw the NPCs
 
             collidingSprite = npcManager.get_colliding()  # the NPC that the player can interact with
             event = npcManager.get_interaction_event(eventList)  # should only ever be one event at a time

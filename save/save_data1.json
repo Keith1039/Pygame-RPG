@@ -13,17 +13,17 @@
          -1
       ],
       "Lvl": 1,
-      "Hpcap": 1671118,
-      "Hp": 1671118,
-      "Mpcap": 1671118,
-      "Mp": 1671118,
+      "Hpcap": 52174,
+      "Hp": 52174,
+      "Mpcap": 52174,
+      "Mp": 52174,
       "Exp": 0,
       "Bal": 0,
-      "Str": 1671118,
+      "Str": 52174,
       "Mag": 1,
-      "Vit": 1671118,
-      "Agl": 1671118,
-      "Def": 1671118,
+      "Vit": 52174,
+      "Agl": 52174,
+      "Def": 52174,
       "moveList": [
          "Attack"
       ],
@@ -63,9 +63,9 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 7,
-      "animationTracker2": 71,
-      "animationTracker3": 12,
+      "animationTracker": 8,
+      "animationTracker2": 40,
+      "animationTracker3": 11,
       "gameState": 5
    },
    "screenManager": {
@@ -182,17 +182,28 @@
          "Quest": "",
          "Context": "",
          "Items Gained": {}
+      },
+      "chestEmpty": {
+         "Range": [],
+         "Event Type": "Dialogue",
+         "Activated": false,
+         "Repeatable": true,
+         "Dialogue Path": "event_text/chestEmpty.txt",
+         "Quest": "",
+         "Context": "",
+         "Items Gained": {}
       }
    },
    "NPCDict": {
       "testNPC": {
-         "Name": "Gossiper",
-         "Sprite": "NPC_Sprites/Gossiper/",
+         "Name": "testNPC",
+         "Sprite": "NPC_Sprites/testNPC/",
          "Scale": [
             300,
             300
          ],
-         "Dialogue": [
+         "Flipped": false,
+         "Events": [
             "genericDialogue"
          ],
          "Context": "test",
@@ -208,7 +219,8 @@
             300,
             300
          ],
-         "Dialogue": [
+         "Flipped": false,
+         "Events": [
             "Gossiper1"
          ],
          "Context": "Background2",
@@ -216,6 +228,48 @@
             500,
             650
          ]
+      }
+   },
+   "objectDict": {
+      "testObject": {
+         "Name": "testObject",
+         "Object Type": "Treasure_Chest",
+         "Flipped": false,
+         "Context": "test",
+         "Pos": [
+            500,
+            500
+         ],
+         "Events": [
+            "genericDialogue"
+         ],
+         "Sprite": "Object_Sprites/Treasure_Chest/",
+         "Scale": [
+            140,
+            140
+         ],
+         "Generic Dialogue": "chestEmpty",
+         "aniStatus": "Idle",
+         "aniTracker": 0
+      },
+      "chest1": {
+         "Name": "chest1",
+         "Object Type": "Treasure_Chest",
+         "Flipped": true,
+         "Context": "Background1",
+         "Pos": [
+            1000,
+            700
+         ],
+         "Events": [],
+         "Sprite": "Object_Sprites/Treasure_Chest/",
+         "Scale": [
+            140,
+            140
+         ],
+         "Generic Dialogue": "chestEmpty",
+         "aniStatus": "Idle",
+         "aniTracker": 0
       }
    }
 }

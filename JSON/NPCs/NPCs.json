@@ -3,7 +3,8 @@
       "Name": "testNPC",
       "Sprite": "NPC_Sprites/testNPC/",
       "Scale": [300, 300],
-      "Dialogue": ["testEvent"],
+      "Flipped": false,
+      "Events": ["testEvent"],
       "Context": "test",
       "Pos": [500, 650]
    },
@@ -14,7 +15,8 @@
          300,
          300
       ],
-      "Dialogue": [
+      "Flipped": false,
+      "Events": [
          "Gossiper1"
       ],
       "Context": "Background2",

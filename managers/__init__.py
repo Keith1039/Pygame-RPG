@@ -17,3 +17,4 @@ from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move
 from Entity.Entity_Factory import EntityFactory
 from Entity.NPC_Manager import NPCManager
+from Entity.Object_Manager import ObjectManager

@@ -20,7 +20,7 @@ def test_save_and_empty():
     obj.Events = []  # set it to an empty list
     # make it so that it's past the limit but doesn't trigger the interval normally
     obj.aniTracker = obj.maxAniVal * 10 + 1
-    objectManager.objectGroup.add(obj)  # add the object to the group
+    objectManager.interactableGroup.add(obj)  # add the object to the group
     objectManager.save_and_empty()  # save and empty the changes
     obj = objectManager.create_object("testObject")  # create a test object
     # aniTracker is 0 because it isn't opening, otherwise it would be -1
@@ -28,13 +28,13 @@ def test_save_and_empty():
 
 def test_get_objects():
     objectManager.get_objects("INVALID")  # give in a context that makes no sense
-    flag = len(objectManager.objectGroup.sprites()) == 0  # check if the list is empty
+    flag = len(objectManager.interactableGroup.sprites()) == 0  # check if the list is empty
     objectManager.get_objects("test")  # pass in a context that does work
-    flag2 = len(objectManager.objectGroup.sprites()) == 1  # check to see if the list grew
+    flag2 = len(objectManager.interactableGroup.sprites()) == 1  # check to see if the list grew
     assert flag and flag2
 
 def test_get_colliding():
-    obj = objectManager.objectGroup.sprites()[0]  # get the object in the group
+    obj = objectManager.interactableGroup.sprites()[0]  # get the object in the group
     obj.rect.center = (999, 999)  # put the sprite in some random corner
     colliding = objectManager.get_colliding()  # check to see if knight is colliding with anything
     flag = colliding is None  # confirm that the returned value was none (knight isn't colliding)
@@ -44,7 +44,7 @@ def test_get_colliding():
     assert flag and flag2
 
 def test_get_interaction_event():
-    obj = objectManager.objectGroup.sprites()[0]  # get the object
+    obj = objectManager.interactableGroup.sprites()[0]  # get the object
     obj.Events = ["testEvent"]
     knight.rect.center = (999, 999)  # put the knight in some random, inaccessible spot
     eventKey = objectManager.get_interaction_event(get_keydown_event("s"))  # give the incorrect key and not colliding
