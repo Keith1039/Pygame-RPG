@@ -1,9 +1,12 @@
 from managers.Screen_Manager import ScreenManager
 from Entity.Knight import Knight
 from Entity.NPC_Manager import NPCManager
-import os, json
+from Entity.Object_Manager import ObjectManager
+import os
+import json
 class SaveManager:
-    def __init__(self, knight,  localVars, screenManager, eventManager, questManager, npcManager, saveNumber=1):
+    def __init__(self, knight,  localVars, screenManager, eventManager, questManager, npcManager, objectManager,
+                 saveNumber=1):
         self.knight = knight
         self.localVars = localVars
         self.screenManager = screenManager
@@ -11,6 +14,7 @@ class SaveManager:
         self.eventManager = eventManager
         self.questManager = questManager
         self.npcManager = npcManager
+        self.objectManager = objectManager
         self.limit = 4
         # Makes the initial save file
         
@@ -102,9 +106,12 @@ class SaveManager:
         }
         self.npcManager.save_and_empty()  # save current changes to the dictionary
         self.npcManager.get_NPCs(self.screenManager.context)  # get the NPCs back
+        self.objectManager.save_and_empty()  # save current changes to the dictionary
+        self.objectManager.get_objects(self.screenManager.context)  # get the objects back
         newerdict = {"Knight": knightDict, "questManager": questManagerDict, "rawVariables": rawVarsDict,
                      "screenManager": screenManagerDict, "eventDict": self.eventManager.eventDict,
-                     "NPCDict": self.npcManager.NPCDict}
+                     "NPCDict": self.npcManager.interactableDict,
+                     "objectDict": self.objectManager.interactableDict}
         return newerdict
 
     def load_data(self, file):
@@ -116,8 +123,10 @@ class SaveManager:
         self.screenManager.objectDict = fileInfo["screenManager"]["objectDict"]
         self.screenManager.change_context(fileInfo["screenManager"]["context"])
         interactablesInfo = fileInfo["screenManager"]["interactablesDict"]
-        self.npcManager.NPCDict = fileInfo["NPCDict"]  # set the NPC dict
+        self.npcManager.interactableDict = fileInfo["NPCDict"]  # set the NPC dict
         self.npcManager.get_NPCs(self.screenManager.context)  # reset the NPCs
+        self.objectManager.interactableDict = fileInfo["objectDict"]  # set the Object dict
+        self.objectManager.get_objects(self.screenManager.context)  # reset the objects
         self.eventManager.eventDict = fileInfo["eventDict"]
         # convert all lists to tuples in the dict
 

@@ -23,15 +23,15 @@ def test_update():
     assert flag and flag2 and flag3 and flag4
 
 def test_add_events():
-    oldEvents = npc.Dialogue.copy()  # a copy of the old events
+    oldEvents = npc.Events.copy()  # a copy of the old events
     newEvents = ["testEvent2", "testEvent3"]  # the newer events
     npc.add_event_keys(newEvents)  # add the events to the NPC
-    flag = npc.Dialogue == (oldEvents + newEvents)  # checked to see if the old events + new events were added
-    flag2 = npc.Dialogue[0] == "testEvent" and npc.Dialogue[1] == "testEvent2" and npc.Dialogue[2] == "testEvent3"
+    flag = npc.Events == (oldEvents + newEvents)  # checked to see if the old events + new events were added
+    flag2 = npc.Events[0] == "testEvent" and npc.Events[1] == "testEvent2" and npc.Events[2] == "testEvent3"
     assert flag and flag2
 
 def test_get_event_key():
-    npc.Dialogue = ["testEvent", "testEvent2"]  # set the events
+    npc.Events = ["testEvent", "testEvent2"]  # set the events
     eventKeys = []  # a list of the event keys returned
     for i in range(3):
         eventKeys.append(npc.get_event_key())  # add the key to the list

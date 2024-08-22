@@ -5,6 +5,7 @@ from Entity.Entity import Entity
 from Entity.Entity_Factory import EntityFactory
 from Entity.Move import *
 from Entity.Battle_Manager import BattleManager
+from Entity.Interactable import Interactable
 from Entity.NPC import NPC
 from Entity.NPC_Manager import NPCManager
 from Entity.Object import Object

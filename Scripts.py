@@ -5,6 +5,7 @@ from managers import DialogueManager
 from managers import EventManager
 from managers import QuestManager
 from Entity.NPC_Manager import NPCManager
+from Entity.Object_Manager import ObjectManager
 import pygame as game
 from Entity.Knight import Knight
 import sys
@@ -25,7 +26,8 @@ if __name__ == "__main__":
         questManager = QuestManager(knight)
         eventManager = EventManager(knight, dialogueManager, questManager)
         npcManager = NPCManager(knight)
-        saveManager = SaveManager(knight, vars(), screenManager, eventManager, questManager, knight)
+        objectManager = ObjectManager(knight)
+        saveManager = SaveManager(knight, vars(), screenManager, eventManager, questManager, knight, objectManager)
         for i in range(4):
             saveManager.save(i+1)
         game.quit()
@@ -279,7 +281,8 @@ if __name__ == "__main__":
                 "Name": arg2,
                 "Sprite": "Object_Sprites/" + arg2 + "/",
                 "Scale": [],
-                "Dialogue": [],
+                "Flipped": False,
+                "Events": [],
                 "Context": "",
                 "Pos": []
             }
@@ -313,7 +316,8 @@ if __name__ == "__main__":
         npcDict.update({
             arg2: {
                 "Sprite": "NPC_Sprites/" + arg2 + "/",
-                "Scale": []
+                "Scale": [],
+                "Generic Dialogue": ""
             }
         })
         file = open(path, "w")

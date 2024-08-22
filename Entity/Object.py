@@ -1,7 +1,7 @@
-import pygame as game
+from Entity.Interactable import Interactable
 import Utils
 
-class Object(game.sprite.Sprite):
+class Object(Interactable):
 
     def __init__(self, jsonInfo):
         super().__init__()
@@ -15,48 +15,41 @@ class Object(game.sprite.Sprite):
         self.Pos = tuple(jsonInfo["Pos"])  # turn this into a tuple as well
         self.Events = jsonInfo["Events"]
         self.aniStatus = jsonInfo["aniStatus"]  # set the animation status
+        self.genericKey = jsonInfo["Generic Dialogue"]
         self.aniTracker = jsonInfo["aniTracker"]  # set the animation tracker
         self.maxAniVal = self.get_max_animation_val()  # set the max animation value
         self.image = None
         self.rect = None
-        self.set_image_and_rect()  # set the image and rect variables
+        self.set_image_and_rect(self.ObjectType)  # set the image and rect variables
+    def get_updated_data(self):
+        # only thing we care about are the events in this case
+        return {
+            "aniStatus": self.aniStatus,
+            "aniTracker": self.aniTracker,
+            "Events": self.Events
+        }
+
+    def process_special_criteria(self):
+        flag = False
+        if self.ObjectType == "Treasure_Chest" and self.aniStatus == "Opening":
+            flag = True
+        return flag
+
+    def is_colliding(self, knight):
+        flag = False
+        if self.ObjectType == "Treasure_Chest":  # collision detection for Treasure Chests
+            flag = knight.rect.collidepoint(self.rect.midright)
+        return flag
+
+    def process_collision(self):
+        if self.ObjectType == "Treasure_Chest":
+            if self.aniStatus != "Opening":
+                self.aniStatus = "Opening"  # change the animation status
+                self.aniTracker = 0  # reset ani tracker
+                self.maxAniVal = self.get_max_animation_val()  # reset the max animation value
 
     def get_max_animation_val(self):
-        return Utils.get_max_animation_val(self.Sprite, self.ObjectType, self.aniStatus)
-
-    def set_image_and_rect(self):
-        spot = str((self.aniTracker // 10) + 1)  # the frame of the animation
-        if self.aniTracker == -1:  # check if we have a -1
-            spot = str(self.maxAniVal)  # set the spot to the max
-        filePath = self.Sprite + self.ObjectType + "_" + self.aniStatus + "_" + spot + ".png"  # create the file path
-        self.image = game.image.load(filePath)  # load the new image
-        self.image = game.transform.scale(self.image, self.Scale)  # scale the image to a set value
-        if self.Flipped:  # check if the image is supposed to be flipped
-            self.image = game.transform.flip(self.image, True, False)
-        self.rect = self.image.get_rect()  # get the new
-        self.rect.center = self.Pos  # set the new pos
+        return self.super_get_max_ani_val(self.ObjectType)
 
     def update(self, force=False):
-        if self.aniTracker != -1:  # -1 indicates that it can't change
-            self.aniTracker += 1  # increment the tracker
-        if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or when we force it
-            update = False  # flag for when we should update the image and rect
-            if (self.aniTracker // 10) + 1 > self.maxAniVal and self.aniStatus == "Opening":
-                self.aniTracker = -1  # make it stuck on the final animation
-            elif (self.aniTracker // 10) + 1 > self.maxAniVal:
-                self.aniTracker = 0  # reset animation timer
-                update = True  # we need to update the sprite
-            elif (self.aniTracker // 10) + 1 <= self.maxAniVal:
-                update = True  # we need to update the animation
-            if update:
-                self.set_image_and_rect()  # if the above condition is triggered we know an update is going to happen
-
-    def get_event_key(self):
-        if len(self.Events) > 0:
-            return self.Events.pop(0)
-        else:
-            # set of conditions depending on the object
-            key = ""
-            if self.ObjectType == "Treasure_Chest":
-                key = "chestEmpty"
-            return key
+        self.super_update(self.ObjectType, force)
