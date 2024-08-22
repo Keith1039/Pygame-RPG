@@ -15,10 +15,12 @@ def test_update():
     npc.update()
     # check if rect and image were set and confirm this happened on the tenth frame
     flag2 = npc.rect is not None and npc.image is not None and npc.aniTracker == 10
-    npc.aniTracker = (npc.maxAniVal * 10) + 9  # a number that exceeds the max and is 1 tick away from an update
+    npc.aniTracker = (npc.maxAniVal * 10) + 5  # a number that ISN'T going to trigger the update
     npc.update()  # update the sprite
-    flag3 = npc.aniTracker == 0  # check to see if the tracker was reset
-    assert flag and flag2 and flag3
+    flag3 = npc.aniTracker == (npc.maxAniVal * 10) + 6  # check to see if aniTracker was upped
+    npc.update(True)  # force the update
+    flag4 = npc.aniTracker == 0  # check to see if the tracker was reset
+    assert flag and flag2 and flag3 and flag4
 
 def test_add_events():
     oldEvents = npc.Dialogue.copy()  # a copy of the old events

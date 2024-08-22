@@ -19,6 +19,8 @@ class NPCManager:
     def save_and_empty(self):
         # saves the changed NPC information and then empties the Sprite Group
         for sprite in self.NPCGroup.sprites():
+            if (sprite.aniTracker // 10) + 1 > sprite.maxAniVal:  # check if the aniTracker value is valid
+                sprite.update(True)  # force update
             self.NPCDict[sprite.Name]["Dialogue"] = sprite.Dialogue  # update the dialogue list
         self.NPCGroup.empty()  # remove all sprites from the group
 

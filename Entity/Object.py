@@ -25,7 +25,10 @@ class Object(game.sprite.Sprite):
         return Utils.get_max_animation_val(self.Sprite, self.ObjectType, self.aniStatus)
 
     def set_image_and_rect(self):
-        filePath = self.Sprite + self.ObjectType + "_" + self.aniStatus + "_" + str((self.aniTracker // 10) + 1) + ".png"
+        spot = str((self.aniTracker // 10) + 1)  # the frame of the animation
+        if self.aniTracker == -1:  # check if we have a -1
+            spot = str(self.maxAniVal)  # set the spot to the max
+        filePath = self.Sprite + self.ObjectType + "_" + self.aniStatus + "_" + spot + ".png"  # create the file path
         self.image = game.image.load(filePath)  # load the new image
         self.image = game.transform.scale(self.image, self.Scale)  # scale the image to a set value
         if self.Flipped:  # check if the image is supposed to be flipped
@@ -33,12 +36,13 @@ class Object(game.sprite.Sprite):
         self.rect = self.image.get_rect()  # get the new
         self.rect.center = self.Pos  # set the new pos
 
-    def update(self):
-        self.aniTracker += 1  # increment the tracker
-        if self.aniTracker % 10 == 0:  # every 10 frames we shift the animation
+    def update(self, force=False):
+        if self.aniTracker != -1:  # -1 indicates that it can't change
+            self.aniTracker += 1  # increment the tracker
+        if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or when we force it
             update = False  # flag for when we should update the image and rect
             if (self.aniTracker // 10) + 1 > self.maxAniVal and self.aniStatus == "Opening":
-                self.aniTracker = self.maxAniVal * 10 - 10  # set it to the max already
+                self.aniTracker = -1  # make it stuck on the final animation
             elif (self.aniTracker // 10) + 1 > self.maxAniVal:
                 self.aniTracker = 0  # reset animation timer
                 update = True  # we need to update the sprite
