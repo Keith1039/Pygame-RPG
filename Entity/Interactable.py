@@ -5,6 +5,7 @@ class Interactable(game.sprite.Sprite):
 
     def __init__(self):
         super().__init__()  # initiate the sprite class
+        self.simpleEventDict = Utils.get_cut_event_info()  # a simplified event dictionary
         self.Name = ""
         self.Sprite = ""
         self.aniStatus = "Idle"
@@ -18,6 +19,7 @@ class Interactable(game.sprite.Sprite):
         self.maxAniVal = 0
         self.image = None
         self.rect = None
+
 
     # meant to be overwritten by child classes
     def get_updated_data(self):
@@ -72,10 +74,30 @@ class Interactable(game.sprite.Sprite):
 
     def add_event_keys(self, events):
         self.Events += events  # add the events to the interactable's dialogue queue
+        self.sort_events()  # sort the new events
 
     def get_event_key(self):
         if len(self.Events) > 0:
-            return self.Events.pop(0)  # remove and return the first item in the queue
+            key = self.Events[0]  # get the first key in queue
+            repeatable = self.simpleEventDict[key]["Repeatable"]  # check if the event is repeatable
+            if repeatable:
+                return key  # only return the key, the item stays in the queue
+            else:
+                return self.Events.pop(0)  # remove and return the first item in the queue
         else:
             # return a key to generic dialogue
             return self.genericKey
+
+    def sort_events(self):
+        newEvents = []
+        sortedEvents = []
+        for key in self.Events:  # attach the priority to the event via a tuple
+            priority = self.simpleEventDict[key]["Priority"]  # get the priority for the event
+            newEvents.append((priority, key))  # add the new tuple to the newEvents list
+        newEvents.sort(key=lambda event: event[0])  # sort based off of the first index
+
+        for eventTup in newEvents:
+            sortedEvents.append(eventTup[1])  # only take the event key
+        self.Events = sortedEvents  # set the events attribute to the sorted events
+
+

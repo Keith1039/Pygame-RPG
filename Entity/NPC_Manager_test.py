@@ -27,12 +27,12 @@ def test_get_NPCs():
 def test_save_and_empty():
     npc = npcManager.interactableGroup.sprites()[0]
     oldDialogue = npc.Events.copy()  # the old dialogue of the NPC object
-    npc.Events = ["newDialogue"]
+    npc.Events = ["testEvent"]
     npcManager.save_and_empty()  # save and empty the sprite
     flag = len(npcManager.interactableGroup.sprites()) == 0
     npc = npcManager.create_NPC(npcName)  # creat the new NPC
     npcManager.interactableGroup.add(npc)  # recreate the npc and add it back to the group
-    flag2 = npc.Events == ["newDialogue"]   # check the dialogue
+    flag2 = npc.Events == ["testEvent"]   # check the dialogue
     npc.Events = oldDialogue  # set the dialogue back to the old one
     assert flag and flag2
 
@@ -40,10 +40,11 @@ def test_save_and_empty():
 def test_update_NPC():
     npcManager.update_interactable("NONAME", ["stuff", "stuff"])  # try to update an NPC that doesn't exist
     # check to see if no new sprites were added and that the sprite that is in the list doesn't match
-    flag = len(npcManager.interactableGroup.sprites()) == 1 and npcManager.interactableGroup.sprites()[0].Name == "testNPC"
-    npcManager.update_interactable("testNPC", ["testEvent2", "testEvent3"])
     npc = npcManager.interactableGroup.sprites()[0]  # get the NPC
-    flag2 = len(npc.Events) == 3  # we ensure order is maintained on the NPC_test.py file
+    flag = len(npcManager.interactableGroup.sprites()) == 1 and npc.Name == npcName
+    npcManager.update_interactable(npcName, ["testEvent2"])
+    npc = npcManager.interactableGroup.sprites()[0]  # get the NPC
+    flag2 = len(npc.Events) == 2  # we ensure order is maintained on the NPC_test.py file
     assert flag and flag2
 
 def test_get_colliding():
@@ -58,7 +59,7 @@ def test_get_colliding():
 
 def test_get_interaction_event():
     npc = npcManager.interactableGroup.sprites()[0]  # get the NPC
-    npc.Events = ["testEvent"]
+    npc.Events = ["testEvent2"]
     knight.rect.center = (999, 999)  # put the knight in some random, inaccessible spot
     eventKey = npcManager.get_interaction_event(get_keydown_event("s"))  # give the incorrect key and not colliding
     flag = eventKey is None  # confirm that there was no event key returned
@@ -68,7 +69,7 @@ def test_get_interaction_event():
     eventKey = npcManager.get_interaction_event(get_keydown_event("a"))  # give the incorrect key and we're colliding
     flag3 = eventKey is None
     eventKey = npcManager.get_interaction_event(get_keydown_event("w"))  # give the correct key and we're colliding
-    flag4 = eventKey == "testEvent" and len(npc.Events) == 0  # confirm a key was returned and the list shrunk
+    flag4 = eventKey == "testEvent2" and len(npc.Events) == 0  # confirm a key was returned and the list shrunk
     eventKey = npcManager.get_interaction_event(get_keydown_event("w"))  # give the correct key and we're colliding
     # confirm that a generic text event key was returned and the dialogue list is still empty
     flag5 = eventKey == "genericDialogue" and len(npc.Events) == 0

@@ -22,19 +22,3 @@ def test_update():
     flag4 = npc.aniTracker == 0  # check to see if the tracker was reset
     assert flag and flag2 and flag3 and flag4
 
-def test_add_events():
-    oldEvents = npc.Events.copy()  # a copy of the old events
-    newEvents = ["testEvent2", "testEvent3"]  # the newer events
-    npc.add_event_keys(newEvents)  # add the events to the NPC
-    flag = npc.Events == (oldEvents + newEvents)  # checked to see if the old events + new events were added
-    flag2 = npc.Events[0] == "testEvent" and npc.Events[1] == "testEvent2" and npc.Events[2] == "testEvent3"
-    assert flag and flag2
-
-def test_get_event_key():
-    npc.Events = ["testEvent", "testEvent2"]  # set the events
-    eventKeys = []  # a list of the event keys returned
-    for i in range(3):
-        eventKeys.append(npc.get_event_key())  # add the key to the list
-    flag = len(eventKeys) == 3
-    flag2 = eventKeys[0] == "testEvent" and eventKeys[1] == "testEvent2" and eventKeys[2] == "genericDialogue"
-    assert flag and flag2

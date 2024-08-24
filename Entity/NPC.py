@@ -20,6 +20,7 @@ class NPC(Interactable):
         self.image = None
         self.rect = None
         self.set_image_and_rect(self.Name)  # set the image and rect variables
+        self.sort_events()  # sort the event keys
 
     def get_updated_data(self):
         # only thing we care about are the events in this case

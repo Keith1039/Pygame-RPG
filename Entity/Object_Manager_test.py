@@ -45,7 +45,7 @@ def test_get_colliding():
 
 def test_get_interaction_event():
     obj = objectManager.interactableGroup.sprites()[0]  # get the object
-    obj.Events = ["testEvent"]
+    obj.Events = ["testEvent2"]
     knight.rect.center = (999, 999)  # put the knight in some random, inaccessible spot
     eventKey = objectManager.get_interaction_event(get_keydown_event("s"))  # give the incorrect key and not colliding
     flag = eventKey is None  # confirm that there was no event key returned
@@ -55,7 +55,7 @@ def test_get_interaction_event():
     eventKey = objectManager.get_interaction_event(get_keydown_event("a"))  # give the incorrect key and we're colliding
     flag3 = eventKey is None
     eventKey = objectManager.get_interaction_event(get_keydown_event("w"))  # give the correct key and we're colliding
-    flag4 = eventKey == "testEvent" and len(obj.Events) == 0  # confirm a key was returned and the list shrunk
+    flag4 = eventKey == "testEvent2" and len(obj.Events) == 0  # confirm a key was returned and the list shrunk
     eventKey = objectManager.get_interaction_event(get_keydown_event("w"))  # give the correct key and we're colliding
     # confirm that a generic event key was returned and the event list is still empty
     # also confirm that the animation has changed and the max animation val has changed alongside it
