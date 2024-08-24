@@ -54,6 +54,17 @@ def get_complete_object_dict():
         completeDict.update({key: jsonInfo})
     return completeDict
 
+# this function returns the event dictionary with only the priority and if the event is repeatable
+def get_cut_event_info():
+    completeDict = {}
+    eventDict = get_event_dict()  # the event dictionary
+    for key, dictionary in eventDict.items():
+        completeDict.update({key: {  # we only want the priority and if the event is repeatable
+            "Priority": dictionary["Priority"],
+            "Repeatable": dictionary["Repeatable"]
+        }})
+    return completeDict
+
 
 
 

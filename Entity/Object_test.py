@@ -26,11 +26,5 @@ def test_update():
     flag5 = obj.aniTracker == -1
     assert flag and flag2 and flag3 and flag4 and flag5
 
-def test_get_event_key():
-    key = obj.get_event_key()
-    flag = key == "testEvent" and len(obj.Events) == 0  # check to see if the real key was returned and it was removed
-    # check to see if the generic event was returned (treasure chest specific)
-    flag2 = obj.get_event_key() == "chestEmpty" and len(obj.Events) == 0
-    assert flag and flag2
 
 

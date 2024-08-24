@@ -233,6 +233,7 @@ if __name__ == "__main__":
                 "Event Type": "",
                 "Activated": False,
                 "Repeatable": False,
+                "Priority": -1,
                 "Dialogue Path": "",
                 "Quest": "",
                 "Context": "",
