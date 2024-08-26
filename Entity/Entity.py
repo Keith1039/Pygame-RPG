@@ -5,9 +5,6 @@ import Utils
 class Entity(game.sprite.Sprite):
     def __init__(self, Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money, inventory=None):
         super().__init__()
-        self.aniStatus = "Idle"
-        self.aniTracker = 0
-        self.maxAniVal = 0
         if inventory is None:
             inventory = {}  # Inventory is a dictionary of it with key pairs (string: int)
         self.Name = name
@@ -29,6 +26,14 @@ class Entity(game.sprite.Sprite):
             "Str": (0, -1), "Vit": (0, -1), "Agl": (0, -1), "Def": (0, -1)  # -1 means unlimited duration for bonus
         }
         self.Inventory = inventory  # For heroes, it's a bunch of useful items, for monsters it's dropped items
+        self.x = 0
+        self.y = 0
+        self.aniStatus = "Idle"
+        self.aniTracker = 0
+        self.maxAniVal = 0
+        self.image = None
+        self.rect = None
+        self.flipped = False
 
     def get_max_animation_val(self):
         return Utils.get_max_animation_val(self.Sprite, self.Name, self.aniStatus)  # return the utils version of this
@@ -36,6 +41,36 @@ class Entity(game.sprite.Sprite):
     def reset_max_animation_val(self):
         # sets the maxAniVal value to the max value for the given animation
         self.maxAniVal = self.get_max_animation_val()
+
+    def set_image_and_rect(self):
+        spot = str((self.aniTracker // 10) + 1)  # the frame of the animation
+        if self.aniTracker == -1:  # check if we have a -1
+            spot = str(self.maxAniVal)  # set the spot to the max
+        filePath = self.Sprite + self.Name + "_" + self.aniStatus + "_" + spot + ".png"  # create the file path
+        self.image = game.image.load(filePath)  # load the new image
+        if self.flipped:  # if the run is to be flipped
+            self.image = game.transform.flip(self.image, True, False)  # flip across y axis
+        self.image = game.transform.scale(self.image, (450, 300))  # scale the image
+        self.rect = self.image.get_rect()  # get the new rectangle
+        self.rect.center = (self.x, self.y)  # center the rectangle to the players coordinates
+
+    def update(self, force=False):
+        if self.rect.center != (self.x, self.y):  # check if the entity moved
+            self.rect.center = (self.x, self.y)  # center the rectangle
+        # this behavior is for overworld behavior
+        if self.aniTracker != -1:  # -1 means that the animation is stuck for it
+            self.aniTracker += 1  # increment the tracker
+        if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or if we force it
+            update = False  # indicator for if an update is needed
+            if (self.aniTracker // 10) + 1 > self.maxAniVal and self.aniStatus == "Death":
+                self.aniTracker = -1  # set it so that it can't change
+            elif (self.aniTracker // 10) + 1 > self.maxAniVal:
+                self.aniTracker = 0  # reset animation timer
+                update = True  # indicate that an update is needed
+            elif (self.aniTracker // 10) + 1 <= self.maxAniVal:
+                update = True  # indicate that an update is needed
+            if update:
+                self.set_image_and_rect()  # sets the image and the rectangle
 
     def take_damage(self, damage, effect=False):
         if not effect:  # if it isn't effect damage, consider defence

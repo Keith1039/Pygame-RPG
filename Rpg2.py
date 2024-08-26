@@ -12,31 +12,30 @@ def display_frame_rate(font, screen):
 def handle_basic_input(keys, knight): # This is just movement for left and right
     # Determines players overworld movement
     prevAniStatus = knight.aniStatus
+
+    if prevAniStatus != knight.aniStatus:  # check if the animation status is different
+        knight.aniTracker = 0
+        knight.reset_max_animation_val()  # reset the max animation value
+
     if knight.fieldStatus == "Normal":
         if keys[game.K_RIGHT]:
             knight.aniStatus = "Run"
             knight.flipped = False
             if prevAniStatus == knight.aniStatus:
                 knight.x += 4
-                knight.rect.center = (knight.x, knight.y)
 
         elif keys[game.K_LEFT]:
             knight.aniStatus = "Run"
             knight.flipped = True
             if prevAniStatus == knight.aniStatus:
                 knight.x -= 4
-                knight.rect.center = (knight.x, knight.y)
         else:
             knight.aniStatus = "Idle"
 
     elif knight.aniStatus != "Death":
         knight.aniStatus = "Idle"
-
     else:
         knight.aniStatus = "Death"
-    if prevAniStatus != knight.aniStatus:
-        knight.aniTracker = 0
-        knight.reset_max_animation_val()  # reset the max animation value
 
 def handle_player_interaction(keys, knight, saveManager, screenManager, npcManager):
     if keys[game.K_s]:

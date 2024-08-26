@@ -5,6 +5,7 @@
    "Mpcap": 1,
    "Name": "Goblin",
    "Sprite": "Entity_Sprites/Goblin/",
+   "flipped": false,
    "Lvl": 1,
    "Str": 1,
    "Mag": 1,
