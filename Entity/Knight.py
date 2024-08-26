@@ -7,15 +7,6 @@ class Knight(Entity):
     def __init__(self, Hp=1, Hpcap=1, Mp=1, Mpcap=1, name="Knight", sprite="Entity_Sprites/Knight/", level=1, strength=1, magic=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
         super().__init__(Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money)
         self.fieldStatus = "Normal"  # indicator for the knight class
-        self.reset_max_animation_val()  # set the limit
-        self.default_x = 0  # default x value
-        self.default_y = 590  # default y value 350 works for battles
-        self.x = self.default_x  # set the x value
-        self.y = self.default_y  # set the y value
-        self.flipped = False  # determines whether the sprite is inverted or not
-        self.image = None
-        self.rect = None
-        self.set_image_and_rect()  # set the image and rectangle variables
         self.Expcap = expcap
         self.Stance = "1"
         self.growths = {
@@ -30,34 +21,12 @@ class Knight(Entity):
             "Shoes": None,
             "Accessory": None
         }
-
-    def set_image_and_rect(self):
-        spot = str((self.aniTracker // 10) + 1)  # the frame of the animation
-        if self.aniTracker == -1:  # check if we have a -1
-            spot = str(self.maxAniVal)  # set the spot to the max
-        filePath = self.Sprite + self.Name + "_" + self.aniStatus + "_" + spot + ".png"  # create the file path
-        self.image = game.image.load(filePath)  # load the new image
-        if self.flipped:  # if the run is to be flipped
-            self.image = game.transform.flip(self.image, True, False)  # flip across y axis
-        self.image = game.transform.scale(self.image, (450, 300))  # scale the image
-        self.rect = self.image.get_rect()  # get the new rectangle
-        self.rect.center = (self.x, self.y)  # center the rectangle to the players coordinates
-
-    def update(self, force=False):
-        # this behavior is for overworld behavior
-        if self.aniTracker != -1:  # -1 means that the animation is stuck for it
-            self.aniTracker += 1  # increment the tracker
-        if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or if we force it
-            update = False  # indicator for if an update is needed
-            if (self.aniTracker // 10) + 1 > self.maxAniVal and self.aniStatus == "Death":
-                self.aniTracker = -1  # set it so that it can't change
-            elif (self.aniTracker // 10) + 1 > self.maxAniVal:
-                self.aniTracker = 0  # reset animation timer
-                update = True  # indicate that an update is needed
-            elif (self.aniTracker // 10) + 1 <= self.maxAniVal:
-                update = True  # indicate that an update is needed
-            if update:
-                self.set_image_and_rect()  # sets the image and the rectangle
+        self.default_x = 0  # default x value
+        self.default_y = 590  # default y value 350 works for battles
+        self.x = self.default_x  # set the x value
+        self.y = self.default_y  # set the y value
+        self.reset_max_animation_val()  # set the limit
+        self.set_image_and_rect()  # set the image and rectangle variables
 
     def level_up(self):
         # add to stats

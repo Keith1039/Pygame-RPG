@@ -33,7 +33,7 @@ if __name__ == "__main__":
         game.quit()
         exit()
 
-    elif arg == "create-enemy":
+    elif arg == "add-enemy":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Enemies/" + arg2 + ".json"
         file = open(path, "w")  # Create the JSON file
@@ -44,6 +44,7 @@ if __name__ == "__main__":
             "Mpcap": 1,
             "Name": arg2,
             "Sprite": "Entity_Sprites/",
+            "flipped": False,
             "Lvl": 1,
             "Str": 1,
             "Mag": 1,

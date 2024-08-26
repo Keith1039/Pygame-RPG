@@ -19,8 +19,9 @@ case $args in
     pytest Entity
     ;;
 
-  create-enemy)
-    python scripts.py create-enemy "$args2"
+  add-enemy)
+    python scripts.py add-enemy "$args2"
+    mkdir Entity_Sprites/"$args2"
     ;;
 
   refresh-enemy-data)
