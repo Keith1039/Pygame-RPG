@@ -38,7 +38,8 @@ def test_add_enemy():
     # clear the list and re-add one dummy to the list of enemies
     battleManager.enemies.clear()
     battleManager.add_enemy(dummy)
-    assert flag
+    flag2 = dummy.x == 900 and dummy.y == 100  # check if the dummy's coordinates changed
+    assert flag and flag2
 
 def test_parse_effects():
     # parse a move with no effect

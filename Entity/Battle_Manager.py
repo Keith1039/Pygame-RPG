@@ -29,7 +29,9 @@ class BattleManager:
         i = len(self.enemies)
         x = 900 + int(i / 3) * 300
         y = 100 + (i % 3) * 250
-        self.enemies.append(((x, y), enemy))
+        enemy.x = x  # set the new x coordinate for the enemy object
+        enemy.y = y  # set the new y coordinate for the enemy object
+        self.enemies.append(((x, y), enemy))  # add the enemy to the lsit
 
     def do_one_turn(self, move, target):
         # I'll worry about the drawing later

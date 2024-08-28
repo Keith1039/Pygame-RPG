@@ -30,8 +30,8 @@ case $args in
     done
   ;;
 
-  create-move)
-    python scripts.py create-move "$args2"
+  add-move)
+    python scripts.py add-move "$args2"
   ;;
 
   create-item)

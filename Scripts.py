@@ -61,7 +61,7 @@ if __name__ == "__main__":
         json.dump(enemy_dict, file, indent=3)  # Dump the JSON info
         file.close()  # Close the file
 
-    elif arg == "create-move":
+    elif arg == "add-move":
         arg2 = sys.argv[2]  # There will a second argument with this
         path = "JSON/Moves/Complete_Move_List.json"
         moveDict = Utils.get_move_dict()
@@ -77,6 +77,9 @@ if __name__ == "__main__":
                 "Target Number": 1,
                 "Probability": None,
                 "Weight": 100,
+                "Attack Type": "",
+                "Animation Status": "Attack1",
+                "Alternative": "Attack1",
                 "Description": ""
             }
         })
