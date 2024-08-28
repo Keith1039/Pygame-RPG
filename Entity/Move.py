@@ -12,6 +12,9 @@ class Move:
         # Chance for the effect of a move to be applied
         self.probability = jsonInfo["Probability"]
         self.weight = jsonInfo["Weight"]  # Probability of the move being used (Enemy object only)
+        self.attackType = jsonInfo["Attack Type"]  # the type of attack (if any)
+        self.aniStatus = jsonInfo["Animation Status"]  # the type of animation that is meant to be played
+        self.alternative = jsonInfo["Alternative"]  # the animation to play if the sprite doesn't have the animation
         self.description = jsonInfo["Description"]  # Description of the attack being used
 
 def isfloat(stringVal):

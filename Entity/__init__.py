@@ -10,6 +10,7 @@ from Entity.NPC import NPC
 from Entity.NPC_Manager import NPCManager
 from Entity.Object import Object
 from Entity.Object_Manager import ObjectManager
+from Entity.Animation_Manager import AnimationManager
 from Utils.Getters import *
 from managers.UI_Manager import UIManager
 from managers.UI_Handler import UIHandler

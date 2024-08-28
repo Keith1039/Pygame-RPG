@@ -9,6 +9,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "Physical",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "Standard attack, inflicts a normal amount of damage to one enemy."
    },
    "Pilfering Strike": {
@@ -21,6 +24,9 @@
       "Target Number": 1,
       "Probability": 50,
       "Weight": 50,
+      "Attack Type": "Physical",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "A weak attack that has a medium chance of stealing gold from the target."
    },
    "Spinning Slash": {
@@ -33,6 +39,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "AOE",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "A weak slash that hits all enemies."
    },
    "Angry Shout": {
@@ -45,6 +54,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 50,
+      "Attack Type": "",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "The user howls in anger, raising the strength of the user for 3 turns."
    },
    "Drink Potion": {
@@ -57,6 +69,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 25,
+      "Attack Type": "",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack",
       "Description": "The user drinks a potion and heals 20 Hp."
    },
    "Wrathful Charge": {
@@ -69,6 +84,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": ""
    },
    "Super Attack": {
@@ -81,6 +99,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "Physical",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": ""
    },
    "Venom Strike": {
@@ -93,6 +114,9 @@
       "Target Number": 1,
       "Probability": 100,
       "Weight": 100,
+      "Attack Type": "Physical",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "A strike that fills it's enemy with a lethal poison"
    },
    "Defensive Stance": {
@@ -105,6 +129,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "Adopt a defensive position and heal a minor amount of health"
    },
    "Double Slash": {
@@ -117,6 +144,9 @@
       "Target Number": 2,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "Ranged",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "Slash enemies twice in quick succession"
    },
    "Desperado": {
@@ -129,6 +159,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "Physical",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "A desperate attack that gets stronger the weaker you are."
    },
    "Experienced Strike": {
@@ -141,6 +174,9 @@
       "Target Number": 1,
       "Probability": null,
       "Weight": 100,
+      "Attack Type": "",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
       "Description": "The strike of a veteran warrior"
    }
 }
