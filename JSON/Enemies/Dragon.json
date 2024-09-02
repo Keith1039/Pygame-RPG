@@ -1,0 +1,23 @@
+{
+   "Hp": 1,
+   "Hpcap": 1,
+   "Mp": 1,
+   "Mpcap": 1,
+   "Name": "Dragon",
+   "Sprite": "Entity_Sprites/",
+   "flipped": false,
+   "Lvl": 1,
+   "Str": 1,
+   "Mag": 1,
+   "Vit": 1,
+   "Agl": 1,
+   "Def": 1,
+   "Exp": 1,
+   "Money": 1,
+   "Inventory": {},
+   "moveList": [
+      "Attack"
+   ],
+   "uniqueBuff": "",
+   "Weakness": ""
+}

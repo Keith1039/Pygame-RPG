@@ -10,8 +10,8 @@ class Enemy(Entity):
         self.moveList = jsonInfo["moveList"]
         self.uniqueBuff = jsonInfo["uniqueBuff"]  # For bosses only really
         self.weakness = jsonInfo["Weakness"]  # What stance they're weak to
-        # self.reset_max_animation_val()  # reset the max animation value
-        # self.set_image_and_rect()  # set the image and rectangle
+        self.reset_max_animation_val()  # reset the max animation value
+        self.set_image_and_rect()  # set the image and rectangle
 
     def take_attack(self, damage, lootpool, effect=False):
         # take_attack is the Enemy specific version of `take_damage()`

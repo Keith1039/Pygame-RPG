@@ -2,11 +2,19 @@
    "testNPC": {
       "Name": "testNPC",
       "Sprite": "NPC_Sprites/testNPC/",
-      "Scale": [300, 300],
+      "Scale": [
+         300,
+         300
+      ],
       "Flipped": false,
-      "Events": ["testEvent"],
+      "Events": [
+         "testEvent"
+      ],
       "Context": "test",
-      "Pos": [500, 650]
+      "Pos": [
+         500,
+         650
+      ]
    },
    "Gossiper": {
       "Name": "Gossiper",
@@ -24,5 +32,23 @@
          500,
          650
       ]
+   },
+   "Werewolf": {
+      "Name": "Werewolf",
+      "Sprite": "Object_Sprites/Werewolf/",
+      "Scale": [],
+      "Flipped": false,
+      "Events": [],
+      "Context": "",
+      "Pos": []
+   },
+   "Witch": {
+      "Name": "Witch",
+      "Sprite": "Object_Sprites/Witch/",
+      "Scale": [],
+      "Flipped": false,
+      "Events": [],
+      "Context": "",
+      "Pos": []
    }
 }
