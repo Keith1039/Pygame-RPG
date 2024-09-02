@@ -8,7 +8,9 @@ class Entity(game.sprite.Sprite):
         if inventory is None:
             inventory = {}  # Inventory is a dictionary of it with key pairs (string: int)
         self.Name = name
+        self.altName = self.Name  # alternative name
         self.Sprite = sprite
+        self.Scale = ()
         self.Status = ("Normal", -1)
         self.Lvl = level
         self.Hpcap = Hpcap
@@ -50,7 +52,7 @@ class Entity(game.sprite.Sprite):
         self.image = game.image.load(filePath)  # load the new image
         if self.flipped:  # if the run is to be flipped
             self.image = game.transform.flip(self.image, True, False)  # flip across y axis
-        self.image = game.transform.scale(self.image, (450, 300))  # scale the image
+        self.image = game.transform.scale(self.image, self.Scale)  # scale the image
         self.rect = self.image.get_rect()  # get the new rectangle
         self.rect.center = (self.x, self.y)  # center the rectangle to the players coordinates
 

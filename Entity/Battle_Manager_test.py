@@ -1,5 +1,6 @@
 from Entity.Knight import Knight
 from Entity.Entity_Factory import EntityFactory
+from Entity.Animation_Manager import AnimationManager
 from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move
 import pygame as game
@@ -15,7 +16,8 @@ factory = EntityFactory()
 knight = Knight()
 dummy = factory.create_entity("dummy")
 itemManager = ItemManager(knight)
-battleManager = BattleManager(knight, itemManager)
+animationManager = AnimationManager(screen)
+battleManager = BattleManager(knight, itemManager, animationManager)
 effectListMatrix = []
 # creating move objects
 attack = Move("Attack", dummy, battleManager.moveDict["Attack"])
@@ -165,15 +167,17 @@ def test_determine_battle_state():
     # kill hero and see if the state is changed appropriately
     knight.Status = ("Dead", -1)
     battleManager.determine_battle_state()
-    flag = battleManager.battleState == (False, "Hero Loses")
+    flag = battleManager.battleState == (False, "Hero Loses") and not animationManager.active
     # revive hero and determine if the state is changed appropriately
     knight.Status = ("Normal", -1)
     battleManager.determine_battle_state()
-    flag2 = battleManager.battleState == (True, "")
+    # change the battle state and confirm that the boolean for animationManager has not changed
+    flag2 = battleManager.battleState == (True, "") and not animationManager.active
     # get rid of all enemies and determine if the state is changed appropriately
     battleManager.enemies.clear()
+    animationManager.active = True  # change the active bool to true
     battleManager.determine_battle_state()
-    flag3 = battleManager.battleState == (False, "Hero Wins")
+    flag3 = battleManager.battleState == (False, "Hero Wins") and not animationManager.active
     # check all flags
     assert flag and flag2 and flag3
 
@@ -256,14 +260,15 @@ def test_handle_status_effect():
     # and the status of the character tells us if the statuses were removed, killing 2 birds with
     # one stone
     returnableStrings, refresh = battleManager.do_one_turn("", ())
-    # check size of array, turn order and the status of knight object
-    flag = len(returnableStrings) == 2 and battleManager.turnOrder[0] == dummy and knight.Status[0] == "Normal"
+    # check size of array, turn order and the status of knight object confirm that animation manager wasn't activated
+    flag = len(returnableStrings) == 2 and battleManager.turnOrder[0] == dummy and knight.Status[0] == "Normal" \
+        and not animationManager.active
     presumedDamage = int(dummy.Hpcap/100 * 5)  # damage we assume freeze will do
     returnableStrings, refresh = battleManager.do_one_turn("", ())
+    # confirm that the animation manager isn't active
     flag2 = len(returnableStrings) == 3 and len(battleManager.turnOrder) == 0 and dummy.Hp == dummy.Hpcap - presumedDamage \
-           and dummy.Status[0] == "Normal"
+           and dummy.Status[0] == "Normal" and not animationManager.active
     returnableStrings = battleManager.handle_status(knight)
-    print(knight.Status)
     # check to see if the count for infinite statuses stays the same
     flag3 = len(returnableStrings) == 0 and knight.Status[1] == -1
     assert flag and flag2 and flag3

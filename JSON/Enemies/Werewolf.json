@@ -5,6 +5,7 @@
    "Mpcap": 1,
    "Name": "Werewolf",
    "Sprite": "Entity_Sprites/",
+   "Scale": [158, 125],
    "flipped": false,
    "Lvl": 1,
    "Str": 1,

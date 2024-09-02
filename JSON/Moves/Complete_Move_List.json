@@ -1,4 +1,19 @@
 {
+   "Use Item": {
+      "Damage Calculation": "",
+      "Type": "",
+      "Cost": 0,
+      "Restriction": null,
+      "Effect": null,
+      "AOE": false,
+      "Target Number": 1,
+      "Probability": null,
+      "Weight": 100,
+      "Attack Type": "",
+      "Animation Status": "Attack1",
+      "Alternative": "Attack1",
+      "Description": "Default move when the player uses an item"
+   },
    "Attack": {
       "Damage Calculation": "Str * 0.8",
       "Type": "Attack",

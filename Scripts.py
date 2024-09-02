@@ -44,6 +44,7 @@ if __name__ == "__main__":
             "Mpcap": 1,
             "Name": arg2,
             "Sprite": "Entity_Sprites/",
+            "Scale": (),
             "flipped": False,
             "Lvl": 1,
             "Str": 1,

@@ -47,14 +47,18 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, npcManag
 
     elif keys[game.K_b]:
         # start a battle
+        knight.x = 500  # set the x coord
+        knight.y = 300  # set the y coord
+        knight.rect.center = (knight.x, knight.y)  # recenter the rect
         battleManager.enemies.clear()  # clear the enemies
         for i in range(2):
-            battleManager.add_enemy(entityFactory.create_entity("Goblin"))
+            enemy = entityFactory.create_entity("Goblin")  # create an enemy
+            entityGroup.add(enemy)  # add the enemy to the sprite group
+            battleManager.add_enemy(enemy)  # add an enemy to the battle manager
+
         knight.Inventory.update({"Potion": 2})  # add a potion
         knight.Inventory.update({"Bomb": 1})  # add a bomb
-        battleManager.battleState = (True, "")
-
-
+        battleManager.battleState = (True, "")  # set the battle manager to active
 
 
 def change_screen(knight, screenManager, npcManager):
@@ -111,7 +115,8 @@ npcManager = Entity.NPCManager(knight)
 objectManager = Entity.ObjectManager(knight)
 saveManager = managers.SaveManager(knight, vars(), screenManager, eventManager, questManager, npcManager, objectManager)
 itemManager = managers.ItemManager(knight)
-battleManager = Entity.BattleManager(knight, itemManager)
+animationManager = Entity.AnimationManager(screen)
+battleManager = Entity.BattleManager(knight, itemManager, animationManager)
 uiManager = managers.UIManager(font, screen)
 uiHandler = managers.UIHandler(uiManager, saveManager, knight, vars(), battleManager, itemManager)
 
@@ -150,6 +155,7 @@ while True:
             objectManager.get_objects(screenManager.context)  # get objects for this context change
     else:
         eventManager.process_events(screenManager.context)  # process any outstanding events before the game code
+        screen.blit(screenManager.screen, (0, 0))
         # Determines players overworld movement
         if not battleManager.battleState[0] and battleManager.battleState[1] == "":
             # handles basic movement for the player character
@@ -158,7 +164,6 @@ while True:
             handle_player_interaction(keys, knight, saveManager, screenManager, npcManager)
 
             # Draws the objects on the screen
-            screen.blit(screenManager.screen, (0, 0))
 
             # draw the rectangle around objects
             # for sprite in objectManager.interactableGroup.sprites():
@@ -166,17 +171,17 @@ while True:
             objectManager.interactableGroup.update()  # update object sprites
             objectManager.interactableGroup.draw(screen)  # draw the sprites
 
-            # draw the rectangle behind Knight
-            # game.draw.rect(screen, (255, 0, 0), knight.rect)
-            entityGroup.update()  # update all the sprites in the group
-            entityGroup.draw(screen)  # draw all the sprites
-
             # draw the rectangle around NPCs
             # for sprite in npcManager.interactableGroup.sprites():
             #     game.draw.rect(screen, (150, 150, 150), sprite.rect)
-
             npcManager.interactableGroup.update()  # update sprites
             npcManager.interactableGroup.draw(screen)  # draw the NPCs
+
+            # draw the rectangle behind entities
+            # for sprite in entityGroup.sprites():
+            #     game.draw.rect(screen, (255, 0, 0), sprite.rect)
+            entityGroup.update()  # update all the sprites in the group
+            entityGroup.draw(screen)  # draw all the sprites
 
             collidingSprite = npcManager.get_colliding()  # the NPC that the player can interact with
             event = npcManager.get_interaction_event(eventList)  # should only ever be one event at a time
@@ -196,21 +201,22 @@ while True:
 
             change_screen(knight, screenManager, npcManager)
 
-
         elif battleManager.battleState[0]:
-
-            screen.blit(screenManager.screen, (0, 0))  # draw the screen
             # draw the knight object here
             # if this condition is ever true that means that the player used a move last turn
             # and the values need to be reset
 
-            # check if the dialogue manager is active
-            if len(dialogueManager.dialogue) > 0:
-                dialogueManager.draw_dialogue(eventList, True)
-                # when we're done reading through the dialogue, check battle state
-                if len(dialogueManager.dialogue) == 0:
-                    battleManager.determine_battle_state()  # checks to see if the battle state has changed
+            if animationManager.active:
+                animationManager.process_action()  # process all of this
+                # check if the dialogue manager is active
+                if len(dialogueManager.dialogue) > 0:
+                    dialogueManager.draw_dialogue(eventList, True)
+                    # when we're done reading through the dialogue, check battle state
+                    if len(dialogueManager.dialogue) == 0:
+                        battleManager.determine_battle_state()  # checks to see if the battle state has changed
             else:
+                entityGroup.update()  # update the entities
+                entityGroup.draw(screen)  # draw the entities
                 if buffered_move != "" and len(targets) == battleManager.targetNum:
                     buffered_move = ""  # reset the move string
                     targets.clear()  # remove the targets from the list
@@ -251,6 +257,10 @@ while True:
             # this means the battle ended and its result needs to be processed
             battleResult = battleManager.battleState[1]
             if battleResult == "Hero Wins":
+                entityGroup = game.sprite.Group(knight)  # reset the entity group
+                # reset to default positions
+                knight.x = knight.default_x
+                knight.y = knight.default_y
                 knight.get_rewards(battleManager.lootPool)
                 # reset lootpool
                 battleManager.lootPool = {

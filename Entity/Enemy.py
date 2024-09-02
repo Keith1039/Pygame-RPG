@@ -6,6 +6,7 @@ class Enemy(Entity):
                         jsonInfo["Sprite"], jsonInfo["Lvl"], jsonInfo["Str"], jsonInfo["Mag"], jsonInfo["Vit"],
                         jsonInfo["Agl"], jsonInfo["Def"], jsonInfo["Exp"], jsonInfo["Money"],
                         jsonInfo["Inventory"])
+        self.Scale = tuple(jsonInfo["Scale"])
         self.flipped = jsonInfo["flipped"]
         self.moveList = jsonInfo["moveList"]
         self.uniqueBuff = jsonInfo["uniqueBuff"]  # For bosses only really

@@ -17,7 +17,7 @@ class EntityFactory:
             self.createdCount.update({name: 1})
         else:
             self.createdCount[name] += 1  # increment the value by 1
-            enemy.Name = enemy.Name + str(self.createdCount[name])  # add the number to the name
+            enemy.altName = enemy.Name + str(self.createdCount[name])  # add the number to the name
         return enemy  # return enemy
 
     def clear_created_count(self):

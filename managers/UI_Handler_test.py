@@ -3,6 +3,7 @@ import pygame as game
 from managers.UI_Manager_test import get_keydown_event
 from Entity.NPC_Manager import NPCManager
 from Entity.Object_Manager import ObjectManager
+from Entity.Animation_Manager import AnimationManager
 
 game.init()
 
@@ -14,7 +15,8 @@ screenManager = managers.ScreenManager(screen)
 dummyKnight = managers.Knight()
 factory = managers.EntityFactory()
 itemManager = managers.ItemManager(dummyKnight)
-battleManager = managers.BattleManager(dummyKnight, itemManager)
+animationManager = AnimationManager(screen)
+battleManager = managers.BattleManager(dummyKnight, itemManager, animationManager)
 dialogueManager = managers.DialogueManager(font, screen)
 questManager = managers.QuestManager(dummyKnight)
 eventManager = managers.EventManager(dummyKnight, dialogueManager, questManager)

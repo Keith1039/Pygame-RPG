@@ -34,11 +34,12 @@ class AnimationManager:
         self.x_increment = 0
 
     def set_slope_equation(self, startingPoint, endPoint):
+        # print(startingPoint, endPoint)
         # slope line equation
         x_diff = endPoint[0] - startingPoint[0]  # difference in the x-axis
         y_diff = endPoint[1] - startingPoint[1]  # difference in the y-axis
         slope = y_diff/x_diff  # the slope of the equation
-        b = startingPoint[1] - (slope * startingPoint[0])  # get the b portion
+        b = startingPoint[1] - (slope * startingPoint[0])  # get the y intercept
         self.slopeEquation.update({  # update the equation
             "m": slope,
             "b": b,
@@ -52,7 +53,7 @@ class AnimationManager:
         x_distance = self.slopeEquation["x_distance"]
         startingPoint = self.slopeEquation["Starting Point"]
         # check if the equation is set
-        properEquation = m != 0 and b != 0 and x_distance != 0 and startingPoint != ()
+        properEquation = startingPoint != ()
         if properEquation:
             # find the new x and y values
             self.actor.x = int(startingPoint[0] + (self.frameCount * self.x_increment))  # update x
@@ -82,6 +83,7 @@ class AnimationManager:
                 entity.reset_max_animation_val()  # reset the max animation for the new animation
 
     def load_action_queue(self, move, actor, targets, others):
+        self.active = True  # set the active attribute to true
         self.actor = actor  # main actor
         if len(targets) == 1 and targets[0] == actor:
             self.targets = []  # if the target is actor there's no real target
@@ -111,10 +113,13 @@ class AnimationManager:
             runningBackDict = runningToDict.copy()  # copy the running to dict
             point = ()
             if attackType == "Physical":  # physical attacks go up to one Entity and smack them
-                point = (others[0].x - 20, others[0].y)
+                if self.actor.x > targets[0].x:
+                    point = (targets[0].x + 100, targets[0].y)
+                else:
+                    point = (targets[0].x - 100, targets[0].y)
 
             elif attackType == "Ranged":  # ranged attacks walk up forward and hit people
-                point = (self.actor.x + 20, self.actor.y)
+                point = (self.actor.x + 100, self.actor.y)
 
             elif attackType == "AOE":
                 point = (711, 400)  # some defined midpoint
@@ -144,6 +149,7 @@ class AnimationManager:
 
         if self.action["point"] is not None:  # check if we're moving to a point
             # if we are, set the slope equation
+
             self.set_slope_equation((self.actor.x, self.actor.y), self.action["point"])
             self.x_increment = self.slopeEquation["x_distance"] / self.maxFrameCount
 
@@ -151,8 +157,24 @@ class AnimationManager:
             # change the animation of all targets to hurt
             self.change_targets_animation(self.targets, "Hurt")
 
-    def reset_action(self):
+    def partial_reset_action(self):
         tempList = self.targets + [self.actor]  # a list of all the notable entities
+        self.change_targets_animation(tempList, "Idle")  # change the animation for all back to Idle
+        self.action = {}  # reset the action dictionary
+        # reset the slope equation
+        self.slopeEquation = {
+            "m": 0,
+            "b": 0,
+            "Starting Point": (),
+            "x_distance": 0
+        }
+        self.x_increment = 0  # reset the increment
+
+    def reset_action(self):
+        # null check the actor
+        tempList = self.targets
+        if self.actor is not None:
+            tempList = tempList + [self.actor]  # a list of all the notable entities
         self.change_targets_animation(tempList, "Idle")  # change the animation for all back to Idle
         # reset everything essentially
         self.active = False  # boolean that tells us if the manager is to be used
@@ -179,12 +201,22 @@ class AnimationManager:
             self.apply_new_action()  # apply the action
         elif self.action == {} and len(self.actionQueue) == 0:
             self.active = False  # deactivate the manager
+            self.reset_action()  # reset everything
         if self.action != {}:  # check if the action dictionary isn't empty
             self.frameCount += 1  # increment the frame counter
+            if self.action["point"] is not None:
+                self.use_slope_equation()
             self.spriteGroup.update()  # update the sprites
             self.spriteGroup.draw(self.screen)
+            # # draw the rectangle behind entities
+            # for sprite in self.spriteGroup.sprites():
+            #     print(sprite.altName)
+            #     print(sprite.rect.center)
+            #     print(".....................")
+            #     self.screen.set_at(sprite.rect.center, (255, 0, 0))
+                #game.draw.rect(self.screen, (255, 0, 0), sprite.rect)
             if self.frameCount == self.maxFrameCount:
-                self.reset_action()  # reset everything
+                self.partial_reset_action()  # partially reset things
 
 
 

@@ -166,7 +166,7 @@ def test_create_entity():
     entity1 = factory.create_entity(name)
     entity2 = factory.create_entity(name)
     # check the names
-    flag = entity1.Name == name and entity2.Name == (name + "2")
+    flag = entity1.altName == name and entity2.altName == (name + "2")
     assert flag and factory.createdCount[name] == 2
 
 def test_clear_created_count():

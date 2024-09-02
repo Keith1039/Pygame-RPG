@@ -5,6 +5,7 @@
    "Mpcap": 1,
    "Name": "Dragon",
    "Sprite": "Entity_Sprites/",
+   "Scale": [140, 140],
    "flipped": false,
    "Lvl": 1,
    "Str": 1,
