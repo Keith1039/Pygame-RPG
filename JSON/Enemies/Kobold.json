@@ -5,6 +5,7 @@
    "Mpcap": 1,
    "Name": "Kobold",
    "Sprite": "Entity_Sprites/Kobold/",
+   "Scale": [148, 96],
    "flipped": false,
    "Lvl": 1,
    "Str": 1,

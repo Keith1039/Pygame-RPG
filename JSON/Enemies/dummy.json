@@ -5,6 +5,7 @@
    "Mpcap": 999,
    "Name": "dummy",
    "Sprite": "Entity_Sprites/dummy/",
+   "Scale": [140, 140],
    "flipped": false,
    "Lvl": 1,
    "Str": 999,

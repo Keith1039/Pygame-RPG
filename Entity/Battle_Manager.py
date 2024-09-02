@@ -1,16 +1,16 @@
 import random
 import Utils
-
 from Entity.Move import Move
 
 class BattleManager:
-    def __init__(self, knight, itemManager):
+    def __init__(self, knight, itemManager, animationManager):
         # First value in tuple is whether there's a battle going on, second value is the victor
         self.battleState = (False, "")
         self.moveDict = Utils.get_move_dict()  # fills up the move dictionary
         self.statusDict = Utils.get_status_dict()  # retrieves the effect information
-        self.hero = knight
-        self.itemManager = itemManager
+        self.hero = knight  # the hero dict
+        self.itemManager = itemManager  # the item manager
+        self.animationManager = animationManager  # the animation manager
         self.targetNum = -1  # the amount of targets that need to be selected
         self.heroPos = (300, 500)  # write it down later
         self.enemies = []  # tuple dict with enemy object and the x and y position of the object (max 6)
@@ -31,7 +31,8 @@ class BattleManager:
         y = 100 + (i % 3) * 250
         enemy.x = x  # set the new x coordinate for the enemy object
         enemy.y = y  # set the new y coordinate for the enemy object
-        self.enemies.append(((x, y), enemy))  # add the enemy to the lsit
+        enemy.rect.center = (enemy.x, enemy.y)
+        self.enemies.append(((x, y), enemy))  # add the enemy to the list
 
     def do_one_turn(self, move, target):
         # I'll worry about the drawing later
@@ -54,12 +55,15 @@ class BattleManager:
             targets = []  # list of entity objects
             # Note that the move that is given is assumed to have been validated
             if objectType == "Knight" and move != "" and len(target) == self.targetNum:
+                # print(target)
+                moveObj = None  # the move object we need
                 for i in range(len(target)):
                     # get a list of Entity objects from the positions
                     targets.append(self.get_entity_from_pos(target[i]))
                 # we're using an item
                 if move in self.itemManager.itemJson.keys():
                     refresh = True  # set refresh equal to true
+                    moveObj = Move("Use Item", self.hero, self.moveDict["Use Item"])  # use the stock move for items
                     itemDetails = self.itemManager.get_effect_details(move)  # getting information about the item
                     if itemDetails["AOE"]:
                         returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], self.get_enemy_objects())
@@ -72,6 +76,9 @@ class BattleManager:
                         returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
                     else:
                         returnable_strings += self.use_move(self.hero, moveObj, targets)
+                # get the list of uninvolved actors
+                others = Utils.get_others(self.hero, targets, self.get_enemy_objects())
+                self.animationManager.load_action_queue(moveObj, self.hero, targets, others)
                 self.turnOrder.pop(0)  # after the player has moved, kick them from turn order
                 # self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":
@@ -94,7 +101,9 @@ class BattleManager:
                 for z in range(moveObj.targetNumber):
                     targets.append(self.hero)
                 returnable_strings += self.use_move(turnObject, moveObj, targets)
+                others = Utils.get_others(turnObject, targets, self.get_enemy_objects())  # get the others
                 self.targetNum = -1  # reset the target number since the move was done successfully
+                self.animationManager.load_action_queue(moveObj, turnObject, targets, others)
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
                 # self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
@@ -106,7 +115,7 @@ class BattleManager:
         returnableStrings = []
         effectList = self.parse_effects(move.effect)  # the function null checks the effects of the move
         for i in range(len(targets)):
-            returnableStrings.append(turnObject.Name + " used " + move.name + "!")
+            returnableStrings.append(turnObject.altName + " used " + move.name + "!")
             turnObject.Mp -= move.cost  # lower Mp by the cost of the move
             if move.type == "Attack":  # if this move is an attack, do damage to the target object
                 # text outputted for attack type moves
@@ -116,7 +125,7 @@ class BattleManager:
                     damageVal = targets[i].take_damage(move.damage)
                 else:
                     damageVal = targets[i].take_attack(move.damage, self.lootPool)
-                battleText = targets[i].Name + " took " + str(damageVal) + " damage!"
+                battleText = targets[i].altName + " took " + str(damageVal) + " damage!"
                 returnableStrings.append(battleText)
             # merge the 2 lists of move strings together
             returnableStrings = returnableStrings + self.apply_effects(effectList, turnObject, targets[i])
@@ -125,7 +134,7 @@ class BattleManager:
     def use_item(self, turnObject, itemName, itemEffect, targets):
         # function for when an item is used
         returnableStrings = []
-        returnableStrings.append(turnObject.Name + " Used " + itemName + "!")
+        returnableStrings.append(turnObject.altName + " Used " + itemName + "!")
         self.hero.remove_from_inventory(itemName)
         effectList = self.parse_effects(itemEffect)
         for i in range(len(targets)):
@@ -168,10 +177,10 @@ class BattleManager:
             targetIndicator = currentEffectTup[0]
             if targetIndicator == "T":
                 effectTarget = target
-                targetName = target.Name
+                targetName = target.altName
             else:
                 effectTarget = turnObject
-                targetName = turnObject.Name
+                targetName = turnObject.altName
             effectString = targetName + " "
             effect = currentEffectTup[1]
             if effect.__class__ == str:
@@ -225,7 +234,7 @@ class BattleManager:
                         # cure a status effect if the right item was used
                         if result == effectTarget.Status[0] or result == "All":
                             effectTarget.Status = ("Normal", -1)
-                            effectString += effectTarget.Name + " is back to Normal!"
+                            effectString += effectTarget.altName + " is back to Normal!"
                         else:
                             effectString += "it wasn't effective!"
             else:
@@ -292,7 +301,7 @@ class BattleManager:
             if enemy.Status[0] != "Dead":
                 newEnemies.append(self.enemies[i])
             else:
-                returnableStrings.append(enemy.Name + " died!")
+                returnableStrings.append(enemy.altName + " died!")
         self.enemies = newEnemies  # set the enemies list to the newEnemies list
         # Loop through the turnOrder list and append the not dead entities to the newTurnOrder list
         # turnOrder does not need position of the enemy Object
@@ -322,8 +331,10 @@ class BattleManager:
     def determine_battle_state(self):
         if len(self.enemies) == 0 and self.hero.Status[0] != "Dead":
             self.battleState = (False, "Hero Wins")  # Battle ended, hero wins
+            self.animationManager.reset_action()  # reset the animation manager
         elif self.hero.Status[0] == "Dead":
             self.battleState = (False, "Hero Loses")  # Battle ended, hero lost
+            self.animationManager.reset_action()  # reset the animation manager
         elif len(self.enemies) != 0 and self.hero.Status[0] != "Dead":  # Battle is on going
             self.battleState = (True, "")
 
@@ -352,7 +363,7 @@ class BattleManager:
         if statusEffect != "":
             effectList = statusEffect.split(",")  # split by
             for i in range(len(effectList)):
-                effectString = " Because of " + entity.Status[0] + ", " + entity.Name + " "
+                effectString = " Because of " + entity.Status[0] + ", " + entity.altName + " "
                 effect = effectList[i]  # the effect we parse
                 effectSplit = effect.split()
                 # REPLACE LATER ON WHEN DOING YOUR FINAL REVISIONS
@@ -407,7 +418,7 @@ class BattleManager:
         maxCount = self.statusDict[entity.Status[0]]["maxCount"]
         # checks to see if the status effect has faded away assuming it isn't infinite
         if entity.Status[1] == maxCount and maxCount != -1:
-            returnableStrings.append(entity.Name + " is back to Normal!")
+            returnableStrings.append(entity.altName + " is back to Normal!")
             entity.Status = ("Normal", -1)
         return returnableStrings  # return all status strings
 

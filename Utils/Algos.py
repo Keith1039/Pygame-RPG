@@ -16,3 +16,10 @@ def get_max_animation_val(sprite, name, aniStatus):
 def sort_func(e):
     final = e.replace(".png", "")  # get rid of the png portion of the file name
     return int(final.split("_").pop())  # get the maximum number
+
+def get_others(actor, selectedTargets, targets):
+    others = []
+    for target in targets:
+        if target not in selectedTargets and target != actor:
+            others.append(target)
+    return others

@@ -257,7 +257,9 @@ class UIManager:
                 # validate targetSlider pos and draw cursor
                 if self.targetSlider > len(self.targets) - 1 or self.targetSlider < 0:
                     self.targetSlider = oldSliderVal
-                self.screen.blit(self.cursor.cursor, self.targets[self.targetSlider])
+                pos = self.targets[self.targetSlider]  # the position we blit
+                pos = (pos[0] - 100, pos[1] - 20)  # apply offsets
+                self.screen.blit(self.cursor.cursor, pos)
         else:
             flag = self.cursor.handle_cursor(keys)
             # If a selection is made, find out which option was selected

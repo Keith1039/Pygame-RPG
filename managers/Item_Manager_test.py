@@ -1,10 +1,14 @@
 from Entity import Knight
+from Entity import AnimationManager
 from managers import ItemManager
 from managers import BattleManager
-
+import pygame as game
+game.init()
+screen = game.display.set_mode((1422, 800))
 knight = Knight()
 
 itemManager = ItemManager(knight)
+animationManager = AnimationManager(screen)
 
 
 def test_determine_limited():
@@ -115,7 +119,7 @@ def test_fuse_items():
 
 def test_item_compatibility():
     # this series of tests checks if the item effects can be parsed by battleManager
-    battleManager = BattleManager(knight, itemManager)  # init BattleManager
+    battleManager = BattleManager(knight, itemManager, animationManager)  # init BattleManager
     staticHealingEffect = itemManager.get_effect("Potion")  # get an effect string that heals the user by X amount
     percentageHealingEffect = itemManager.get_effect("Dragon Tear")  # get an effect that heals on a percentage
     burnHealEffect = itemManager.get_effect("Ointment")  # get the effect to heal Burn
