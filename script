@@ -77,16 +77,16 @@ case $args in
 
   add-animation-NPC)
     num=1
-    for i in NPC_SPRITES/"$args2"/tile*.png
-      do mv "$i" NPC_SPRITES/"$args2"/"$args2"_"$args3"_"$num".png
+    for i in NPC_Sprites/"$args2"/tile*.png
+      do mv "$i" NPC_Sprites/"$args2"/"$args2"_"$args3"_"$num".png
       num=$((num + 1))
     done
   ;;
 
-  add-animation-Entity)
+  add-animation-entity)
     num=1
     for i in Entity_Sprites/"$args2"/tile*.png
-      do mv "$i" NPC_SPRITES/"$args2"/"$args2"_"$args3"_"$num".png
+      do mv "$i" Entity_Sprites/"$args2"/"$args2"_"$args3"_"$num".png
       num=$((num + 1))
     done
   ;;
