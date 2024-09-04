@@ -214,6 +214,8 @@ while True:
                     # when we're done reading through the dialogue, check battle state
                     if len(dialogueManager.dialogue) == 0:
                         battleManager.determine_battle_state()  # checks to see if the battle state has changed
+                if not animationManager.active:  # check to see if the animation manager was just de-activated
+                    battleManager.determine_battle_state()  # checks to see if the battle state has changed
             else:
                 entityGroup.update()  # update the entities
                 entityGroup.draw(screen)  # draw the entities

@@ -116,7 +116,9 @@ if __name__ == "__main__":
             if itemInfo["Effect"] and itemEffectDict.get(item) is None:
                 itemEffectDict.update({
                     item: {
+                        "Type": "Heal",
                         "Target": "",
+                        "AOE": False,
                         "Effect": ""
                     }
                 })

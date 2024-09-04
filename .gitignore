@@ -4,3 +4,4 @@ event_text/strip.py
 event_text/Parse.py
 test.py
 ui_test.py
+.idea

@@ -57,6 +57,7 @@ class ItemManager:
             return self.itemEffectJson[item]
         else:
             return {
+                "Type": "",
                 "Target": "",
                 "AOE": "",
                 "Effect": ""
@@ -65,6 +66,19 @@ class ItemManager:
     def get_effect(self, item):
         # returns the effect string if the item has an effect or returns empty string
         return self.get_effect_details(item)["Effect"]
+
+    # formats a dictionary to return for action manager
+    def get_action_details(self, item):
+        itemEffect = self.get_effect_details(item)
+        return {
+            "attack type": "",
+            "type": itemEffect["Type"],
+            "aniStatus": "Attack1",
+            "alternative": "Attack1",
+            "flipped": False,
+            "point": None
+        }
+
 
     def get_parsable_item_info(self, item):
         # return a dictionary that's easier to parse

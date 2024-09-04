@@ -71,7 +71,8 @@ class AnimationManager:
 
     def fill_sprite_group(self, entities):
         for entity in entities:
-            self.spriteGroup.add(entity)  # add the entity
+            if entity not in self.spriteGroup.sprites():  # only allow unique entries
+                self.spriteGroup.add(entity)  # add the entity
 
     def change_targets_animation(self, sprites, aniStatus):
         for entity in sprites:
@@ -82,7 +83,7 @@ class AnimationManager:
                 entity.aniStatus = aniStatus  # change the animation
                 entity.reset_max_animation_val()  # reset the max animation for the new animation
 
-    def load_action_queue(self, move, actor, targets, others):
+    def load_action_queue(self, actionInfo, actor, targets, others):
         self.active = True  # set the active attribute to true
         self.actor = actor  # main actor
         if len(targets) == 1 and targets[0] == actor:
@@ -94,14 +95,7 @@ class AnimationManager:
         self.fill_sprite_group(targets)  # add in the targets
         self.fill_sprite_group([self.actor])  # add in the actor
         self.actorStartingPos = (self.actor.x, self.actor.y)  # starting position for actor
-        attackType = move.attackType  # the type of attack
-        moveAction = {
-            "type": move.type,
-            "aniStatus": move.aniStatus,
-            "alternative": move.alternative,
-            "flipped": False,
-            "point": None
-        }
+        attackType = actionInfo.pop("attack type")  # get the type of attack and remove it from the dict
         if attackType != "":  # confirm that there is movement
             runningToDict = {
                 "type": "",
@@ -125,14 +119,14 @@ class AnimationManager:
                 point = (711, 400)  # some defined midpoint
             runningToDict.update({"point": point})  # update the point key
             self.actionQueue.append(runningToDict)  # add this to the queue
-            self.actionQueue.append(moveAction)  # the actual attack animation
+            self.actionQueue.append(actionInfo)  # the actual attack animation
             runningBackDict.update({  # update the running back dict
                 "flipped": True,
                 "point": self.actorStartingPos
             })
             self.actionQueue.append(runningBackDict)  # add the running back to the queue
         else:
-            self.actionQueue.append(moveAction)  # add the actual attack animation
+            self.actionQueue.append(actionInfo)  # add the actual attack animation
 
     def apply_new_action(self):
         # check if the animation we want to set it to is available

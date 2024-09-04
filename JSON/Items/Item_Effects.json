@@ -1,65 +1,78 @@
 {
    "Old Bread": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+20 Hp"
    },
    "Potion": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+100 Hp"
    },
    "Ether": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+50 Mp"
    },
    "Hi-Ether": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+100 Mp"
    },
    "Hi-Potion": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+200 Hp"
    },
    "Dragon Tear": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+50% Hp"
    },
    "Medicinal Herbs": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "Cure Poison"
    },
    "Bandages": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "Cure Bleed"
    },
    "Elixir": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "+100% Hp | +100% Mp | Cure All"
    },
    "Ointment": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "Cure Burn"
    },
    "Paralyze Tonic": {
+      "Type": "Heal",
       "Target": "S",
       "AOE": false,
       "Effect": "Cure Paralyze"
    },
    "Bomb": {
+      "Type": "Attack",
       "Target": "T",
       "AOE": true,
       "Effect": "-100 Hp, T"
    },
    "Super Bomb": {
+      "Type": "Attack",
       "Target": "T",
       "AOE": true,
       "Effect": "-100% Hp, T"
