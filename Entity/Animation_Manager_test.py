@@ -93,10 +93,10 @@ def test_change_animation_target():
 
 def test_load_action_queue():
     # set up the moves
-    rangedMove = Move("Double Slash", knight, moveDict["Double Slash"])
-    nonAttackMove = Move("Defensive Stance", knight, moveDict["Defensive Stance"])
-    physicalMove = Move("Attack", knight, moveDict["Attack"])
-    aoeMove = Move("Spinning Slash", knight, moveDict["Spinning Slash"])
+    rangedMove = Move("Double Slash", knight, moveDict["Double Slash"]).get_action_details()
+    nonAttackMove = Move("Defensive Stance", knight, moveDict["Defensive Stance"]).get_action_details()
+    physicalMove = Move("Attack", knight, moveDict["Attack"]).get_action_details()
+    aoeMove = Move("Spinning Slash", knight, moveDict["Spinning Slash"]).get_action_details()
     # load the ranged move
     animationManager.load_action_queue(rangedMove, knight, [goblin], [dummy])
     # check the actor details

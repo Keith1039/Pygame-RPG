@@ -17,6 +17,17 @@ class Move:
         self.alternative = jsonInfo["Alternative"]  # the animation to play if the sprite doesn't have the animation
         self.description = jsonInfo["Description"]  # Description of the attack being used
 
+    def get_action_details(self):
+        # returns a dictionary for the move action
+        return {
+            "attack type": self.attackType,
+            "type": self.type,
+            "aniStatus": self.aniStatus,
+            "alternative": self.alternative,
+            "flipped": False,
+            "point": None
+        }
+
 def isfloat(stringVal):
     # checks and sees if a string is an eligible float
     try:

@@ -56,29 +56,36 @@ class BattleManager:
             # Note that the move that is given is assumed to have been validated
             if objectType == "Knight" and move != "" and len(target) == self.targetNum:
                 # print(target)
-                moveObj = None  # the move object we need
+                actionInfo = {}  # the action information we need
+                actionTargets = []
                 for i in range(len(target)):
                     # get a list of Entity objects from the positions
                     targets.append(self.get_entity_from_pos(target[i]))
                 # we're using an item
                 if move in self.itemManager.itemJson.keys():
                     refresh = True  # set refresh equal to true
-                    moveObj = Move("Use Item", self.hero, self.moveDict["Use Item"])  # use the stock move for items
+                    actionInfo = self.itemManager.get_action_details(move)  # get the action information
                     itemDetails = self.itemManager.get_effect_details(move)  # getting information about the item
                     if itemDetails["AOE"]:
+                        actionTargets = self.get_enemy_objects()  # set the action targets to every enemy
                         returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], self.get_enemy_objects())
                     else:
+                        actionTargets = targets
                         returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], targets)
                 # if we aren't using an item we're using a move of some sort
                 else:
-                    moveObj = Move(move, self.hero, self.moveDict[move])
+                    moveObj = Move(move, self.hero, self.moveDict[move])  # make the move object
+                    actionInfo = moveObj.get_action_details()  # get the action details for the move
                     if moveObj.AOE:  # if the move is an AOE move, target all enemies
+                        actionTargets = self.get_enemy_objects()  # set the action targets to all enemies
                         returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
                     else:
+                        actionTargets = targets
                         returnable_strings += self.use_move(self.hero, moveObj, targets)
                 # get the list of uninvolved actors
-                others = Utils.get_others(self.hero, targets, self.get_enemy_objects())
-                self.animationManager.load_action_queue(moveObj, self.hero, targets, others)
+                others = Utils.get_others(self.hero, actionTargets, self.get_enemy_objects())
+                # load the manager with information
+                self.animationManager.load_action_queue(actionInfo, self.hero, actionTargets, others)
                 self.turnOrder.pop(0)  # after the player has moved, kick them from turn order
                 # self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":
@@ -100,10 +107,11 @@ class BattleManager:
                     loopNum += 1
                 for z in range(moveObj.targetNumber):
                     targets.append(self.hero)
+                actionInfo = moveObj.get_action_details()  # get the move information
                 returnable_strings += self.use_move(turnObject, moveObj, targets)
                 others = Utils.get_others(turnObject, targets, self.get_enemy_objects())  # get the others
                 self.targetNum = -1  # reset the target number since the move was done successfully
-                self.animationManager.load_action_queue(moveObj, turnObject, targets, others)
+                self.animationManager.load_action_queue(actionInfo, turnObject, targets, others)
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
                 # self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
