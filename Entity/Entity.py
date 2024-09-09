@@ -54,11 +54,11 @@ class Entity(game.sprite.Sprite):
             self.image = game.transform.flip(self.image, True, False)  # flip across y axis
         self.image = game.transform.scale(self.image, self.Scale)  # scale the image
         self.rect = self.image.get_rect()  # get the new rectangle
-        self.rect.center = (self.x, self.y)  # center the rectangle to the players coordinates
+        self.rect.midbottom = (self.x, self.y)  # center the rectangle to the players coordinates
 
     def update(self, force=False):
-        if self.rect.center != (self.x, self.y):  # check if the entity moved
-            self.rect.center = (self.x, self.y)  # center the rectangle
+        if self.rect.midbottom != (self.x, self.y):  # check if the entity moved
+            self.rect.midbottom = (self.x, self.y)  # center the rectangle
         # this behavior is for overworld behavior
         if self.aniTracker != -1:  # -1 means that the animation is stuck for it
             self.aniTracker += 1  # increment the tracker

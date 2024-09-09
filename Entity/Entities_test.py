@@ -38,7 +38,7 @@ def test_update():
     knight.y = 999  # set a new position
     knight.update()  # update the knight
     # confirm that the rectangle shifted to the knight's coordinates
-    flag5 = knight.rect.center != oldRectPos and knight.rect.center == (knight.x, knight.y)
+    flag5 = knight.rect.center != oldRectPos and knight.rect.midbottom == (knight.x, knight.y)
     assert flag and flag2 and flag3 and flag4 and flag5
 
 

@@ -23,7 +23,7 @@ class Knight(Entity):
             "Accessory": None
         }
         self.default_x = 0  # default x value
-        self.default_y = 590  # default y value 350 works for battles
+        self.default_y = 740  # default y value 350 works for battles
         self.x = self.default_x  # set the x value
         self.y = self.default_y  # set the y value
         self.reset_max_animation_val()  # set the limit
