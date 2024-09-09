@@ -4,7 +4,7 @@
       "aniStatus": "Idle",
       "aniTracker": 0,
       "x": 0,
-      "y": 590,
+      "y": 740,
       "flipped": false,
       "Name": "Knight",
       "Sprite": "Entity_Sprites/Knight/",
@@ -13,17 +13,17 @@
          -1
       ],
       "Lvl": 1,
-      "Hpcap": 52174,
-      "Hp": 52174,
-      "Mpcap": 52174,
-      "Mp": 52174,
+      "Hpcap": 766,
+      "Hp": 766,
+      "Mpcap": 766,
+      "Mp": 766,
       "Exp": 0,
       "Bal": 0,
-      "Str": 52174,
+      "Str": 766,
       "Mag": 1,
-      "Vit": 52174,
-      "Agl": 52174,
-      "Def": 52174,
+      "Vit": 766,
+      "Agl": 766,
+      "Def": 766,
       "moveList": [
          "Attack"
       ],
@@ -63,10 +63,10 @@
       }
    },
    "rawVariables": {
-      "animationTracker": 87,
-      "animationTracker2": 17,
-      "animationTracker3": 14,
-      "gameState": 2
+      "animationTracker": 29,
+      "animationTracker2": 11,
+      "animationTracker3": 27,
+      "gameState": 5
    },
    "screenManager": {
       "context": "Background1",
@@ -237,6 +237,24 @@
             500,
             650
          ]
+      },
+      "Werewolf": {
+         "Name": "Werewolf",
+         "Sprite": "Object_Sprites/Werewolf/",
+         "Scale": [],
+         "Flipped": false,
+         "Events": [],
+         "Context": "",
+         "Pos": []
+      },
+      "Witch": {
+         "Name": "Witch",
+         "Sprite": "Object_Sprites/Witch/",
+         "Scale": [],
+         "Flipped": false,
+         "Events": [],
+         "Context": "",
+         "Pos": []
       }
    },
    "objectDict": {
