@@ -33,14 +33,17 @@ def test_add_enemy():
     flag = False
     for i in range(6):
         battleManager.add_enemy(dummy)
-        flag = battleManager.enemies[i][1] == dummy and \
-               battleManager.enemies[i][0] == (900 + int(i / 3) * 300, 100 + int(i % 3) * 250)
+        flag = battleManager.enemies[i] == dummy and \
+               battleManager.enemies[i].rect.center == (900 + int(i / 3) * 300, 100 + int(i % 3) * 250)
         if not flag:
             break
     # clear the list and re-add one dummy to the list of enemies
     battleManager.enemies.clear()
     battleManager.add_enemy(dummy)
-    flag2 = dummy.x == 900 and dummy.y == 100  # check if the dummy's coordinates changed
+    # dummy's coords
+    x = dummy.rect.center[0]
+    y = dummy.rect.center[1]
+    flag2 = x == 900 and y == 100  # check if the dummy's coordinates changed
     assert flag and flag2
 
 def test_parse_effects():
@@ -134,7 +137,7 @@ def test_reset_turn_order():
             and battleManager.turnOrder[1] == knight)
 
 def test_clear_dead_enemies():
-    battleManager.enemies[0][1].Status = ("Dead", -1)  # Change Dummy status to Dead
+    battleManager.enemies[0].Status = ("Dead", -1)  # Change Dummy status to Dead
     returnableStrings = battleManager.clear_dead_enemies()  # clear the dead enemies
     # Check if the enemies list is empty and only the hero object should be in turn order
     # also checks to see if the event string was added
@@ -145,19 +148,19 @@ def test_fix_entity_stats():
     knight.Hpcap = 9
     knight.Bal = - 100
     battleManager.add_enemy(factory.create_entity("dummy"))  # re-add a new dummy to list of enemies
-    battleManager.enemies[0][1].Mpcap = 1
+    battleManager.enemies[0].Mpcap = 1
     battleManager.turnOrder.clear()  # reset the turnOrder
     battleManager.reset_turn_order()  # Add all alive entities to the turn order
     battleManager.fix_entity_stats()
     # check to see if the health, mana and bal values have been changed
-    assert knight.Hp == 9 and knight.Bal == 0 and battleManager.enemies[0][1].Mp == 1
+    assert knight.Hp == 9 and knight.Bal == 0 and battleManager.enemies[0].Mp == 1
 
 def test_get_entity_from_pos():
     # clear and re-add a dummy object
     battleManager.enemies.clear()
     dummy = factory.create_entity("dummy")
     battleManager.add_enemy(dummy)
-    pos = battleManager.heroPos
+    pos = battleManager.get_knight_pos()  # center of the knight's rect
     entity = battleManager.get_entity_from_pos(pos)
     pos = (900, 100)
     entity2 = battleManager.get_entity_from_pos(pos)

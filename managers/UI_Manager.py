@@ -258,7 +258,7 @@ class UIManager:
                 if self.targetSlider > len(self.targets) - 1 or self.targetSlider < 0:
                     self.targetSlider = oldSliderVal
                 pos = self.targets[self.targetSlider]  # the position we blit
-                pos = (pos[0] - 100, pos[1] - 20)  # apply offsets
+                pos = (pos[0] - 100, pos[1])  # apply offsets
                 self.screen.blit(self.cursor.cursor, pos)
         else:
             flag = self.cursor.handle_cursor(keys)

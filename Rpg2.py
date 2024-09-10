@@ -47,9 +47,9 @@ def handle_player_interaction(keys, knight, saveManager, screenManager, npcManag
 
     elif keys[game.K_b]:
         # start a battle
-        knight.x = 500  # set the x coord
-        knight.y = 300  # set the y coord
-        knight.rect.center = (knight.x, knight.y)  # recenter the rect
+        knight.rect.center = (500, 300)
+        knight.x = knight.rect.midbottom[0]
+        knight.y = knight.rect.midbottom[1]
         battleManager.enemies.clear()  # clear the enemies
         for i in range(2):
             enemy = entityFactory.create_entity("Goblin")  # create an enemy
