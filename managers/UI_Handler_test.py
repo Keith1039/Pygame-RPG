@@ -79,7 +79,8 @@ def test_simulate_targeting_transition():
     context, choice = uiManager.draw_UI(eventList)  # process events
     UIHandler.handle_interaction(context, choice)  # handle the interaction
     # check if the UI changed and if the position is the same
-    assert uiManager.UI == "Select Target" and uiManager.targets[0] == battleManager.enemies[0][0]
+    targetable = battleManager.get_enemy_positions()
+    assert uiManager.UI == "Select Target" and uiManager.targets[0] == targetable[0]
 
 def test_simulate_skill_use():
     dummyKnight.moveList.append("Super Attack")  # give dummy knight an unusable skill

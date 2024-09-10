@@ -76,11 +76,11 @@ class UIHandler():
                     targetable = []
                     if target == "S":
                         # add the hero to the list of targets
-                        targetable.append(self.battleManager.heroPos)
+                        targetable.append(self.battleManager.get_knight_pos())
                     elif target == "All":
                         # add everything into the list of targets
                         targetable = self.battleManager.get_enemy_positions()
-                        targetable.insert(0, self.battleManager.heroPos)
+                        targetable.insert(0, self.battleManager.get_knight_pos())
                     else:
                         # add enemies to the list of targets
                         targetable = self.battleManager.get_enemy_positions()

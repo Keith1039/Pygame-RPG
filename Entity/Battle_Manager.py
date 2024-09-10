@@ -8,11 +8,10 @@ class BattleManager:
         self.battleState = (False, "")
         self.moveDict = Utils.get_move_dict()  # fills up the move dictionary
         self.statusDict = Utils.get_status_dict()  # retrieves the effect information
-        self.hero = knight  # the hero dict
+        self.knight = knight  # the hero dict
         self.itemManager = itemManager  # the item manager
         self.animationManager = animationManager  # the animation manager
         self.targetNum = -1  # the amount of targets that need to be selected
-        self.heroPos = (300, 500)  # write it down later
         self.enemies = []  # tuple dict with enemy object and the x and y position of the object (max 6)
         self.turnOrder = []  # turn order list for the entities
         self.lootPool = {
@@ -29,10 +28,10 @@ class BattleManager:
         i = len(self.enemies)
         x = 900 + int(i / 3) * 300
         y = 100 + (i % 3) * 250
-        enemy.x = x  # set the new x coordinate for the enemy object
-        enemy.y = y  # set the new y coordinate for the enemy object
-        enemy.rect.center = (enemy.x, enemy.y)
-        self.enemies.append(((x, y), enemy))  # add the enemy to the list
+        enemy.rect.center = (x, y)  # center the object first
+        enemy.x = enemy.rect.center[0]  # set the x value
+        enemy.y = enemy.rect.bottom  # set the y value
+        self.enemies.append(enemy)  # add the enemy to the list
 
     def do_one_turn(self, move, target):
         # I'll worry about the drawing later
@@ -68,24 +67,24 @@ class BattleManager:
                     itemDetails = self.itemManager.get_effect_details(move)  # getting information about the item
                     if itemDetails["AOE"]:
                         actionTargets = self.get_enemy_objects()  # set the action targets to every enemy
-                        returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], self.get_enemy_objects())
+                        returnable_strings += self.use_item(self.knight, move, itemDetails["Effect"], self.get_enemy_objects())
                     else:
                         actionTargets = targets
-                        returnable_strings += self.use_item(self.hero, move, itemDetails["Effect"], targets)
+                        returnable_strings += self.use_item(self.knight, move, itemDetails["Effect"], targets)
                 # if we aren't using an item we're using a move of some sort
                 else:
-                    moveObj = Move(move, self.hero, self.moveDict[move])  # make the move object
+                    moveObj = Move(move, self.knight, self.moveDict[move])  # make the move object
                     actionInfo = moveObj.get_action_details()  # get the action details for the move
                     if moveObj.AOE:  # if the move is an AOE move, target all enemies
                         actionTargets = self.get_enemy_objects()  # set the action targets to all enemies
-                        returnable_strings += self.use_move(self.hero, moveObj, self.get_enemy_positions())
+                        returnable_strings += self.use_move(self.knight, moveObj, self.get_enemy_positions())
                     else:
                         actionTargets = targets
-                        returnable_strings += self.use_move(self.hero, moveObj, targets)
+                        returnable_strings += self.use_move(self.knight, moveObj, targets)
                 # get the list of uninvolved actors
-                others = Utils.get_others(self.hero, actionTargets, self.get_enemy_objects())
+                others = Utils.get_others(self.knight, actionTargets, self.get_enemy_objects())
                 # load the manager with information
-                self.animationManager.load_action_queue(actionInfo, self.hero, actionTargets, others)
+                self.animationManager.load_action_queue(actionInfo, self.knight, actionTargets, others)
                 self.turnOrder.pop(0)  # after the player has moved, kick them from turn order
                 # self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":
@@ -106,7 +105,7 @@ class BattleManager:
                         moveObj = Move(move, turnObject, moveInfo)
                     loopNum += 1
                 for z in range(moveObj.targetNumber):
-                    targets.append(self.hero)
+                    targets.append(self.knight)
                 actionInfo = moveObj.get_action_details()  # get the move information
                 returnable_strings += self.use_move(turnObject, moveObj, targets)
                 others = Utils.get_others(turnObject, targets, self.get_enemy_objects())  # get the others
@@ -143,7 +142,7 @@ class BattleManager:
         # function for when an item is used
         returnableStrings = []
         returnableStrings.append(turnObject.altName + " Used " + itemName + "!")
-        self.hero.remove_from_inventory(itemName)
+        self.knight.remove_from_inventory(itemName)
         effectList = self.parse_effects(itemEffect)
         for i in range(len(targets)):
             returnableStrings = returnableStrings + self.apply_effects(effectList, turnObject, targets[i])
@@ -291,10 +290,10 @@ class BattleManager:
     def reset_turn_order(self):
         if len(self.turnOrder) == 0:
             # add the hero object
-            self.turnOrder.append(self.hero)
+            self.turnOrder.append(self.knight)
             # add the enemy objects
             for i in range(len(self.enemies)):
-                enemy = self.enemies[i][1]
+                enemy = self.enemies[i]
                 self.turnOrder.append(enemy)
             # sort the list, since the tuple has a number in the first index in descending order
             self.turnOrder.sort(reverse=True)
@@ -305,9 +304,9 @@ class BattleManager:
         newTurnOrder = []  # empty list of entities that aren't dead
         # Loop through enemies list and append the not dead enemies to the newEnemies list
         for i in range(len(self.enemies)):
-            enemy = self.enemies[i][1]
+            enemy = self.enemies[i]
             if enemy.Status[0] != "Dead":
-                newEnemies.append(self.enemies[i])
+                newEnemies.append(enemy)
             else:
                 returnableStrings.append(enemy.altName + " died!")
         self.enemies = newEnemies  # set the enemies list to the newEnemies list
@@ -328,39 +327,39 @@ class BattleManager:
 
     def get_entity_from_pos(self, pos):
         # find out the entity that this position is mapped to and return it
-        if pos == self.heroPos:
-            return self.hero
+        if pos == self.get_knight_pos():
+            return self.knight  # return hero
         else:
             for i in range(len(self.enemies)):
-                enemyPos = self.enemies[i][0]
-                if enemyPos == pos:
-                    return self.enemies[i][1]
+                enemy = self.enemies[i]  # enemy object
+                if pos == enemy.rect.center:  # check the position
+                    return enemy  # return enemy
 
     def determine_battle_state(self):
-        if len(self.enemies) == 0 and self.hero.Status[0] != "Dead":
+        if len(self.enemies) == 0 and self.knight.Status[0] != "Dead":
             self.battleState = (False, "Hero Wins")  # Battle ended, hero wins
             self.animationManager.reset_action()  # reset the animation manager
-        elif self.hero.Status[0] == "Dead":
+        elif self.knight.Status[0] == "Dead":
             self.battleState = (False, "Hero Loses")  # Battle ended, hero lost
             self.animationManager.reset_action()  # reset the animation manager
-        elif len(self.enemies) != 0 and self.hero.Status[0] != "Dead":  # Battle is on going
+        elif len(self.enemies) != 0 and self.knight.Status[0] != "Dead":  # Battle is on going
             self.battleState = (True, "")
 
     def get_enemy_positions(self):
         # function that returns a list of enemy positions
         targetable = []
         for i in range(len(self.enemies)):
-            # getting the positions of the enemies
-            targetable.append(self.enemies[i][0])
+            # getting the positions of the enemies (center of the sprite)
+            targetable.append(self.enemies[i].rect.center)
         return targetable
 
     def get_enemy_objects(self):
         # function that returns a list of enemy objects
-        enemyObjects = []
-        for i in range(len(self.enemies)):
-            # adds enemy object to the list
-            enemyObjects.append(self.enemies[i][1])
-        return enemyObjects
+        return self.enemies
+
+    def get_knight_pos(self):
+        # returns the position of the knight (specifically the center)
+        return self.knight.rect.center
 
     def apply_status_effect(self, entity):
         returnableStrings = []
@@ -439,7 +438,7 @@ class BattleManager:
     ########## DEBUG FUNCTIONS (NO TESTING REQUIRED)
 
     def print_all_statuses(self):
-        self.hero.print_status()
+        self.knight.print_status()
         d = self.get_enemy_objects()
         for i in range(len(d)):
             d[i].print_status()
