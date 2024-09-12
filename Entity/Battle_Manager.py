@@ -338,8 +338,10 @@ class BattleManager:
     def determine_battle_state(self):
         if len(self.enemies) == 0 and self.knight.Status[0] != "Dead":
             self.battleState = (False, "Hero Wins")  # Battle ended, hero wins
+            self.animationManager.deadGroup.empty()
         elif self.knight.Status[0] == "Dead":
             self.battleState = (False, "Hero Loses")  # Battle ended, hero lost
+            self.animationManager.deadGroup.empty()
         elif len(self.enemies) != 0 and self.knight.Status[0] != "Dead":  # Battle is on going
             self.battleState = (True, "")
 

@@ -1,3 +1,4 @@
+from Entity.Animation_Manager_test import goblin
 from Entity.Knight import Knight
 from Entity.Entity_Factory import EntityFactory
 from Entity.Animation_Manager import AnimationManager
@@ -166,19 +167,22 @@ def test_get_entity_from_pos():
     assert entity == knight and entity2 == dummy
 
 def test_determine_battle_state():
-    # kill hero and see if the state is changed appropriately
+    animationManager.deadGroup.add(goblin)  # add goblin to the group
+    # kill hero and see if the state is changed appropriately also check if the dead group is emptied
     knight.Status = ("Dead", -1)
     battleManager.determine_battle_state()
-    flag = battleManager.battleState == (False, "Hero Loses")
+    flag = battleManager.battleState == (False, "Hero Loses") and len(animationManager.deadGroup.sprites()) == 0
     # revive hero and determine if the state is changed appropriately
     knight.Status = ("Normal", -1)
     battleManager.determine_battle_state()
+    animationManager.deadGroup.add(goblin)  # add goblin to the group
     # change the battle state and confirm that the boolean for animationManager has not changed
-    flag2 = battleManager.battleState == (True, "")
+    flag2 = battleManager.battleState == (True, "") and len(animationManager.deadGroup.sprites()) == 1
     # get rid of all enemies and determine if the state is changed appropriately
     battleManager.enemies.clear()
+    animationManager.deadGroup.add(goblin)  # add goblin to the group
     battleManager.determine_battle_state()
-    flag3 = battleManager.battleState == (False, "Hero Wins")
+    flag3 = battleManager.battleState == (False, "Hero Wins") and len(animationManager.deadGroup.sprites()) == 0
     # check all flags
     assert flag and flag2 and flag3
 
