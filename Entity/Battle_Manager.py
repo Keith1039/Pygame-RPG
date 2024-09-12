@@ -338,10 +338,8 @@ class BattleManager:
     def determine_battle_state(self):
         if len(self.enemies) == 0 and self.knight.Status[0] != "Dead":
             self.battleState = (False, "Hero Wins")  # Battle ended, hero wins
-            self.animationManager.reset_action()  # reset the animation manager
         elif self.knight.Status[0] == "Dead":
             self.battleState = (False, "Hero Loses")  # Battle ended, hero lost
-            self.animationManager.reset_action()  # reset the animation manager
         elif len(self.enemies) != 0 and self.knight.Status[0] != "Dead":  # Battle is on going
             self.battleState = (True, "")
 
@@ -433,7 +431,6 @@ class BattleManager:
         # set the target number based off of the move
         moveInfo = self.moveDict[move]
         self.targetNum = moveInfo["Target Number"]
-
 
     ########## DEBUG FUNCTIONS (NO TESTING REQUIRED)
 

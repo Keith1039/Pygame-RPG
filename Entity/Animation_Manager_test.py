@@ -19,8 +19,6 @@ goblin.x = 431
 goblin.y = 500
 dummy = factory.create_entity("dummy")  # make a dummy object
 
-
-
 def test_set_slope_equation():
     startingPoint = (500, 400)  # start point
     endPoint = (900, 500)  # end point
@@ -56,18 +54,19 @@ def test_use_slope_equation():
     flag3 = (knight.x, knight.y) == endPoint  # confirm that at the max, the end point is reached
     assert flag and flag2 and flag3
 
-def confirm_valid_animation_status():
+def test_confirm_valid_animation_status():
     # check if the "Attack" animation is present in the folder for knight animations
     flag = animationManager.confirm_valid_animation_status(knight.Sprite, "Attack1")
     # check for an invalid animation status
     flag2 = animationManager.confirm_valid_animation_status(knight.Sprite, "ASDASDACJJIABSHD")
-    assert flag and flag2
+    assert flag and not flag2
 
-def fill_sprite_group():
+def test_fill_sprite_group():
     animationManager.fill_sprite_group([knight, goblin])  # add in two sprites
     flag = len(animationManager.spriteGroup.sprites()) == 2  # check if the length works
-    animationManager.spriteGroup.remove()  # remove the sprites
-    assert flag
+    animationManager.spriteGroup.empty()  # remove the sprites
+    flag2 = len(animationManager.spriteGroup.sprites()) == 0  # check if the sprites were really cleared
+    assert flag and flag2
 
 def test_change_animation_target():
     animationManager.change_targets_animation([knight, goblin], "Run")  # change animation to run
@@ -86,7 +85,7 @@ def test_change_animation_target():
     # confirm that the knight object is still dead (confirm that flipped stays the same)
     flag3 = knight.aniStatus == "Death" and knight.maxAniVal == 10 and knight.flipped and knight.aniTracker == 50
     # confirm that the goblin's animation changed and the animation tracker was reset
-    flag4 = goblin.aniStatus == "Idle" and goblin.maxAniVal == 6 and not goblin.flipped and goblin.aniTracker == 0
+    flag4 = goblin.aniStatus == "Idle" and goblin.maxAniVal == 6 and not goblin.flipped and goblin.aniTracker == 1
     knight.aniStatus = "Idle"  # set the animation manually
     knight.reset_max_animation_val()  # reset the maximum
     assert flag and flag2 and flag3 and flag4
@@ -101,23 +100,25 @@ def test_load_action_queue():
     animationManager.load_action_queue(rangedMove, knight, [goblin], [dummy])
     # check the actor details
     flag = animationManager.actor == knight and animationManager.actorStartingPos == (knight.x, knight.y)
-    flag2 = len(animationManager.actionQueue) == 3 and len(animationManager.targets) == 1 \
-           and len(animationManager.spriteGroup.sprites()) == 3
-    animationManager.reset_action()  # reset everything
+    # check if the first action in the queue was preloaded
+    flag2 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
+           and len(animationManager.spriteGroup.sprites()) == 3 and animationManager.action != {}
+    animationManager.reset()  # reset everything
     # load the non-attacking move
     animationManager.load_action_queue(nonAttackMove, knight, [knight], [goblin, dummy])
-    flag3 = len(animationManager.actionQueue) == 1 \
-        and len(animationManager.targets) == 0 and len(animationManager.spriteGroup.sprites()) == 3
-    animationManager.reset_action()  # reset everything
+    flag3 = len(animationManager.actionQueue) == 0 \
+        and len(animationManager.targets) == 0 and len(animationManager.spriteGroup.sprites()) == 3 \
+        and animationManager.action != {}
+    animationManager.reset()  # reset everything
     animationManager.load_action_queue(physicalMove, goblin, [knight], [dummy])
     flag4 = animationManager.actor == goblin and animationManager.actorStartingPos == (goblin.x, goblin.y)
-    flag5 = len(animationManager.actionQueue) == 3 and len(animationManager.targets) == 1 \
-           and len(animationManager.spriteGroup.sprites()) == 3
-    animationManager.reset_action()  # reset everything
+    flag5 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
+           and len(animationManager.spriteGroup.sprites()) == 3 and animationManager.action != {}
+    animationManager.reset()  # reset everything
     animationManager.load_action_queue(aoeMove, knight, [goblin], [dummy])
-    flag6 = len(animationManager.actionQueue) == 3 and len(animationManager.targets) == 1 \
-           and len(animationManager.spriteGroup.sprites()) == 3
-    animationManager.reset_action()  # reset everything
+    flag6 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
+           and len(animationManager.spriteGroup.sprites()) == 3 and animationManager.action != {}
+    animationManager.reset()  # reset everything
     assert flag and flag2 and flag3 and flag4 and flag5 and flag6
 
 def test_apply_new_action():
@@ -149,7 +150,7 @@ def test_apply_new_action():
     # confirm slope information
     flag2 = slopeDict["m"] == (1/4) and slopeDict["b"] == 275 and slopeDict["x_distance"] == 400 and \
         slopeDict["Starting Point"] == (500, 400)
-    animationManager.reset_action()  # rest the manager
+    animationManager.reset()  # rest the manager
     animationManager.actor = knight  # set the actor to the knight object
     animationManager.targets = [goblin]  # set the target to goblin
     animationManager.action = invalidAttackAction  # set the action
@@ -158,6 +159,3 @@ def test_apply_new_action():
     flag3 = knight.aniStatus == "Attack1" and knight.maxAniVal == 4 and not knight.flipped
     flag4 = goblin.aniStatus == "Hurt" and goblin.maxAniVal == 3
     assert flag and flag2 and flag3 and flag4
-
-
-
