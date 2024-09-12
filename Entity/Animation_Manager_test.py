@@ -85,7 +85,7 @@ def test_change_animation_target():
     # confirm that the knight object is still dead (confirm that flipped stays the same)
     flag3 = knight.aniStatus == "Death" and knight.maxAniVal == 10 and knight.flipped and knight.aniTracker == 50
     # confirm that the goblin's animation changed and the animation tracker was reset
-    flag4 = goblin.aniStatus == "Idle" and goblin.maxAniVal == 6 and not goblin.flipped and goblin.aniTracker == 1
+    flag4 = goblin.aniStatus == "Idle" and goblin.maxAniVal == 6 and not goblin.flipped and goblin.aniTracker == 0
     knight.aniStatus = "Idle"  # set the animation manually
     knight.reset_max_animation_val()  # reset the maximum
     assert flag and flag2 and flag3 and flag4
