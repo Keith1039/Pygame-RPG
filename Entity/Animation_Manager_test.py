@@ -61,11 +61,49 @@ def test_confirm_valid_animation_status():
     flag2 = animationManager.confirm_valid_animation_status(knight.Sprite, "ASDASDACJJIABSHD")
     assert flag and not flag2
 
+def test_pseudo_update():
+    animationManager.primaryGroup.empty()  # empty the group
+    # add the knight and the goblin to the primary group
+    animationManager.primaryGroup.add(knight)
+    animationManager.primaryGroup.add(goblin)
+    knight.aniTracker = knight.maxAniVal * 10 - 1  # set the knight's tracker to right before the cap
+    goblin.aniTracker = 0  # set the goblin's animation tracker to 0
+    animationManager.pseudo_update()  # pseudo update
+    # confirm that knight froze and goblin was still updated.
+    flag = knight.aniTracker == knight.maxAniVal * 10 -1 and goblin.aniTracker == 1
+    assert flag
+
+def test_is_over():
+    animationManager.primaryGroup.empty()  # empty the primary group
+    animationManager.primaryGroup.add(knight)
+    animationManager.primaryGroup.add(goblin)
+    knight.aniTracker = knight.maxAniVal * 10 - 1  # set the knight's tracker to right before the cap
+    goblin.aniTracker = 0  # set the goblin's animation tracker to 0
+    flag = animationManager.is_over()  # check if it's over
+    goblin.aniTracker = goblin.maxAniVal * 10 - 1  # set the goblin's tracker to right before the cap
+    flag2 = animationManager.is_over()  # check if it's over
+    assert not flag and flag2
+
+def test_fill_dead_group():
+    animationManager.primaryGroup.empty()  # empty the primary group
+    animationManager.deadGroup.empty()  # empty the dead group
+    animationManager.primaryGroup.add(knight)
+    animationManager.primaryGroup.add(goblin)
+    knightCopy = knight.__dict__.copy()  # make a copy of the knight's stats before we change them
+    knight.Status = ("Dead", -1)
+    animationManager.fill_dead_group()
+    primaryCopy = animationManager.primaryGroup.sprites()  # make a reference to the sprites list
+    deadCopy = animationManager.deadGroup.sprites()  # make a reference to the dead sprites list
+    flag = len(primaryCopy) == 1 and primaryCopy[0] == goblin
+    flag2 = len(deadCopy) == 1 and deadCopy[0] == knight and knight.aniStatus == "Death"
+    knight.__dict__ = knightCopy  # revert the knight object
+    assert flag and flag2
+
 def test_fill_sprite_group():
-    animationManager.fill_sprite_group([knight, goblin])  # add in two sprites
-    flag = len(animationManager.spriteGroup.sprites()) == 2  # check if the length works
-    animationManager.spriteGroup.empty()  # remove the sprites
-    flag2 = len(animationManager.spriteGroup.sprites()) == 0  # check if the sprites were really cleared
+    animationManager.fill_sprite_group(animationManager.primaryGroup, [knight, goblin])  # add in two sprites
+    flag = len(animationManager.primaryGroup.sprites()) == 2  # check if the length works
+    animationManager.primaryGroup.empty()  # remove the sprites
+    flag2 = len(animationManager.primaryGroup.sprites()) == 0  # check if the sprites were really cleared
     assert flag and flag2
 
 def test_change_animation_target():
@@ -102,22 +140,25 @@ def test_load_action_queue():
     flag = animationManager.actor == knight and animationManager.actorStartingPos == (knight.x, knight.y)
     # check if the first action in the queue was preloaded
     flag2 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
-           and len(animationManager.spriteGroup.sprites()) == 3 and animationManager.action != {}
+           and len(animationManager.primaryGroup.sprites()) == 2 and animationManager.action != {} \
+            and len(animationManager.secondaryGroup.sprites()) == 1
     animationManager.reset()  # reset everything
     # load the non-attacking move
     animationManager.load_action_queue(nonAttackMove, knight, [knight], [goblin, dummy])
     flag3 = len(animationManager.actionQueue) == 0 \
-        and len(animationManager.targets) == 0 and len(animationManager.spriteGroup.sprites()) == 3 \
-        and animationManager.action != {}
+        and len(animationManager.targets) == 0 and len(animationManager.primaryGroup.sprites()) == 1 \
+        and animationManager.action != {} and len(animationManager.secondaryGroup.sprites()) == 2
     animationManager.reset()  # reset everything
     animationManager.load_action_queue(physicalMove, goblin, [knight], [dummy])
     flag4 = animationManager.actor == goblin and animationManager.actorStartingPos == (goblin.x, goblin.y)
     flag5 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
-           and len(animationManager.spriteGroup.sprites()) == 3 and animationManager.action != {}
+           and len(animationManager.primaryGroup.sprites()) == 2 and animationManager.action != {} \
+           and len(animationManager.secondaryGroup.sprites()) == 1
     animationManager.reset()  # reset everything
     animationManager.load_action_queue(aoeMove, knight, [goblin], [dummy])
     flag6 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
-           and len(animationManager.spriteGroup.sprites()) == 3 and animationManager.action != {}
+           and len(animationManager.primaryGroup.sprites()) == 2 and animationManager.action != {} \
+           and len(animationManager.secondaryGroup.sprites()) == 1
     animationManager.reset()  # reset everything
     assert flag and flag2 and flag3 and flag4 and flag5 and flag6
 

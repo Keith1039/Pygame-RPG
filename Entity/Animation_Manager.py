@@ -16,7 +16,9 @@ class AnimationManager:
     def __init__(self, screen):
         self.screen = screen  # screen for animating
         self.active = False  # boolean that tells us if the manager is to be used
-        self.spriteGroup = game.sprite.Group()  # the group of sprites getting animated
+        self.primaryGroup = game.sprite.Group()  # Entities that matter
+        self.secondaryGroup = game.sprite.Group()  # Entities who don't matter
+        self.deadGroup = game.sprite.Group()  # group of dead objects
         self.actor = None  # main entity
         self.targets = []  # a list of entities getting hit or something
         self.others = []  # list of the other entities
@@ -69,10 +71,33 @@ class AnimationManager:
                 break  # end loop
         return flag
 
-    def fill_sprite_group(self, entities):
+    def pseudo_update(self):
+        for entity in self.primaryGroup.sprites():
+            # we stop 1 frame before we loop back around because of how update works
+            if entity.aniTracker != entity.maxAniVal * 10 - 1:
+                entity.update()  # update the animation
+
+    def is_over(self):
+        for entity in self.primaryGroup.sprites():
+            # check we reached the stopping point
+            if entity.aniTracker != entity.maxAniVal * 10 - 1:
+                return False
+        return True
+
+    def fill_dead_group(self):
+        primaryCopy = self.primaryGroup.sprites()
+        deadEntities = []
+        for entity in primaryCopy:
+            if entity.Status[0] == "Dead":  # check if the sprite is dead
+                deadEntities.append(entity)  # add the dead entity to the list
+                self.primaryGroup.remove(entity)  # remove the entity from primary group
+        self.change_targets_animation(deadEntities, "Death")  # set all of them to their death animation
+        self.fill_sprite_group(self.deadGroup, deadEntities)  # add them to the dead sprite group
+
+    def fill_sprite_group(self, group, entities):
         for entity in entities:
-            if entity not in self.spriteGroup.sprites():  # only allow unique entries
-                self.spriteGroup.add(entity)  # add the entity
+            if entity not in group.sprites():  # only allow unique entries
+                group.add(entity)  # add the entity
 
     def change_targets_animation(self, sprites, aniStatus):
         for entity in sprites:
@@ -92,16 +117,19 @@ class AnimationManager:
         else:
             self.targets = targets  # set the targets
         self.others = others  # everyone else
-        self.fill_sprite_group(others)  # add in the others
-        self.fill_sprite_group(targets)  # add in the targets
-        self.fill_sprite_group([self.actor])  # add in the actor
+        # self.fill_sprite_group(others)  # add in the others
+        # self.fill_sprite_group(targets)  # add in the targets
+        # self.fill_sprite_group([self.actor])  # add in the actor
         self.actorStartingPos = (self.actor.x, self.actor.y)  # starting position for actor
         attackType = actionInfo.pop("attack type")  # get the type of attack and remove it from the dict
+        # make it so that the animation ends when all primary animations are done
+        actionInfo.update({"Frame Count": False})
         if attackType != "":  # confirm that there is movement
             runningToDict = {
                 "type": "",
                 "aniStatus": "Run",
                 "alternative": "Idle",
+                "Frame Count": True,
                 "flipped": False,
                 "point": (self.actor.x, self.actor.y)
             }
@@ -128,8 +156,11 @@ class AnimationManager:
             self.actionQueue.append(runningBackDict)  # add the running back to the queue
         else:
             self.actionQueue.append(actionInfo)  # add the actual attack animation
+        self.fill_sprite_group(self.secondaryGroup, self.others)  # the uninvolved sprites
+        self.fill_sprite_group(self.primaryGroup, self.targets)  # add it to the primary group
+        self.fill_sprite_group(self.primaryGroup, [self.actor])  # add it to the primary group
         self.action = self.actionQueue.pop(0)  # load the first action
-        self.apply_new_action()
+        self.apply_new_action()  # apply the action
 
     def apply_new_action(self):
         # check if the animation we want to set it to is available
@@ -175,7 +206,8 @@ class AnimationManager:
         self.change_targets_animation(tempList, "Idle")  # change the animation for all back to Idle
         # reset everything essentially
         self.active = False  # boolean that tells us if the manager is to be used
-        self.spriteGroup.empty()  # clear all sprites
+        self.primaryGroup.empty()  # empty the primary group
+        self.secondaryGroup.empty()  # empty the secondary group
         self.actor = None  # main entity
         self.targets = []  # a list of entities getting hit or something
         self.others = []  # list of the other entities
@@ -194,11 +226,18 @@ class AnimationManager:
 
     def process_action(self):
         if self.action != {}:  # check if the action dictionary isn't empty
-            self.frameCount += 1  # increment the frame counter
             if self.action["point"] is not None:
                 self.use_slope_equation()
-            self.spriteGroup.update()  # update the sprites
-            self.spriteGroup.draw(self.screen)
+            if self.action["Frame Count"]:
+                self.frameCount += 1  # increment the frame counter
+                self.primaryGroup.update()  # update the sprites
+            else:
+                self.pseudo_update()
+            self.primaryGroup.draw(self.screen)
+            self.secondaryGroup.update()
+            self.secondaryGroup.draw(self.screen)
+            self.deadGroup.update()
+            self.deadGroup.draw(self.screen)
             # # draw the rectangle behind entities
             # for sprite in self.spriteGroup.sprites():
             #     print(sprite.altName)
@@ -206,7 +245,12 @@ class AnimationManager:
             #     print(".....................")
             #     self.screen.set_at(sprite.rect.center, (255, 0, 0))
                 #game.draw.rect(self.screen, (255, 0, 0), sprite.rect)
-            if self.frameCount == self.maxFrameCount:
+            frameCount = self.action["Frame Count"] and self.frameCount == self.maxFrameCount
+            isOver = not self.action["Frame Count"] and self.is_over()
+            if frameCount or isOver:
+                # print(frameCount, isOver)
+                if self.action["type"] == "Attack":  # check if we just finished an attack
+                    self.fill_dead_group()  # fill the dead group
                 if len(self.actionQueue) > 0: # check if we can load a new action
                     self.partial_reset()  # partially reset things
                     self.action = self.actionQueue.pop(0)  # get the latest action in the queue

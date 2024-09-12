@@ -219,6 +219,8 @@ while True:
             else:
                 entityGroup.update()  # update the entities
                 entityGroup.draw(screen)  # draw the entities
+                animationManager.deadGroup.update()  # update the dead group
+                animationManager.deadGroup.draw(screen)  # draw the dead entities
                 if buffered_move != "" and len(targets) == battleManager.targetNum:
                     buffered_move = ""  # reset the move string
                     targets.clear()  # remove the targets from the list
