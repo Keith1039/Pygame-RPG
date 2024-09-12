@@ -29,17 +29,19 @@ def test_update():
     flag2 = knight.aniTracker == knight.maxAniVal * 10 + 6  # confirm that the tracker didn't get reset
     knight.update(True)  # force update
     flag3 = knight.aniTracker == 0  # confirm it reset
+    knight.update(True)  # force update again
+    flag4 = knight.aniTracker == 0  # confirm forced upadtes don't increment aniTracker
     knight.aniTracker = knight.maxAniVal * 10 + 9  # set it right up until the last interval
     knight.update()  # update normally
-    flag4 = knight.aniTracker == 0  # confirm it reset on the interval
+    flag5 = knight.aniTracker == 0  # confirm it reset on the interval
     # check to see if the image and rectangle were updated and the animation tracker was reset
     oldRectPos = knight.rect.center  # set the old rectangle position
     knight.x = 999  # set a new position
     knight.y = 999  # set a new position
     knight.update()  # update the knight
     # confirm that the rectangle shifted to the knight's coordinates
-    flag5 = knight.rect.center != oldRectPos and knight.rect.midbottom == (knight.x, knight.y)
-    assert flag and flag2 and flag3 and flag4 and flag5
+    flag6 = knight.rect.center != oldRectPos and knight.rect.midbottom == (knight.x, knight.y)
+    assert flag and flag2 and flag3 and flag4 and flag5 and flag6
 
 
 def test_take_damage():

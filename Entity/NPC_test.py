@@ -20,5 +20,7 @@ def test_update():
     flag3 = npc.aniTracker == (npc.maxAniVal * 10) + 6  # check to see if aniTracker was upped
     npc.update(True)  # force the update
     flag4 = npc.aniTracker == 0  # check to see if the tracker was reset
-    assert flag and flag2 and flag3 and flag4
+    npc.update(True)  # force another update
+    flag5 = npc.aniTracker == 0  # check to see if a forced update incremented aniTracker
+    assert flag and flag2 and flag3 and flag4 and flag5
 

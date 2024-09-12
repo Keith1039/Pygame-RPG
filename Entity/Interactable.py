@@ -57,7 +57,8 @@ class Interactable(game.sprite.Sprite):
 
     # what the update function of the child class is actually going to do
     def super_update(self, name, force):
-        if self.aniTracker != -1:  # -1 indicates that it can't change
+        # -1 indicates that it can't change and the animation tracker shouldn't update when forced
+        if self.aniTracker != -1 and not force:
             self.aniTracker += 1  # increment the tracker
         if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or when we force it
             update = False  # flag for when we should update the image and rect

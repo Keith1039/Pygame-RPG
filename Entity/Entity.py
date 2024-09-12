@@ -59,8 +59,8 @@ class Entity(game.sprite.Sprite):
     def update(self, force=False):
         if self.rect.midbottom != (self.x, self.y):  # check if the entity moved
             self.rect.midbottom = (self.x, self.y)  # center the rectangle
-        # this behavior is for overworld behavior
-        if self.aniTracker != -1:  # -1 means that the animation is stuck for it
+        # -1 means that the animation is stuck for it and forced updates shouldn't add to the animation tracker
+        if self.aniTracker != -1 and not force:
             self.aniTracker += 1  # increment the tracker
         if self.aniTracker % 10 == 0 or force:  # every 10 frames we shift the animation or if we force it
             update = False  # indicator for if an update is needed
