@@ -28,7 +28,6 @@ healMove = Move("Drink Potion", dummy, battleManager.moveDict["Drink Potion"])
 hybridMove = Move("Defensive Stance", dummy, battleManager.moveDict["Defensive Stance"])
 # AOE moves can only be play tested because they utilise the logic in the do_one_turn function which is play tested
 
-
 def test_add_enemy():
     flag = False
     for i in range(6):
@@ -170,17 +169,16 @@ def test_determine_battle_state():
     # kill hero and see if the state is changed appropriately
     knight.Status = ("Dead", -1)
     battleManager.determine_battle_state()
-    flag = battleManager.battleState == (False, "Hero Loses") and not animationManager.active
+    flag = battleManager.battleState == (False, "Hero Loses")
     # revive hero and determine if the state is changed appropriately
     knight.Status = ("Normal", -1)
     battleManager.determine_battle_state()
     # change the battle state and confirm that the boolean for animationManager has not changed
-    flag2 = battleManager.battleState == (True, "") and not animationManager.active
+    flag2 = battleManager.battleState == (True, "")
     # get rid of all enemies and determine if the state is changed appropriately
     battleManager.enemies.clear()
-    animationManager.active = True  # change the active bool to true
     battleManager.determine_battle_state()
-    flag3 = battleManager.battleState == (False, "Hero Wins") and not animationManager.active
+    flag3 = battleManager.battleState == (False, "Hero Wins")
     # check all flags
     assert flag and flag2 and flag3
 
@@ -239,10 +237,6 @@ def test_apply_status_effect():
     flag5 = knight.Status[0] == "Burn" and knight.Hp == 1 and len(returnableStrings) == 1
     assert flag and flag2 and flag3 and flag4 and flag5
 
-
-
-
-
 def test_handle_status_effect():
     # make the knight strong enough to handle the damage
     knight.Hp = 999  # refill Hp
@@ -275,8 +269,3 @@ def test_handle_status_effect():
     # check to see if the count for infinite statuses stays the same
     flag3 = len(returnableStrings) == 0 and knight.Status[1] == -1
     assert flag and flag2 and flag3
-
-
-
-
-

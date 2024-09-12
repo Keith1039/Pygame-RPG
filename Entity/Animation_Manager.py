@@ -82,6 +82,7 @@ class AnimationManager:
                 entity.flipped = False  # reset flipped
                 entity.aniStatus = aniStatus  # change the animation
                 entity.reset_max_animation_val()  # reset the max animation for the new animation
+                entity.update(True)  # force the sprite to update
 
     def load_action_queue(self, actionInfo, actor, targets, others):
         self.active = True  # set the active attribute to true
@@ -127,6 +128,8 @@ class AnimationManager:
             self.actionQueue.append(runningBackDict)  # add the running back to the queue
         else:
             self.actionQueue.append(actionInfo)  # add the actual attack animation
+        self.action = self.actionQueue.pop(0)  # load the first action
+        self.apply_new_action()
 
     def apply_new_action(self):
         # check if the animation we want to set it to is available
@@ -151,7 +154,7 @@ class AnimationManager:
             # change the animation of all targets to hurt
             self.change_targets_animation(self.targets, "Hurt")
 
-    def partial_reset_action(self):
+    def partial_reset(self):
         tempList = self.targets + [self.actor]  # a list of all the notable entities
         self.change_targets_animation(tempList, "Idle")  # change the animation for all back to Idle
         self.action = {}  # reset the action dictionary
@@ -164,7 +167,7 @@ class AnimationManager:
         }
         self.x_increment = 0  # reset the increment
 
-    def reset_action(self):
+    def reset(self):
         # null check the actor
         tempList = self.targets
         if self.actor is not None:
@@ -172,7 +175,7 @@ class AnimationManager:
         self.change_targets_animation(tempList, "Idle")  # change the animation for all back to Idle
         # reset everything essentially
         self.active = False  # boolean that tells us if the manager is to be used
-        self.spriteGroup.remove()  # remove all sprites
+        self.spriteGroup.empty()  # clear all sprites
         self.actor = None  # main entity
         self.targets = []  # a list of entities getting hit or something
         self.others = []  # list of the other entities
@@ -190,12 +193,6 @@ class AnimationManager:
         self.x_increment = 0
 
     def process_action(self):
-        if self.action == {} and len(self.actionQueue) > 0:
-            self.action = self.actionQueue.pop(0)  # get the latest action in the queue
-            self.apply_new_action()  # apply the action
-        elif self.action == {} and len(self.actionQueue) == 0:
-            self.active = False  # deactivate the manager
-            self.reset_action()  # reset everything
         if self.action != {}:  # check if the action dictionary isn't empty
             self.frameCount += 1  # increment the frame counter
             if self.action["point"] is not None:
@@ -210,14 +207,9 @@ class AnimationManager:
             #     self.screen.set_at(sprite.rect.center, (255, 0, 0))
                 #game.draw.rect(self.screen, (255, 0, 0), sprite.rect)
             if self.frameCount == self.maxFrameCount:
-                self.partial_reset_action()  # partially reset things
-
-
-
-
-
-
-
-
-
-
+                if len(self.actionQueue) > 0: # check if we can load a new action
+                    self.partial_reset()  # partially reset things
+                    self.action = self.actionQueue.pop(0)  # get the latest action in the queue
+                    self.apply_new_action()  # apply the action
+                else:
+                    self.reset()  # reset everything, this also deactivates the manager
