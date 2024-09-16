@@ -216,6 +216,7 @@ while True:
                         battleManager.determine_battle_state()  # checks to see if the battle state has changed
                 if not animationManager.active:  # check to see if the animation manager was just de-activated
                     battleManager.determine_battle_state()  # checks to see if the battle state has changed
+
             else:
                 entityGroup.update()  # update the entities
                 entityGroup.draw(screen)  # draw the entities
@@ -254,8 +255,8 @@ while True:
                     if uiManager.subMenuSlider >= len(uiManager.subMenuItems) and len(uiManager.subMenuItems) != 0:
                         uiManager.subMenuSlider -= 1  # move slider back by 1
                 if len(returnable_strings) != 0:
-                    # load the event strings into the dialogue list
-                    dialogueManager.load_dialogue_list(returnable_strings)
+                    # load the event strings into the backlog
+                    dialogueManager.backlog += returnable_strings
         elif not battleManager.battleState[0] and battleManager.battleState[1] != "":
             entityFactory.clear_created_count()  # clear the dictionary
             # this means the battle ended and its result needs to be processed
