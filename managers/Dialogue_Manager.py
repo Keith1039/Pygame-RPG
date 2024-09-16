@@ -159,5 +159,3 @@ class DialogueManager:
                     self.dialogue.insert(1, " ".join(textList[i: len(textList)]))
                     break
             count += 3  # adjust for the 3 spaces we add later
-        # print("First line: " + str(self.firstLine))
-        # print("Second line: " + str(self.secondLine))

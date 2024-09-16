@@ -115,7 +115,6 @@ class BattleManager:
                 # self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
         returnable_strings += self.clear_dead_enemies()  # removes dead entities and add event strings
-        self.fix_entity_stats()  # correct the stats of all entities that are still alive
         return returnable_strings, refresh
 
     def use_move(self, turnObject, move,  targets):
@@ -257,7 +256,9 @@ class BattleManager:
                 self.apply_effect_buff(effectTarget, effect)
             #print(effectString)
             returnableStrings.append(effectString)
+        self.fix_entity_stats()  # correct the stats of all entities that are still alive
         return returnableStrings
+
     def apply_effect_buff(self, target, buff):
         target.remove_bonuses(False)  # strip off bonuses but don't remove buffs
         target.Bonuses.update(buff)  # Overwrite the buffs
