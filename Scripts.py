@@ -43,7 +43,7 @@ if __name__ == "__main__":
             "Mp": 1,
             "Mpcap": 1,
             "Name": arg2,
-            "Sprite": "Entity_Sprites/",
+            "Sprite": "Entity_Sprites/" + arg2 + "/",
             "Scale": (),
             "flipped": False,
             "Lvl": 1,
