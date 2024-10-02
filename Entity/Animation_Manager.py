@@ -3,7 +3,6 @@ import re
 import Utils
 import os
 
-
 schema = {
     "aniStatus": "",
     "alternative": "Attack",
@@ -19,6 +18,7 @@ class AnimationManager:
         self.primaryGroup = game.sprite.Group()  # Entities that matter
         self.secondaryGroup = game.sprite.Group()  # Entities who don't matter
         self.deadGroup = game.sprite.Group()  # group of dead objects
+        self.font = game.font.Font('font/Pixeltype.ttf', 50)  # font
         self.actor = None  # main entity
         self.targets = []  # a list of entities getting hit or something
         self.others = []  # list of the other entities
@@ -33,6 +33,7 @@ class AnimationManager:
             "Starting Point": (),
             "x_distance": 0
         }
+        self.differences = {}  # health and status changes
         self.x_increment = 0
 
     def set_slope_equation(self, startingPoint, endPoint):
@@ -109,7 +110,8 @@ class AnimationManager:
                 entity.reset_max_animation_val()  # reset the max animation for the new animation
                 entity.update(True)  # force the sprite to update
 
-    def load_action_queue(self, actionInfo, actor, targets, others):
+    def load_action_queue(self, actionInfo, actor, targets, others, differences):
+        self.differences = differences
         self.active = True  # set the active attribute to true
         self.actor = actor  # main actor
         if len(targets) == 1 and targets[0] == actor:
@@ -165,7 +167,7 @@ class AnimationManager:
     def apply_new_action(self):
         # check if the animation we want to set it to is available
         if self.confirm_valid_animation_status(self.actor.Sprite, self.action["aniStatus"]):
-            self.actor.aniStatus = self.action["aniStatus"]
+            self.change_targets_animation([self.actor], self.action["aniStatus"])
         else:
             # if not set it to the generic alternative
             self.actor.aniStatus = self.action["alternative"]
@@ -222,6 +224,7 @@ class AnimationManager:
             "Starting Point": (),
             "x_distance": 0
         }
+        self.differences = {}  # reset the differences
         self.x_increment = 0
 
     def process_action(self):
@@ -233,6 +236,15 @@ class AnimationManager:
                 self.primaryGroup.update()  # update the sprites
             else:
                 self.pseudo_update()
+            if self.action["type"] == "Attack" or self.action["type"] == "Heal":
+                for name in self.differences:
+                    Hp = self.differences[name]["Hp"]
+                    pos = self.differences[name]["Pos"]
+                    if Hp > 0:
+                        tempRender = self.font.render("+" + str(Hp), False, "Green")
+                    else:
+                        tempRender = self.font.render(str(Hp), False, "Red")
+                    self.screen.blit(tempRender, pos)
             self.primaryGroup.draw(self.screen)
             self.secondaryGroup.update()
             self.secondaryGroup.draw(self.screen)

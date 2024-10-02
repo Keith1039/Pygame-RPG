@@ -135,7 +135,7 @@ def test_load_action_queue():
     physicalMove = Move("Attack", knight, moveDict["Attack"]).get_action_details()
     aoeMove = Move("Spinning Slash", knight, moveDict["Spinning Slash"]).get_action_details()
     # load the ranged move
-    animationManager.load_action_queue(rangedMove, knight, [goblin], [dummy])
+    animationManager.load_action_queue(rangedMove, knight, [goblin], [dummy], {})
     # check the actor details
     flag = animationManager.actor == knight and animationManager.actorStartingPos == (knight.x, knight.y)
     # check if the first action in the queue was preloaded
@@ -144,18 +144,18 @@ def test_load_action_queue():
             and len(animationManager.secondaryGroup.sprites()) == 1
     animationManager.reset()  # reset everything
     # load the non-attacking move
-    animationManager.load_action_queue(nonAttackMove, knight, [knight], [goblin, dummy])
+    animationManager.load_action_queue(nonAttackMove, knight, [knight], [goblin, dummy], {})
     flag3 = len(animationManager.actionQueue) == 0 \
         and len(animationManager.targets) == 0 and len(animationManager.primaryGroup.sprites()) == 1 \
         and animationManager.action != {} and len(animationManager.secondaryGroup.sprites()) == 2
     animationManager.reset()  # reset everything
-    animationManager.load_action_queue(physicalMove, goblin, [knight], [dummy])
+    animationManager.load_action_queue(physicalMove, goblin, [knight], [dummy], {})
     flag4 = animationManager.actor == goblin and animationManager.actorStartingPos == (goblin.x, goblin.y)
     flag5 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
            and len(animationManager.primaryGroup.sprites()) == 2 and animationManager.action != {} \
            and len(animationManager.secondaryGroup.sprites()) == 1
     animationManager.reset()  # reset everything
-    animationManager.load_action_queue(aoeMove, knight, [goblin], [dummy])
+    animationManager.load_action_queue(aoeMove, knight, [goblin], [dummy], {})
     flag6 = len(animationManager.actionQueue) == 2 and len(animationManager.targets) == 1 \
            and len(animationManager.primaryGroup.sprites()) == 2 and animationManager.action != {} \
            and len(animationManager.secondaryGroup.sprites()) == 1

@@ -36,6 +36,7 @@ class BattleManager:
     def do_one_turn(self, move, target):
         # I'll worry about the drawing later
         # One round of battle
+        initialHealthDict = self.get_health_info()
         refresh = False  # indicator that we should refresh the items inventory
         returnable_strings = []
         turnObject = self.turnOrder[0]  # Get the first index object but don't remove it
@@ -84,7 +85,7 @@ class BattleManager:
                 # get the list of uninvolved actors
                 others = Utils.get_others(self.knight, actionTargets, self.get_enemy_objects())
                 # load the manager with information
-                self.animationManager.load_action_queue(actionInfo, self.knight, actionTargets, others)
+                self.animationManager.load_action_queue(actionInfo, self.knight, actionTargets, others, self.get_health_difference(initialHealthDict))
                 self.turnOrder.pop(0)  # after the player has moved, kick them from turn order
                 # self.print_all_statuses()  ######## DEBUG
             elif objectType == "Enemy":
@@ -110,7 +111,7 @@ class BattleManager:
                 returnable_strings += self.use_move(turnObject, moveObj, targets)
                 others = Utils.get_others(turnObject, targets, self.get_enemy_objects())  # get the others
                 self.targetNum = -1  # reset the target number since the move was done successfully
-                self.animationManager.load_action_queue(actionInfo, turnObject, targets, others)
+                self.animationManager.load_action_queue(actionInfo, turnObject, targets, others, self.get_health_difference(initialHealthDict))
                 self.turnOrder.pop(0)  # remove the enemy entity from turnOrder
                 # self.print_all_statuses()  ######## DEBUG
         # clear dead enemies should return a string of people who died to returnable strings
@@ -434,6 +435,37 @@ class BattleManager:
         # set the target number based off of the move
         moveInfo = self.moveDict[move]
         self.targetNum = moveInfo["Target Number"]
+
+    def get_health_info(self):
+        # gets the starting health of all entities
+        # in the future it might also indicate changes in status etc
+        initialStatusDict = {
+            self.knight.altName: {
+                "Hp": self.knight.Hp
+            }
+        }
+        for enemy in self.enemies:
+            initialStatusDict.update({
+                enemy.altName: {
+                    "Hp": enemy.Hp
+                }
+            })
+        return initialStatusDict
+
+    def get_health_difference(self, initialHealthDict):
+        differenceDict = {}
+        fullList = self.enemies + [self.knight]  # every entity
+        for entity in fullList:
+            initialHp = initialHealthDict[entity.altName]["Hp"]
+            # check if the health changed at all
+            if initialHp != entity.Hp:
+                differenceDict.update({
+                    entity.altName: {
+                        "Hp": entity.Hp - initialHp,
+                        "Pos": entity.rect.midtop
+                    }
+                })
+        return differenceDict
 
     ########## DEBUG FUNCTIONS (NO TESTING REQUIRED)
 

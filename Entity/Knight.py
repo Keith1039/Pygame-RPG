@@ -6,7 +6,7 @@ class Knight(Entity):
     # The current stats still need to be changed to the default stats later
     def __init__(self, Hp=1, Hpcap=1, Mp=1, Mpcap=1, name="Knight", sprite="Entity_Sprites/Knight/", level=1, strength=1, magic=1, vitality=1, agility=1, defence=1, exp=0, expcap=1, money=0):
         super().__init__(Hp, Hpcap, Mp, Mpcap, name, sprite, level, strength, magic, vitality, agility, defence, exp, money)
-        self.Scale = (450, 300)
+        self.Scale = (337.5, 187.5)
         self.fieldStatus = "Normal"  # indicator for the knight class
         self.Expcap = expcap
         self.Stance = "1"

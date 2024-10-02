@@ -5,6 +5,7 @@ from Entity.Animation_Manager import AnimationManager
 from Entity.Battle_Manager import BattleManager
 from Entity.Move import Move
 import pygame as game
+
 from managers.UI_Manager import UIManager
 from managers.Item_Manager import ItemManager
 
@@ -45,6 +46,22 @@ def test_add_enemy():
     y = dummy.rect.center[1]
     flag2 = x == 900 and y == 100  # check if the dummy's coordinates changed
     assert flag and flag2
+
+def test_get_health_dict():
+    initial = battleManager.get_health_info()
+    # check if the number is correct and that the Hp key is in the dict
+    flag = True
+    for enemy in battleManager.enemies:
+        # confirm all the enemies are represented in the dict
+        if enemy.altName not in initial:
+            flag = False
+            break
+        else:
+            # check to see if the proper keys are there
+            if initial[enemy.altName].get("Hp") is None:
+                flag = False
+                break
+    assert flag
 
 def test_parse_effects():
     # parse a move with no effect
@@ -273,3 +290,27 @@ def test_handle_status_effect():
     # check to see if the count for infinite statuses stays the same
     flag3 = len(returnableStrings) == 0 and knight.Status[1] == -1
     assert flag and flag2 and flag3
+
+def test_get_health_difference():
+    battleManager.enemies.clear()
+    for i in range(2):
+        battleManager.add_enemy(factory.create_entity("dummy"))
+    initialHp = battleManager.get_health_info()
+    testDummy = battleManager.enemies[1]
+    testDummy.Hp = 1
+    dummyPos = testDummy.rect.midtop
+    differences = battleManager.get_health_difference(initialHp)
+    # checks if the name exists, there's only 1 entry in differences
+    # the correct Hp difference was returned and a proper position tuple was given
+    flag = len(differences) == 1 and differences.get(testDummy.altName) is not None and \
+           differences[testDummy.altName]["Hp"] == -998 and differences[testDummy.altName]["Pos"] == dummyPos
+
+    # check if increases in health register
+    initialHp = battleManager.get_health_info()
+    testDummy.Hp = 500
+    differences = battleManager.get_health_difference(initialHp)
+    flag2 = differences.get(testDummy.altName) is not None and differences[testDummy.altName]["Hp"] == 499 and \
+        len(differences) == 1 and differences[testDummy.altName]["Pos"] == dummyPos
+    assert flag and flag2
+
+
