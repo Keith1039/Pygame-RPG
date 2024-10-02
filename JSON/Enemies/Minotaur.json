@@ -4,7 +4,7 @@
    "Mp": 1,
    "Mpcap": 1,
    "Name": "Minotaur",
-   "Sprite": "Entity_Sprites/",
+   "Sprite": "Entity_Sprites/Minotaur/",
    "Scale": [128, 128],
    "flipped": false,
    "Lvl": 1,
