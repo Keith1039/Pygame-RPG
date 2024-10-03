@@ -2,11 +2,7 @@ import pygame as game
 from sys import exit
 import os
 import Entity
-import re
-
 from Entity import Knight
-from managers.UI_Manager import submenu
-
 
 def get_unique_animations_from_dir(path):
     animations = os.listdir(path)  # the animations
@@ -16,8 +12,6 @@ def get_unique_animations_from_dir(path):
         if testAniName not in uniqueAnimations:
             uniqueAnimations.append(testAniName)
     return uniqueAnimations
-
-
 
 class MinCursor:
     def __init__(self):
@@ -199,9 +193,6 @@ class MinUIHandler:
                 self.minUIManager.subMenuItems = os.listdir("Entity_Sprites/")
                 self.minUIManager.entityGroup.remove(self.minUIManager.displayedEntity)
                 self.minUIManager.displayedEntity = None
-
-
-
 
 # I should have an array of sprite managers and it goes through them
 game.init()

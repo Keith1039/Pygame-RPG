@@ -14,7 +14,6 @@ def test_isfloat():
     assert flag
 
 def test_replace_all_stats_with_values():
-    print(replace_all_stats_with_values(testString1, knight))
     flag = replace_all_stats_with_values(testString1, knight) == "1 * 1"
     assert flag
 

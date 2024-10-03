@@ -1,4 +1,3 @@
-import pygame as game
 from Entity.Entity import Entity
 
 # Statuses: Normal or In-Combat or Dead or opening_chest

@@ -1,4 +1,3 @@
-import Utils
 import pygame as game
 from Entity.Interactable import Interactable
 
