@@ -1,5 +1,4 @@
 from Entity.Interactable import Interactable
-import Utils
 
 class Object(Interactable):
 

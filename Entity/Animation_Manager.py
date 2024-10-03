@@ -1,6 +1,5 @@
 import pygame as game
 import re
-import Utils
 import os
 
 schema = {
