@@ -23,3 +23,33 @@ def get_others(actor, selectedTargets, targets):
         if target not in selectedTargets and target != actor:
             others.append(target)
     return others
+
+def construct_matrix_given_parameters(constraints, items):
+    matrix = []  # matrix we'll be returning
+
+    # get the values from constraints
+    x_constraints = constraints["x_constraints"]
+    y_constraints = constraints["y_constraints"]
+    x_spacing = constraints["x_spacing"]
+    y_spacing = constraints["y_spacing"]
+
+    columnNum = int((x_constraints[1] - x_constraints[0]) / x_spacing)  # should always be an even split
+    rowNum = int((y_constraints[1] - y_constraints[0]) / y_spacing)
+    # for i in range(columnNum):
+    #     matrix.append([])
+
+    columnPointer = 0
+    firstLoop = True
+    # fill in the matrix
+    for i in range(len(items)):
+        x_pos = x_constraints[0] + columnPointer * x_spacing
+        y_pos = y_constraints[0] + int(i/rowNum) * y_spacing
+        if firstLoop:
+            matrix.append([])  # add the column
+        matrix[columnPointer].append((x_pos, y_pos))  # append the locations
+        columnPointer += 1
+        if columnPointer > columnNum:  # check if the column pointer is still valid
+            columnPointer = 0  # reset the column pointer
+            firstLoop = False
+    # print(matrix)
+    return matrix  # return the constructed matrix

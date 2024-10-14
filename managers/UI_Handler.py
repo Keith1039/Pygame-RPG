@@ -3,6 +3,7 @@ import json
 import managers.Save_Manager
 import managers.UI_Manager
 from Entity import Move
+from managers.Submenu import Submenu
 
 # Class that handles the UI inputs
 submenu_choice = ["Skills", "Switch Stance", "Items"]
@@ -30,6 +31,8 @@ class UIHandler():
     def __init__(self, uiManager, SaveManager, knight, localVars, battleManager, itemManager):
         # Dialogue Manager might have to be here too
         self.uiManager = uiManager  # For changing the UI
+        self.UIStack = [self.uiManager]
+        self.tempStack = []
         self.saveManager = SaveManager  # For saving and loading on UI
         self.knight = knight  # For access to inventory as well as battle interaction
         self.localVars = localVars  # For manipulating variables from player interaction
@@ -41,19 +44,28 @@ class UIHandler():
     def handle_interaction(self, context, choice):
         # submenu for battle
         if context == "Player Select" and choice in submenu_choice:
-            self.uiManager.subMenu = True
             if choice == "Skills":
                 # Get all the skills except for the first one ("Attack")
-                self.uiManager.subMenuItems = self.knight.moveList[1:]
+                # and add it to the new submenu
+                self.UIStack.append(Submenu(self.uiManager.UI, self.uiManager.screen, self.knight.moveList[1:]))
+                # self.uiManager.subMenuItems = self.knight.moveList[1:]
             elif choice == "Switch Stance":
-                self.uiManager.subMenuItems = ["Power", "Defensive", "Nimble",
-                                                "Power", "Defensive", "Nimble",
-                                                "Power", "Defensive", "Nimble",
-                                                "Power"]
+                stanceList = ["Power", "Defensive", "Nimble",
+                                "Power", "Defensive", "Nimble",
+                                "Power", "Defensive", "Nimble",
+                                "Power"]
+                self.UIStack.append(Submenu(self.uiManager.UI, self.uiManager.screen, stanceList))
 
             elif choice == "Items":
                 inventory = self.itemManager.get_usable_items()
-                self.uiManager.subMenuItems = inventory
+                self.UIStack.append(Submenu(self.uiManager.UI, self.uiManager.screen, inventory))
+                # self.uiManager.subMenuItems = inventory
+        elif context is not None and choice is None:
+            if context.find("(S)") != -1:
+                self.UIStack.pop(-1)  # remove the submenu from the stack
+            else:
+                if len(self.tempStack) > 0:
+                    self.UIStack.append(self.tempStack.pop())
 
         elif context is not None and choice is not None:
             #print(context)
@@ -74,30 +86,37 @@ class UIHandler():
                     # if the item is only usable on yourself, use it and be done with your turn
                     target = self.itemManager.get_effect_details(choice)["Target"]
                     targetable = []
+                    targets = []
                     if target == "S":
                         # add the hero to the list of targets
-                        targetable.append(self.battleManager.get_knight_pos())
+                        targetable.append([self.battleManager.get_adjusted_knight_pos()])
+                        targets = [self.battleManager.get_knight_pos()]
                     elif target == "All":
-                        # add everything into the list of targets
-                        targetable = self.battleManager.get_enemy_positions()
-                        targetable.insert(0, self.battleManager.get_knight_pos())
+                        # target matrix
+                        targetable = self.battleManager.get_enemy_pos_matrix()
+                        targetable.insert(0, [self.battleManager.get_adjusted_knight_pos()])
+                        # target information
+                        targets = [self.battleManager.get_knight_pos()] + self.battleManager.get_enemy_positions()
                     else:
                         # add enemies to the list of targets
-                        targetable = self.battleManager.get_enemy_positions()
-                    self.uiManager.targets = targetable
-                    self.uiManager.targetSlider = 0
+                        targetable = self.battleManager.get_enemy_pos_matrix()
+                        targets = self.battleManager.get_enemy_positions()
+                    self.uiManager.targets = targets
+                    self.uiManager.cursor.set_new_positions(targetable)
+                    self.tempStack.append(self.UIStack.pop(-1))  # add it to the temp stack
                     self.uiManager.change_UI("Select Target")
-
-
-                # this is an attack of some sort
-                else:
+                # check if it's an attack of some sort
+                elif self.battleManager.moveDict.get(choice) is not None:
                     moveInfo = self.battleManager.moveDict[choice]
                     # Only go to targeting if the move can be used, if not the move cannot be selected
                     if self.battleManager.parse_restriction(self.knight, moveInfo) \
                             and self.knight.Mp >= moveInfo["Cost"]:
                         self.uiManager.targets = self.battleManager.get_enemy_positions()
-                        self.uiManager.targetSlider = 0
+                        self.uiManager.cursor.set_new_positions(self.battleManager.get_enemy_pos_matrix())
+                        if choice != "Attack":
+                            self.tempStack.append(self.UIStack.pop(-1))  # add it to the temp stack
                         self.uiManager.change_UI("Select Target")
+                #print(self.uiManager.targets)
 
             elif context in save_related_context:
                 slot = choice.find("#")       # Finds the # character because the number is always next to it
@@ -131,4 +150,3 @@ class UIHandler():
                         self.saveManager.quick_load()  # Load the file
                         self.localVars.update({"start": False})  # Leave the Start screen
                         self.uiManager.change_UI(None)  # Clear UI
-                    pass
