@@ -208,15 +208,8 @@ while True:
 
             if animationManager.active:
                 animationManager.process_action()  # process all of this
-                # check if the dialogue manager is active
-                if len(dialogueManager.dialogue) > 0:
-                    dialogueManager.draw_dialogue(eventList, True)
-                    # when we're done reading through the dialogue, check battle state
-                    if len(dialogueManager.dialogue) == 0:
-                        battleManager.determine_battle_state()  # checks to see if the battle state has changed
                 if not animationManager.active:  # check to see if the animation manager was just de-activated
                     battleManager.determine_battle_state()  # checks to see if the battle state has changed
-
             else:
                 entityGroup.update()  # update the entities
                 entityGroup.draw(screen)  # draw the entities
@@ -231,7 +224,11 @@ while True:
                 if battleManager.turnOrder[0] == knight:
                     if uiManager.UI is None:
                         uiManager.change_UI("Player Select")  # Change the UI to the proper UI
-                    context, choice = uiManager.draw_UI(eventList)
+                    if len(uiHandler.UIStack) > 1:
+                        uiManager.draw_UI([])
+                        context, choice = uiHandler.UIStack[-1].draw_UI(eventList)
+                    else:
+                        context, choice = uiManager.draw_UI(eventList)
                     uiHandler.handle_interaction(context, choice)
                     # See if the move selected is a valid move
                     if battleManager.moveDict.get(choice) is not None or itemManager.itemJson.get(choice) is not None:
@@ -240,6 +237,7 @@ while True:
                             battleManager.set_target_number(choice)
                         else:
                             battleManager.targetNum = 1
+                        uiHandler.tempStack.clear()  # clear the temporary stack
                     elif isinstance(choice, tuple):
                         if len(battleManager.enemies) > 1:  # we don't assume anything
                             targets.append(choice)  # add the choice to the tuple
@@ -247,13 +245,15 @@ while True:
                             for i in range(battleManager.targetNum):
                                 targets.append(choice)
                         if len(targets) == battleManager.targetNum:  # check if we should leave targeting screen
+                            uiHandler.tempStack.clear()  # clear the temporary stack
                             uiManager.change_UI(None)
+                            #print(battleManager.get_enemy_positions())
                 returnable_strings, refresh = battleManager.do_one_turn(buffered_move, targets)
-                if refresh:
-                    uiManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
-                    uiManager.subMenuMaxIndex = len(uiManager.subMenuItems) - 1
-                    if uiManager.subMenuSlider >= len(uiManager.subMenuItems) and len(uiManager.subMenuItems) != 0:
-                        uiManager.subMenuSlider -= 1  # move slider back by 1
+                # if refresh:
+                #     uiManager.subMenuItems = itemManager.get_usable_items()  # refresh displayed
+                #     uiManager.subMenuMaxIndex = len(uiManager.subMenuItems) - 1
+                #     if uiManager.subMenuSlider >= len(uiManager.subMenuItems) and len(uiManager.subMenuItems) != 0:
+                #         uiManager.subMenuSlider -= 1  # move slider back by 1
                 if len(returnable_strings) != 0:
                     # load the event strings into the backlog
                     dialogueManager.backlog += returnable_strings
