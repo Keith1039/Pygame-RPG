@@ -2,6 +2,7 @@ import pygame as game
 import json
 import re
 from managers.UI_Manager_draw import *
+from managers.Cursor import Cursor
 # File responsible for drawing UI
 
 # example of start screen UI
@@ -46,65 +47,6 @@ redSemiCircle = game.image.load("UI/red_semicircle.png")
 manaBar = game.image.load("UI/mana_bar.png")
 blueSemiCircle = game.image.load("UI/blue_semicircle.png")
 submenu = game.image.load("UI/Battle_UI/sub_menu.png")
-class Cursor:
-    def __init__(self):
-        self.xConstraints = ()
-        self.yConstraints = ()
-        self.pos = ()
-        self.cursor = game.image.load("UI/Cursor.png")
-        self.spacingX = 0
-        self.spacingY = 0
-
-    def set_cursor_info(self, xSpacing, ySpacing, x_constraints, y_constraints):
-        self.spacingX = xSpacing
-        self.spacingY = ySpacing
-        # none of the given parameters ever be None in an active UI so this means there is no active UI
-        if xSpacing is not None:
-            self.xConstraints = (x_constraints[0] - 80, x_constraints[1] - 80)
-            self.yConstraints = (y_constraints[0] - 20, y_constraints[1] - 20)
-            self.pos = (self.xConstraints[0], self.yConstraints[0])
-
-
-    def handle_cursor(self, eventList):
-        select = False
-        xMin = self.xConstraints[0]  # Starting point for x btw
-        xMax = self.xConstraints[1]
-
-        yMin = self.yConstraints[0]  # Starting point for y btw
-        yMax = self.yConstraints[1]
-
-        xPos = self.pos[0]
-        yPos = self.pos[1]
-
-        # For readability
-        for event in eventList:
-            if event.type == game.KEYDOWN:
-                if event.key == game.K_RETURN:
-                    select = True
-                    break  # Breaks because this indicates a transition to another screen
-                elif event.key == game.K_ESCAPE:
-                    select = None
-                    break  # Breaks because this indicates a transition to another screen
-                elif event.key == game.K_RIGHT and self.spacingX != 0:
-                    xPos += self.spacingX
-                    if xPos > xMax:
-                        xPos = xMin
-                elif event.key == game.K_LEFT and self.spacingX != 0:
-                    xPos -= self.spacingX
-                    if xPos < xMin:
-                        xPos = xMax
-                elif event.key == game.K_DOWN:
-                    # Inverted because Pygame is weird
-                    yPos += self.spacingY
-                    if yPos > yMax:
-                        yPos = yMin
-                elif event.key == game.K_UP:
-                    # Inverted because Pygame is weird
-                    yPos -= self.spacingY
-                    if yPos < yMin:
-                        yPos = yMax
-        self.pos = (xPos, yPos)
-        return select
 
 class UIManager:
 
@@ -119,19 +61,11 @@ class UIManager:
         self.spacing_y = 0      # Spacing for the y axis
         
         # Continue will be added to displayable AFTER SaveManager confirms that a prev_save does exist
-        self.cursor = Cursor()
+        self.cursor = Cursor([])
         self.font = font  # Reference to writing surface that I use in Rpg2.py (no point in making a new one)
         self.screen = screen  # Reference to the screen object from ScreenManager
         # targets are a list of coordinates where the enemy objects are
         self.targets = []
-        # targetSlider indicates where the cursor is pointing
-        self.targetSlider = -1
-        # indicates if the subMenu is active
-        self.subMenu = False
-        self.subMenuItems = []
-        self.subMenuMinIndex = -1
-        self.subMenuMaxIndex = -1
-        self.subMenuSlider = -1
         self.change_UI("Start")  # Sets the value of everything
         
     def change_UI(self, UI, flag=True):
@@ -148,9 +82,33 @@ class UIManager:
             self.constraint_y = constraints_y.get(self.UI)
             self.spacing_x = spacings_x.get(self.UI)
             self.spacing_y = spacings_y.get(self.UI)
-            self.cursor.set_cursor_info(self.spacing_x, self.spacing_y, self.constraint_x, self.constraint_y)
+            if self.displayable is not None and self.UI != "Select Target":  # check if there is a need for the cursor
+                self.cursor.set_new_positions(self.create_matrix_from_constraints())  # set the new cursor info
+            elif self.UI != "Select Target":
+                self.cursor.reset()  # reset the cursor
 
-        
+    def create_matrix_from_constraints(self):
+        # offsets for display purposes only
+        x_offset = -70
+        y_offset = -20
+        matrix = []
+        columnNum = 1
+        rowNum = 1
+        if self.spacing_x != 0:
+            columnNum = int((self.constraint_x[1] - self.constraint_x[0])/self.spacing_x) + 1
+
+        if self.spacing_y != 0:
+            rowNum = int((self.constraint_y[1] - self.constraint_y[0])/self.spacing_y) + 1
+
+        for column in range(columnNum):
+            columnPos = self.constraint_x[0] + column * self.spacing_x
+            rowValues = []
+            for row in range(rowNum):
+                rowPos = self.constraint_y[0] + row * self.spacing_y
+                rowValues.append((columnPos + x_offset, rowPos + y_offset))
+            matrix.append(rowValues)
+        return matrix
+
     # Draws the UI based on current state. Assets are game assets that need to be loaded in for certain UIs
     def draw_UI(self, eventList, assets=None):
         # Function that actually draws what's on screen
@@ -175,131 +133,35 @@ class UIManager:
             self.screen.blit(displayableText, pos)
             if self.spacing_x != 0:  # If there's a need to space X position then do this
                 # Draw what needs to be drawn.
-                pos[0] += self.spacing_x  # Increment x's position
+                pos[0] = pos[0] + self.spacing_x  # Increment x's position
                 if pos[0] > xMax:
                     pos[0] = xMin  # Reset x position
                     pos[1] += self.spacing_y  # Increment y's position
-
             else:
                 pos[1] += self.spacing_y  # Increment y's position
-        if self.subMenu and self.UI != "Select Target":
-            self.draw_submenu()
+        # if self.subMenu and self.UI != "Select Target":
+        #     self.draw_submenu()
         return self.handle_cursor(eventList)
     
-    # Funtion that handles the position of the cursor
-    def handle_cursor(self, keys):
+    # Function that handles the position of the cursor
+    def handle_cursor(self, eventList):
         result = None, None
-        if self.subMenu and self.UI != "Select Target":
-            oldSliderVal = self.subMenuSlider
-            flag = self.handle_submenu_input(keys)
-            if flag is None:
-                # reset values
-                self.subMenu = False
-                self.subMenuItems.clear()
-                self.subMenuSlider = -1
-                self.subMenuMaxIndex = -1
-                self.subMenuMinIndex = -1
-            elif flag:
-                # Append "S" to the UI, so we know this came from a submenu
-                item = None
-                if len(self.subMenuItems) != 0:
-                    item = self.subMenuItems[self.subMenuSlider]
-                result = self.UI + "(S)", item
-            else:
-                # check to see if the array is legal to begin with
-                if self.subMenuMaxIndex != -1:
-                    # time to validate slider and the other stuff (simplify expression later)
-                    if self.subMenuSlider > self.subMenuMaxIndex and int(self.subMenuSlider / 9) <= int(
-                            (len(self.subMenuItems) - 1) / 9):
-                        # guaranteed to be right by virtue of condition
-                        self.subMenuMinIndex = int(self.subMenuSlider / 9) * 9
-                        # new max slider index, assuming full row ( 3 x 3, 9 items in total for the screen)
-                        self.subMenuMaxIndex = self.subMenuMinIndex + 8
-                        # validate theoretical max index
-                        if self.subMenuMaxIndex > len(self.subMenuItems):
-                            self.subMenuMaxIndex = len(self.subMenuItems) - 1
-                        # correct the slider val
-                        if self.subMenuSlider >= len(self.subMenuItems):
-                            self.subMenuSlider = len(self.subMenuItems) - 1
-                    elif self.subMenuSlider < self.subMenuMinIndex and self.subMenuSlider > 0:
-                        # guaranteed to be right by virtue of the above conditions
-                        self.subMenuMaxIndex = self.subMenuMinIndex - 1
-                        # new min slider index, assuming full row ( 3 x 3, 9 items in total for the screen)
-                        self.subMenuMinIndex = int(self.subMenuSlider / 9) * 9
-                        # validate theoretical max index
-                        if self.subMenuMaxIndex > len(self.subMenuItems):
-                            self.subMenuMaxIndex = len(self.subMenuItems) - 1
-                    # ensure that slider isn't out of bounds for no reason
-                    elif self.subMenuSlider > self.subMenuMaxIndex or self.subMenuSlider < self.subMenuMinIndex:
-                        self.subMenuSlider = oldSliderVal
-                else:
-                    # reset slider position to a valid one
-                    self.subMenuSlider = oldSliderVal
-
-                # determining cursor position
-                num = (self.subMenuSlider - self.subMenuMinIndex)
-                x_pos = num % 3 * 400 + 390
-                y_pos = int(num / 3) * 75 + 580
-                # drawing cursor
-                self.screen.blit(self.cursor.cursor, (x_pos, y_pos))
-        elif self.UI == "Select Target":
-            oldSliderVal = self.targetSlider
-            flag = self.handle_select_inputs(keys)
-            if flag is None:
-                # go to the previous UI and reset values
+        flag = self.cursor.handle_cursor(eventList)
+        if flag is None:
+            if self.UI == "Select Target":
                 self.targets.clear()
-                self.targetSlider = -1
+            # change_UI() takes care of the cursor stuff
+            result = self.UI, None
+            if len(self.prevUIs) > 0:
                 self.change_UI(self.prevUIs.pop(), False)
-            elif flag:
-                # return the location of your target
-                result = self.UI, self.targets[self.targetSlider]
+        elif flag:
+            cursorIndex = self.cursor.get_index_from_cursor()
+            if self.UI == "Select Target":
+                result = self.UI, self.targets[cursorIndex]
             else:
-                # validate targetSlider pos and draw cursor
-                if self.targetSlider > len(self.targets) - 1 or self.targetSlider < 0:
-                    self.targetSlider = oldSliderVal
-                pos = self.targets[self.targetSlider]  # the position we blit
-                pos = (pos[0] - 100, pos[1])  # apply offsets
-                self.screen.blit(self.cursor.cursor, pos)
+                result = self.UI, self.displayable[cursorIndex]
         else:
-            flag = self.cursor.handle_cursor(keys)
-            # If a selection is made, find out which option was selected
-            if flag is None:
-                # Return to the previous UI if the array contains an item
-                if len(self.prevUIs) != 0:  # Technically speaking this can be simplified to if self.prevUIs
-                    self.change_UI(self.prevUIs.pop(), False)  # Setting flag to false means don't add to stack
-
-            elif flag:
-                pos = self.cursor.pos
-                if self.spacing_x != 0:
-                    # maxSpacing is the amount of movements in the array to represent 1 Y transition
-                    # We get this value by getting the difference between the max X restraint and the min X restraint
-                    # We then divide the difference by the spacing
-                    maxSpacing = (self.cursor.xConstraints[1] - self.cursor.xConstraints[0]) / self.spacing_x + 1
-
-                    # We then add the amount of movements in the x direction
-                    # to the movement in they y direction using maxSpacing to translate it to
-                    # a position in the 1D array
-                    xDistance = ((pos[0] - self.cursor.xConstraints[0]) / self.spacing_x)
-                    yDistance = ((pos[1] - self.cursor.yConstraints[0]) / self.spacing_y)
-                    listPos = (xDistance + yDistance * maxSpacing)
-
-                else:
-                    # If there's no x spacing then only y spacing matters
-                    listPos = ((pos[1] - self.cursor.yConstraints[0]) / self.spacing_y)
-                item = self.displayable[int(listPos)]
-                result = self.UI, item
-            else:
-                self.screen.blit(self.cursor.cursor, self.cursor.pos)
-        choice = result[1]
-        # strip the amount part from the item
-        if isinstance(choice, str):
-            match = re.search("x[1-9]+", choice)
-            if match:
-                choiceArr = choice.split()  # convert it into an array
-                choiceArr.pop(len(choiceArr) - 1)  # get rid of the amount part of the string
-                choice = " ".join(choiceArr)
-                choice.strip()  # get rid of useless white space
-                result = (result[0], choice)  # set the value of result to this now
+            self.screen.blit(self.cursor.cursor, self.cursor.pos)
         return result
 
     def draw_health_bar(self, knight):
@@ -342,61 +204,3 @@ class UIManager:
         # If assets are present draw them as well
         if assets is not None:
             pass
-
-    def draw_submenu(self):
-        # checks should be done in this function
-        # the values aren't properly set
-        subsetItems = []
-        if self.subMenuSlider == -1 and self.subMenuMaxIndex == -1 and self.subMenuMinIndex == -1:
-            subsetItems = self.subMenuItems[0:9]  # get the first 9 items
-            self.subMenuMaxIndex = len(subsetItems) - 1
-            if self.subMenuMaxIndex >= 0:  # check if the max number is allowable
-                self.subMenuSlider = 0
-                self.subMenuMinIndex = 0
-        else:
-            subsetItems = self.subMenuItems[self.subMenuMinIndex: self.subMenuMaxIndex + 1]
-        self.screen.blit(submenu, (350, 550))
-        for i in range(len(subsetItems)):
-            x_pos = i % 3 * 400 + 450
-            y_pos = int(i / 3) * 75 + 600
-            self.screen.blit(self.font.render(subsetItems[i], False, "Black"), (x_pos, y_pos))
-
-    def handle_submenu_input(self, eventList):
-        select = False
-        for event in eventList:
-            if event.type == game.KEYDOWN:
-                if event.key == game.K_RETURN:
-                    select = True
-                    break  # Breaks because this indicates a transition to another screen
-                elif event.key == game.K_ESCAPE:
-                    select = None
-                    break  # Breaks because this indicates a transition to another screen
-                if event.key == game.K_RIGHT:
-                    self.subMenuSlider += 1
-                elif event.key == game.K_LEFT:
-                    self.subMenuSlider -= 1
-                elif event.key == game.K_DOWN:
-                    self.subMenuSlider += 3
-                elif event.key == game.K_UP:
-                    self.subMenuSlider -= 3
-        return select
-
-    def handle_select_inputs(self, eventList):
-        select = False
-        for event in eventList:
-            if event.type == game.KEYDOWN:
-                if event.key == game.K_RETURN:
-                    select = True
-                    break  # Breaks because this indicates a transition to another screen
-                elif event.key == game.K_ESCAPE:
-                    select = None
-                    break  # Breaks because this indicates a transition to another screen
-                if event.key == game.K_RIGHT:
-                    self.targetSlider += 3
-                elif event.key == game.K_LEFT:
-                    self.targetSlider -= 3
-                elif event.key == game.K_DOWN:
-                    self.targetSlider += 1
-                elif event.key == game.K_UP:
-                    self.targetSlider -= 1
-        return select

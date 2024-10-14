@@ -48,6 +48,7 @@ class AnimationManager:
             "Starting Point": startingPoint,
             "x_distance": x_diff
         })
+        # print(self.slopeEquation)
 
     def use_slope_equation(self):
         m = self.slopeEquation["m"]
@@ -58,6 +59,9 @@ class AnimationManager:
         properEquation = startingPoint != ()
         if properEquation:
             # find the new x and y values
+            # print(startingPoint[0] + (self.frameCount * self.x_increment))
+            # print(int(startingPoint[0] + (self.frameCount * self.x_increment)))
+            # print(".......................................")
             self.actor.x = int(startingPoint[0] + (self.frameCount * self.x_increment))  # update x
             self.actor.y = int((self.actor.x * m) + b)  # update y
 
@@ -228,10 +232,10 @@ class AnimationManager:
 
     def process_action(self):
         if self.action != {}:  # check if the action dictionary isn't empty
+            #print(self.actor.x, self.actor.y)
             if self.action["point"] is not None:
                 self.use_slope_equation()
             if self.action["Frame Count"]:
-                self.frameCount += 1  # increment the frame counter
                 self.primaryGroup.update()  # update the sprites
             else:
                 self.pseudo_update()
@@ -258,7 +262,11 @@ class AnimationManager:
                 #game.draw.rect(self.screen, (255, 0, 0), sprite.rect)
             frameCount = self.action["Frame Count"] and self.frameCount == self.maxFrameCount
             isOver = not self.action["Frame Count"] and self.is_over()
+            if not frameCount:
+                self.frameCount += 1  # increment the frame counter
             if frameCount or isOver:
+                # if frameCount:
+                #     print("..........................................")
                 # print(frameCount, isOver)
                 if self.action["type"] == "Attack":  # check if we just finished an attack
                     self.fill_dead_group()  # fill the dead group

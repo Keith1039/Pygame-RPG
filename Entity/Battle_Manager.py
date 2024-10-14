@@ -355,6 +355,32 @@ class BattleManager:
             targetable.append(self.enemies[i].rect.center)
         return targetable
 
+    def get_enemy_pos_matrix(self):
+        matrix = []
+        column = []
+        x_pos = 900  # starting position
+        for i in range(len(self.enemies)):
+            enemy = self.enemies[i]
+            if i == len(self.enemies) - 1:
+                if x_pos == enemy.x:
+                    center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
+                    column.append(center)
+                    matrix.append(column)
+                else:
+                    matrix.append(column)
+                    center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
+                    matrix.append([center])
+            elif x_pos != enemy.x:
+                x_pos = enemy.x  # switch to the next column
+                matrix.append(column) # add the column to the matrix
+                column.clear()  # empty the column
+            else:
+                center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
+                column.append(center)
+        #print(matrix)
+        return matrix
+
+
     def get_enemy_objects(self):
         # function that returns a list of enemy objects
         return self.enemies
@@ -362,6 +388,12 @@ class BattleManager:
     def get_knight_pos(self):
         # returns the position of the knight (specifically the center)
         return self.knight.rect.center
+
+    def get_adjusted_knight_pos(self):
+        # returns the adjusted position of the knight for pointer purposes
+        center = (self.knight.rect.center[0] - 120, self.knight.rect.center[1] - 20)
+        return center
+
 
     def apply_status_effect(self, entity):
         returnableStrings = []
