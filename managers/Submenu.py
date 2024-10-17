@@ -13,14 +13,14 @@ class Submenu:
         self.maxPage = int(len(self.items) / 9)  # how many pages we can have (accurate cuz we start at page 0)
         self.minIndex = 0
         self.maxIndex = 8  # because we start at 0
+        if self.maxIndex >= len(self.items):
+            self.maxIndex = len(self.items) - 1
         self.constraints = {
             "x_constraints": (380, 1180),
             "y_constraints": (580, 805),
             "x_spacing": 400,
             "y_spacing": 75
         }
-        if self.maxIndex > len(self.items) - 1:
-            self.maxIndex = len(self.items) - 1
         self.submenu = game.image.load("UI/Battle_UI/sub_menu.png")
         # construct the matrix
         matrix = Utils.construct_matrix_given_parameters(self.constraints, self.items[self.minIndex:self.maxIndex + 1])
@@ -34,7 +34,7 @@ class Submenu:
         if not flag:  # check to see if I need to do a reset
             self.cursor.__dict__ = prevState  # return the cursor to its previous state
             # re-run the code and have autocorrect enabled but with wraparound disabled
-            select = self.cursor.handle_cursor(eventList, wraparound=False)
+            select = self.cursor.handle_cursor(eventList, correct=True, wraparound=False)
         if select:
             # return the UI and the selection
             return self.UI + "(S)", self.get_item()
@@ -77,22 +77,24 @@ class Submenu:
         self.minIndex = self.page * 9
         self.maxIndex = self.minIndex + 8
         # check to see if max index is still valid
-        if self.maxIndex > len(self.items) - 1:
+        if self.maxIndex >= len(self.items):
             self.maxIndex = len(self.items) - 1  # correct maxIndex
         # reconstruct the matrix for the cursor
         matrix = Utils.construct_matrix_given_parameters(self.constraints, self.items[self.minIndex:self.maxIndex + 1])
         self.cursor.set_new_positions(matrix)  # reset the cursor
+        print(self.items[self.minIndex:self.maxIndex + 1])
+        print(matrix)
 
     def draw_submenu_items(self):
-        for i in range(len(self.items)):
+        for i in range(len(self.items[self.minIndex:self.maxIndex + 1])):
             x_pos = i % 3 * 400 + 450
             y_pos = int(i / 3) * 75 + 600
             self.screen.blit(self.font.render(self.items[i], False, "Black"), (x_pos, y_pos))
 
     def draw_UI(self, eventList):
         self.screen.blit(self.submenu, (350, 550))  # draw the physical submenu
-        self.draw_submenu_items()  # draw the submenu items
         UI, choice = self.handle_cursor(eventList)  # handle the cursor events
+        self.draw_submenu_items()  # draw the submenu items
         self.screen.blit(self.cursor.cursor, self.cursor.pos)
         # strip the amount part from the item
         if choice is not None:

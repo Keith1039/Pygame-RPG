@@ -38,10 +38,11 @@ class Cursor:
                     select = None
                     break  # Breaks because this indicates a transition to another screen
                 elif event.key == game.K_RIGHT:
-                    if self.columnSlider + 1 < len(self.positions):  # check if it's a valid index
+                    if self.columnSlider + 1 < len(self.positions):  # check if it's a valid index)
                         self.columnSlider += 1  # update the slider
                     # check if the next row has "space"
-                    elif len(self.positions[0]) > self.rowSlider + 1:
+                    elif self.columnSlider == len(self.positions) - 1 and len(self.positions[0]) > self.rowSlider + 1:
+                        print(len(self.positions), self.rowSlider)
                         # move over to the first column on the next row
                         self.columnSlider = 0
                         self.rowSlider += 1

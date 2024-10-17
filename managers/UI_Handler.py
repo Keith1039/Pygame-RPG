@@ -50,10 +50,11 @@ class UIHandler():
                 self.UIStack.append(Submenu(self.uiManager.UI, self.uiManager.screen, self.knight.moveList[1:]))
                 # self.uiManager.subMenuItems = self.knight.moveList[1:]
             elif choice == "Switch Stance":
-                self.uiManager.subMenuItems = ["Power", "Defensive", "Nimble",
-                                                "Power", "Defensive", "Nimble",
-                                                "Power", "Defensive", "Nimble",
-                                                "Power"]
+                stanceList = ["Power", "Defensive", "Nimble",
+                                "Power", "Defensive", "Nimble",
+                                "Power", "Defensive", "Nimble",
+                                "Power"]
+                self.UIStack.append(Submenu(self.uiManager.UI, self.uiManager.screen, stanceList))
 
             elif choice == "Items":
                 inventory = self.itemManager.get_usable_items()
