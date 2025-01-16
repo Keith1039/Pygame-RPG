@@ -36,7 +36,6 @@ class AnimationManager:
         self.x_increment = 0
 
     def set_slope_equation(self, startingPoint, endPoint):
-        # print(startingPoint, endPoint)
         # slope line equation
         x_diff = endPoint[0] - startingPoint[0]  # difference in the x-axis
         y_diff = endPoint[1] - startingPoint[1]  # difference in the y-axis
@@ -48,7 +47,6 @@ class AnimationManager:
             "Starting Point": startingPoint,
             "x_distance": x_diff
         })
-        # print(self.slopeEquation)
 
     def use_slope_equation(self):
         m = self.slopeEquation["m"]
@@ -58,10 +56,6 @@ class AnimationManager:
         # check if the equation is set
         properEquation = startingPoint != ()
         if properEquation:
-            # find the new x and y values
-            # print(startingPoint[0] + (self.frameCount * self.x_increment))
-            # print(int(startingPoint[0] + (self.frameCount * self.x_increment)))
-            # print(".......................................")
             self.actor.x = int(startingPoint[0] + (self.frameCount * self.x_increment))  # update x
             self.actor.y = int((self.actor.x * m) + b)  # update y
 
@@ -122,9 +116,6 @@ class AnimationManager:
         else:
             self.targets = targets  # set the targets
         self.others = others  # everyone else
-        # self.fill_sprite_group(others)  # add in the others
-        # self.fill_sprite_group(targets)  # add in the targets
-        # self.fill_sprite_group([self.actor])  # add in the actor
         self.actorStartingPos = (self.actor.x, self.actor.y)  # starting position for actor
         attackType = actionInfo.pop("attack type")  # get the type of attack and remove it from the dict
         # make it so that the animation ends when all primary animations are done
@@ -232,7 +223,6 @@ class AnimationManager:
 
     def process_action(self):
         if self.action != {}:  # check if the action dictionary isn't empty
-            #print(self.actor.x, self.actor.y)
             if self.action["point"] is not None:
                 self.use_slope_equation()
             if self.action["Frame Count"]:
@@ -265,9 +255,6 @@ class AnimationManager:
             if not frameCount:
                 self.frameCount += 1  # increment the frame counter
             if frameCount or isOver:
-                # if frameCount:
-                #     print("..........................................")
-                # print(frameCount, isOver)
                 if self.action["type"] == "Attack":  # check if we just finished an attack
                     self.fill_dead_group()  # fill the dead group
                 if len(self.actionQueue) > 0: # check if we can load a new action

@@ -42,7 +42,6 @@ class Cursor:
                         self.columnSlider += 1  # update the slider
                     # check if the next row has "space"
                     elif self.columnSlider == len(self.positions) - 1 and len(self.positions[0]) > self.rowSlider + 1:
-                        print(len(self.positions), self.rowSlider)
                         # move over to the first column on the next row
                         self.columnSlider = 0
                         self.rowSlider += 1

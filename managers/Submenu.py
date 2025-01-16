@@ -85,8 +85,6 @@ class Submenu:
         # reconstruct the matrix for the cursor
         matrix = Utils.construct_matrix_given_parameters(self.constraints, self.items[self.minIndex:self.maxIndex + 1])
         self.cursor.set_new_positions(matrix)  # reset the cursor
-        print(self.items[self.minIndex:self.maxIndex + 1])
-        print(matrix)
 
     def draw_submenu_items(self):
         for i in range(len(self.items[self.minIndex:self.maxIndex + 1])):

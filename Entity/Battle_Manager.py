@@ -195,7 +195,6 @@ class BattleManager:
                 testString = effect.replace("+", "")  # remove +
                 testString = testString.replace("-", "")  # remove -
                 testString = testString.replace("%", "")  # remove %
-                #print(testString)
                 if testString.split()[0].isnumeric():
                     # do if the first string is a number
                     # this is a bad idea waiting to happen if a stat gets hit with this
@@ -377,7 +376,6 @@ class BattleManager:
             else:
                 center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
                 column.append(center)
-        #print(matrix)
         return matrix
 
 
@@ -393,7 +391,6 @@ class BattleManager:
         # returns the adjusted position of the knight for pointer purposes
         center = (self.knight.rect.center[0] - 120, self.knight.rect.center[1] - 20)
         return center
-
 
     def apply_status_effect(self, entity):
         returnableStrings = []
