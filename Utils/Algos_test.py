@@ -44,8 +44,7 @@ def test_construct_matrix_given_parameters():
         "x_spacing": 400,
         "y_spacing": 75
     }
-
-    items.clear()  # clear the list
+    items.clear() # clear the list
     for i in range(8):
         items.append("blah")
 
@@ -58,4 +57,16 @@ def test_construct_matrix_given_parameters():
         if not flag3:
             break
 
-    assert flag and flag2 and flag3 and flag4
+    # check to see if the matrix can handle no x spacing
+    constraints = {
+        "x_constraints": (380, 380),
+        "y_constraints": (580, 730),
+        "x_spacing": 0,
+        "y_spacing": 75
+    }
+    items.clear() # clear the list
+    for i in range(3):
+        items.append("blah")
+    matrix = construct_matrix_given_parameters(constraints, items)
+    flag5 = len(matrix) == 1 and len(matrix[0]) == 3
+    assert flag and flag2 and flag3 and flag4 and flag5

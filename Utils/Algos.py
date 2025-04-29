@@ -34,7 +34,10 @@ def construct_matrix_given_parameters(constraints, items):
     y_spacing = constraints["y_spacing"]
 
     # Because of how I coded it, the column number can never be 0 (I'll fix that later)
-    columnNum = int((x_constraints[1] - x_constraints[0]) / x_spacing) + 1 # should always be an even split (+1 accounts for the starting pos)
+    if x_spacing != 0:
+        columnNum = int((x_constraints[1] - x_constraints[0]) / x_spacing) + 1 # should always be an even split (+1 accounts for the starting pos)
+    else:
+        columnNum = 1  # because of how the math works out, this is the only way to do this
     if y_spacing != 0:
         rowNum = int((y_constraints[1] - y_constraints[0]) / y_spacing) + 1
     else:
@@ -48,7 +51,7 @@ def construct_matrix_given_parameters(constraints, items):
         x_pos = x_constraints[0] + columnPointer * x_spacing
         rowPos = 0
         if rowNum != 0:
-            rowPos = int(i/rowNum)
+            rowPos = int(i/columnNum)
         y_pos = y_constraints[0] + rowPos * y_spacing
         if i < columnNum:
             matrix.append([])  # add the column
