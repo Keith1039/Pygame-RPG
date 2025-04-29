@@ -20,7 +20,7 @@ class Submenu:
             self.maxIndex = len(self.items) - 1
         self.constraints = {
             "x_constraints": (380, 1180),
-            "y_constraints": (580, 805),
+            "y_constraints": (580, 730),
             "x_spacing": 400,
             "y_spacing": 75
         }
