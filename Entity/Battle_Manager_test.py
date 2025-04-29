@@ -1,3 +1,5 @@
+from operator import truediv
+
 from Entity.Animation_Manager_test import goblin
 from Entity.Knight import Knight
 from Entity.Entity_Factory import EntityFactory
@@ -215,6 +217,34 @@ def test_get_enemy_positions():
         if not flag:
             break
     assert flag
+
+def test_get_enemy_pos_matrix():
+    battleManager.enemies.clear()
+    for i in range(1):
+        battleManager.add_enemy(factory.create_entity("Dummy"))  # add a dummy
+    matrix = battleManager.get_enemy_pos_matrix()  # get the matrix
+    flag = len(matrix) == 1 and len(matrix[0]) == 1  # check to see if the columns and column lengths line up
+    battleManager.enemies.clear()  # clear the list
+
+    for i in range(3):
+        battleManager.add_enemy(factory.create_entity("Dummy"))
+    matrix = battleManager.get_enemy_pos_matrix()  # get the matrix
+    flag2 = len(matrix) == 1 and len(matrix[0]) == 3  # check to see if the columns and column lengths line up
+    battleManager.enemies.clear()  # clear the list
+
+    for i in range(4):
+        battleManager.add_enemy(factory.create_entity("Dummy"))
+    matrix = battleManager.get_enemy_pos_matrix()  # get the matrix
+    flag3 = len(matrix) == 2 and len(matrix[0]) == 3 and len(matrix[1]) == 1  # check to see if the columns and column lengths line up
+    battleManager.enemies.clear()  # clear the list
+
+    for i in range(6):
+        battleManager.add_enemy(factory.create_entity("Dummy"))
+    matrix = battleManager.get_enemy_pos_matrix()  # get the matrix
+    flag4 = len(matrix) == 2 and len(matrix[0]) == 3 and len(matrix[1]) == 3  # check to see if the columns and column lengths line up
+    battleManager.enemies.clear()  # clear the list
+
+    assert flag and flag2 and flag3 and flag4
 
 def test_get_enemy_objects():
     flag = True

@@ -359,23 +359,16 @@ class BattleManager:
         column = []
         x_pos = 900  # starting position
         for i in range(len(self.enemies)):
-            enemy = self.enemies[i]
-            if i == len(self.enemies) - 1:
-                if x_pos == enemy.x:
-                    center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
-                    column.append(center)
-                    matrix.append(column)
-                else:
-                    matrix.append(column)
-                    center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
-                    matrix.append([center])
-            elif x_pos != enemy.x:
-                x_pos = enemy.x  # switch to the next column
-                matrix.append(column) # add the column to the matrix
-                column.clear()  # empty the column
+            enemy = self.enemies[i]  # enemy object
+            center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)  # relative center of the enemy object
+            if x_pos == enemy.x:  # check to see if they are in the same column
+                column.append(center)  # add the center to the column
             else:
-                center = (enemy.rect.center[0] - 70, enemy.rect.center[1] - 20)
-                column.append(center)
+                x_pos = enemy.x  # switch to the next column
+                matrix.append(column)  # add the column to the matrix
+                column = [center] # the current center is the start of the new column
+        if len(column) > 0:  # if there's still a column that needs to be added, add it
+            matrix.append(column)  # add the column
         return matrix
 
 
