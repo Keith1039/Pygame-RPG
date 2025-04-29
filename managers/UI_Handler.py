@@ -52,8 +52,7 @@ class UIHandler():
             elif choice == "Switch Stance":
                 stanceList = ["Power", "Defensive", "Nimble",
                                 "Power", "Defensive", "Nimble",
-                                "Power", "Defensive", "Nimble",
-                                "Power"]
+                                "Power", "Defensive", "Nimble"]
                 self.UIStack.append(Submenu(self.uiManager.UI, self.uiManager.screen, stanceList))
 
             elif choice == "Items":
