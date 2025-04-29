@@ -33,23 +33,28 @@ def construct_matrix_given_parameters(constraints, items):
     x_spacing = constraints["x_spacing"]
     y_spacing = constraints["y_spacing"]
 
-    columnNum = int((x_constraints[1] - x_constraints[0]) / x_spacing)  # should always be an even split
-    rowNum = int((y_constraints[1] - y_constraints[0]) / y_spacing)
+    # Because of how I coded it, the column number can never be 0 (I'll fix that later)
+    columnNum = int((x_constraints[1] - x_constraints[0]) / x_spacing) + 1 # should always be an even split (+1 accounts for the starting pos)
+    if y_spacing != 0:
+        rowNum = int((y_constraints[1] - y_constraints[0]) / y_spacing) + 1
+    else:
+        rowNum = 0
     # for i in range(columnNum):
     #     matrix.append([])
 
     columnPointer = 0
-    firstLoop = True
-    # fill in the matrix
+    # fill in the matrix (row by row)
     for i in range(len(items)):
         x_pos = x_constraints[0] + columnPointer * x_spacing
-        y_pos = y_constraints[0] + int(i/rowNum) * y_spacing
-        if firstLoop:
+        rowPos = 0
+        if rowNum != 0:
+            rowPos = int(i/rowNum)
+        y_pos = y_constraints[0] + rowPos * y_spacing
+        if i < columnNum:
             matrix.append([])  # add the column
         matrix[columnPointer].append((x_pos, y_pos))  # append the locations
         columnPointer += 1
-        if columnPointer > columnNum:  # check if the column pointer is still valid
+        if columnPointer == columnNum:  # check if the column pointer is still valid
             columnPointer = 0  # reset the column pointer
-            firstLoop = False
     # print(matrix)
     return matrix  # return the constructed matrix
